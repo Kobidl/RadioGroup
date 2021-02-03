@@ -1,4 +1,4 @@
-package com.komi.radiogroup;
+package com.kobidl.radiogroup;
 
 import org.junit.Test;
 

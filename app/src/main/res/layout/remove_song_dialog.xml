@@ -1,0 +1,67 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="10dp"
+    app:cardCornerRadius="10dp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="15dp"
+        >
+   <TextView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:text="@string/removing_song_title"
+       android:textSize="24sp"
+       />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/are_you_sure_remove"
+        android:layout_marginTop="10dp"
+        android:textSize="17sp"
+        android:id="@+id/delete_song_desc"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp">
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cancel"
+            android:textColor="@android:color/white"
+            app:strokeColor="@color/white"
+            app:strokeWidth="2dp"
+            app:cornerRadius="6dp"
+            android:layout_margin="15dp"
+            android:id="@+id/cancel_delete_btn"
+            android:enabled="true"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/delete"
+            android:textColor="@android:color/holo_red_light"
+            app:strokeColor="@android:color/holo_red_light"
+            app:strokeWidth="2dp"
+            app:cornerRadius="6dp"
+            android:layout_margin="15dp"
+            android:id="@+id/delete_song_btn"
+            android:enabled="true"
+            />
+
+    </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,78 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorDarkBackground"
+    android:padding="15dp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:id="@+id/take_image"
+            >
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_baseline_photo_camera_24"
+                android:scaleType="fitXY"
+
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/take_photo"
+                android:textSize="16sp"
+                android:textColor="#ffffff"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:id="@+id/choose_image"
+            >
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_baseline_image_24"
+                android:scaleType="fitXY"
+
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/choose_photo"
+                android:textSize="16sp"
+                android:textColor="#ffffff"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/close"
+        android:background="@android:color/transparent"
+        android:textColor="@color/colorOrange"
+        android:layout_gravity="end"
+        android:textSize="17sp"
+        android:id="@+id/close_dialog_btn"
+        />
+</LinearLayout>

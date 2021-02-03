@@ -1,4 +1,4 @@
-package com.komi.radiogroup;
+package com.kobidl.radiogroup;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.komi.radiogroup", appContext.getPackageName());
+        assertEquals("com.kobidl.kdplayer", appContext.getPackageName());
     }
 }
