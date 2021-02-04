@@ -21,7 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import android.os.Vibrator;
 
-import static com.komi.radiogroup.MainActivity.currentPlaying;
+import static com.komi.radiogroup.MainActivity2.currentPlaying;
 
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder> {
 

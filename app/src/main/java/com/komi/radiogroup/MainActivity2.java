@@ -41,7 +41,7 @@ import java.util.Collections;
 
 import static com.komi.radiogroup.MusicPlayerService.PLAYER_BROADCAST;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity2 extends AppCompatActivity {
 
     private static final int NEW_SONG_ACTIVITY = 1;
     final String SONGS_OBJECT = "songs";
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main2);
 
         RecyclerView recyclerView = findViewById(R.id.reclyer);
         recyclerView.setHasFixedSize(true);
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSongClicked(int position, View view) {
-                Intent intent = new Intent(MainActivity.this,FullPageActivity.class);
+                Intent intent = new Intent(MainActivity2.this,FullPageActivity.class);
 //                if(currentPlaying != position) {
 //                    currentPlaying = position;
 //                    playMusic();
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSwiped(@NonNull final RecyclerView.ViewHolder viewHolder, int direction) {
                 if(direction == ItemTouchHelper.END ||direction == ItemTouchHelper.START) {
                     final int position = viewHolder.getAdapterPosition();
-                    final Dialog dialog = new Dialog(MainActivity.this, R.style.WideDialog);
+                    final Dialog dialog = new Dialog(MainActivity2.this, R.style.WideDialog);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     dialog.setCancelable(false);
                     dialog.setContentView(R.layout.remove_song_dialog);
@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
         addNewSong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,NewSongActivity.class);
+                Intent intent = new Intent(MainActivity2.this,NewSongActivity.class);
                 startActivityForResult(new Intent(intent),NEW_SONG_ACTIVITY);
             }
         });

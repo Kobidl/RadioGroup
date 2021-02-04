@@ -15,7 +15,6 @@ import android.os.IBinder;
 import android.widget.RemoteViews;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.NotificationTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 
@@ -53,7 +52,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
         super.onCreate();
         if(songs==null){
             try {
-                songs = MainActivity.songs;
+                songs = MainActivity2.songs;
             }catch (Exception ignored){};
         }
 
@@ -100,7 +99,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
 
         builder.setCustomContentView(remoteViews);
 
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, MainActivity2.class);
         intent.putExtra("current_playing", 1);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);

@@ -22,8 +22,8 @@ import com.bumptech.glide.Glide;
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import static com.komi.radiogroup.MainActivity.currentPlaying;
-import static com.komi.radiogroup.MainActivity.songs;
+import static com.komi.radiogroup.MainActivity2.currentPlaying;
+import static com.komi.radiogroup.MainActivity2.songs;
 import static com.komi.radiogroup.MusicPlayerService.PLAYER_BROADCAST;
 
 public class FullPageActivity extends Activity {
