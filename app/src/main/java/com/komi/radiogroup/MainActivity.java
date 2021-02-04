@@ -47,9 +47,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 View dialogView = getLayoutInflater().inflate(R.layout.signup_dialog, null);
-                EditText et_username = dialogView.findViewById(R.id.et_email);
-                EditText et_fullname = dialogView.findViewById(R.id.et_fullname);
-                EditText et_password = dialogView.findViewById(R.id.et_password);
+                final EditText et_username = dialogView.findViewById(R.id.et_email);
+                final EditText et_fullname = dialogView.findViewById(R.id.et_fullname);
+                final EditText et_password = dialogView.findViewById(R.id.et_password);
 
                 builder.setView(dialogView).setPositiveButton("Register", new DialogInterface.OnClickListener() {
                     @Override
@@ -71,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 View dialogView = getLayoutInflater().inflate(R.layout.login_dialog, null);
-                EditText et_username = dialogView.findViewById(R.id.et_email);
-                EditText et_password = dialogView.findViewById(R.id.et_password);
+                final EditText et_username = dialogView.findViewById(R.id.et_email);
+                final EditText et_password = dialogView.findViewById(R.id.et_password);
 
                 builder.setView(dialogView).setPositiveButton("Login", new DialogInterface.OnClickListener() {
                     @Override
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void registerUser(String username,String fullname, String password) {
+    private void registerUser(String username, final String fullname, String password) {
 
         firebaseAuth.createUserWithEmailAndPassword(username, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
