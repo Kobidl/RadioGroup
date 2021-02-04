@@ -3,13 +3,25 @@ package com.komi.radiogroup.audio_recorder;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
 
 
 public class AudioRecording {
+
+    private StorageReference mStorageRef;
 
     private String mFileName;
     private Context mContext;
@@ -23,6 +35,7 @@ public class AudioRecording {
     public AudioRecording(Context context) {
         mRecorder = new MediaRecorder();
         this.mContext = context;
+        mStorageRef = FirebaseStorage.getInstance().getReference();
     }
 
     public AudioRecording() {
@@ -63,13 +76,37 @@ public class AudioRecording {
         }
         mRecorder.release();
         mElapsedMillis = (System.currentTimeMillis() - mStartingTimeMillis);
-
+        String path = mContext.getCacheDir() + mFileName;
         RecordingItem recordingItem = new RecordingItem();
         recordingItem.setFilePath(mContext.getCacheDir() + mFileName);
         recordingItem.setName(mFileName);
         recordingItem.setLength((int)mElapsedMillis);
         recordingItem.setTime(System.currentTimeMillis());
-   
+
+        Uri file = Uri.fromFile(new File(path));
+        final StorageReference recordRef = mStorageRef.child("records/"+mFileName);
+
+        recordRef.putFile(file)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        recordRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                String url = uri.toString();
+                                Log.d("cloud path", url);
+                                Toast.makeText(mContext, "path: " + url, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                        // ...
+                    }
+                });
         if (cancel == false) {
             audioListener.onStop(recordingItem);
         } else {

@@ -44,6 +44,14 @@
             android:gravity="center"
             android:layout_below="@id/btn_sign_up"/>
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_recorder"
+            android:text="Recorder"
+            android:gravity="center"
+            android:layout_below="@id/btn_logout"/>
+
     </RelativeLayout>
 
 

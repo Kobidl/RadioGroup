@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "208814546777-lo043rqf1vra4g2otc34ihc3d8llgld6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.komi.radiogroup",
+            "certificate_hash": "cb8791671d15583142f8a377bc96b0a927da0393"
+          }
+        },
+        {
           "client_id": "208814546777-6k9ee1mfjdiilcg3erim2junsb069se1.apps.googleusercontent.com",
           "client_type": 3
         }

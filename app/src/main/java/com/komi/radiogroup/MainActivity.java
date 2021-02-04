@@ -7,7 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -95,6 +98,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button btn_recorder = findViewById(R.id.btn_recorder);
+        btn_recorder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,RecorderActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -122,6 +133,11 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else
                     Toast.makeText(MainActivity.this, "Register Failed", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("failed",e.toString());
             }
         });
 
