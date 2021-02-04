@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "208814546777",
+    "project_id": "radiogroup-d75dd",
+    "storage_bucket": "radiogroup-d75dd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:208814546777:android:a5b2918be48d94e7a0b648",
+        "android_client_info": {
+          "package_name": "com.komi.radiogroup"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "208814546777-6k9ee1mfjdiilcg3erim2junsb069se1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCupMKHqqJhqEnFnPTzVAOGKBbkkVv4AHk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "208814546777-6k9ee1mfjdiilcg3erim2junsb069se1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
