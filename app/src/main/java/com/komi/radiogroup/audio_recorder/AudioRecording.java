@@ -3,13 +3,12 @@ package com.komi.radiogroup.audio_recorder;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
 
-/**
- * @author netodevel
- */
+
 public class AudioRecording {
 
     private String mFileName;
@@ -70,7 +69,7 @@ public class AudioRecording {
         recordingItem.setName(mFileName);
         recordingItem.setLength((int)mElapsedMillis);
         recordingItem.setTime(System.currentTimeMillis());
-
+   
         if (cancel == false) {
             audioListener.onStop(recordingItem);
         } else {
