@@ -1,33 +1,34 @@
 {
   "project_info": {
-    "project_number": "233102133099",
-    "project_id": "radiogroupfb",
-    "storage_bucket": "radiogroupfb.appspot.com"
+    "project_number": "208814546777",
+    "firebase_url": "https://radiogroup-d75dd-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "radiogroup-d75dd",
+    "storage_bucket": "radiogroup-d75dd.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:233102133099:android:0a373008137f879c5dae2e",
+        "mobilesdk_app_id": "1:208814546777:android:997887a8831ba1c8a0b648",
         "android_client_info": {
           "package_name": "com.komi.radiogroup"
         }
       },
       "oauth_client": [
         {
-          "client_id": "233102133099-ka8okl65jf2opl7t2slvgp2j9dbojegm.apps.googleusercontent.com",
+          "client_id": "208814546777-6k9ee1mfjdiilcg3erim2junsb069se1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDhGijl7VX-CrBJivPDWA9-_zsTApywLvs"
+          "current_key": "AIzaSyCupMKHqqJhqEnFnPTzVAOGKBbkkVv4AHk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "233102133099-ka8okl65jf2opl7t2slvgp2j9dbojegm.apps.googleusercontent.com",
+              "client_id": "208814546777-6k9ee1mfjdiilcg3erim2junsb069se1.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
