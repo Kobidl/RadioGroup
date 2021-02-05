@@ -5,71 +5,84 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     >
-
-    <LinearLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity"
-        android:orientation="vertical">
+        android:id="@+id/coordinator_layout">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:minHeight="?attr/actionBarSize"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:titleTextColor="@android:color/white"
-            android:background="?attr/colorPrimary">
-        </androidx.appcompat.widget.Toolbar>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_user_status"
-            android:text="Logged out"
-            android:textSize="16sp"
-            android:gravity="center" />
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp">
-
-            <Button
+            android:layout_height="match_parent"
+            tools:context=".MainActivity"
+            android:orientation="vertical">
+            <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_login"
-                android:text="LogIn"
-                android:gravity="center" />
+                android:layout_height="wrap_content">
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:minHeight="?attr/actionBarSize"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:titleTextColor="@android:color/white"
+                    android:background="?attr/colorPrimary">
+                </androidx.appcompat.widget.Toolbar>
+            </com.google.android.material.appbar.AppBarLayout>
 
-            <Button
+            <androidx.viewpager.widget.ViewPager
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_sign_up"
-                android:text="Sign up"
-                android:gravity="center"
-                android:layout_below="@id/btn_login"/>
+                android:layout_height="match_parent"
+                android:id="@+id/pager">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_user_status"
+                    android:text="Logged out"
+                    android:textSize="16sp"
+                    android:gravity="center" />
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_logout"
-                android:text="Logout"
-                android:gravity="center"
-                android:layout_below="@id/btn_sign_up"/>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp">
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_recorder"
-                android:text="Recorder"
-                android:gravity="center"
-                android:layout_below="@id/btn_logout"/>
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btn_login"
+                        android:text="LogIn"
+                        android:gravity="center" />
 
-        </RelativeLayout>
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btn_sign_up"
+                        android:text="Sign up"
+                        android:gravity="center"
+                        android:layout_below="@id/btn_login"/>
 
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btn_logout"
+                        android:text="Logout"
+                        android:gravity="center"
+                        android:layout_below="@id/btn_sign_up"/>
 
-    </LinearLayout>
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btn_recorder"
+                        android:text="Recorder"
+                        android:gravity="center"
+                        android:layout_below="@id/btn_logout"/>
+
+                </RelativeLayout>
+
+            </androidx.viewpager.widget.ViewPager>
+
+        </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"

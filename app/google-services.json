@@ -1,26 +1,19 @@
 {
   "project_info": {
     "project_number": "208814546777",
+    "firebase_url": "https://radiogroup-d75dd-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "radiogroup-d75dd",
     "storage_bucket": "radiogroup-d75dd.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:208814546777:android:a5b2918be48d94e7a0b648",
+        "mobilesdk_app_id": "1:208814546777:android:997887a8831ba1c8a0b648",
         "android_client_info": {
           "package_name": "com.komi.radiogroup"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "208814546777-lo043rqf1vra4g2otc34ihc3d8llgld6.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.komi.radiogroup",
-            "certificate_hash": "cb8791671d15583142f8a377bc96b0a927da0393"
-          }
-        },
         {
           "client_id": "208814546777-6k9ee1mfjdiilcg3erim2junsb069se1.apps.googleusercontent.com",
           "client_type": 3
