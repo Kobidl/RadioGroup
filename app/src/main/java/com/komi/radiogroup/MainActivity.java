@@ -214,11 +214,11 @@ public class MainActivity extends AppCompatActivity {
     private void writeUser(String fullname, String uID) {
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
-        //User user = new User();
-        //user.setFullname(fullname);
-        //user.setUID(uID);
+        User user = new User();
+        user.setFullname(fullname);
+        user.setUID(uID);
 
-        ref.child(uID).setValue("user");
+        ref.child(uID).setValue(user);
 
     }
 
