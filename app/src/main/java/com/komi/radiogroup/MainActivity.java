@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.annotations.Nullable;
 import com.komi.structures.Group;
 import com.komi.structures.User;
 
@@ -218,13 +219,12 @@ public class MainActivity extends AppCompatActivity {
         user.setFullname(fullname);
         user.setUID(uID);
 
-        ref.child(uID).setValue(user);
+        ref.child(uID).setValue(user, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                Toast.makeText(MainActivity.this, "complete", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
-
-
-
-
-
-
 }
