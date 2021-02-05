@@ -1,7 +1,6 @@
 package com.komi.radiogroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -20,11 +19,27 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.komi.structures.Group;
+import com.komi.structures.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     // Firebase Authentication Variables
     private FirebaseAuth firebaseAuth;
+
+    // Firebase Database Variables
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference dbReference;
+    List<Group> groups = new ArrayList<>();
+    Button writeBtn;
 
     private Button btn_signup, btn_login, btn_logout;
     TextView tv_userStatus;
@@ -37,6 +52,19 @@ public class MainActivity extends AppCompatActivity {
 
         // Initializing Firebase Authentication
         firebaseAuth = FirebaseAuth.getInstance();
+
+        // Initializing Firebase Database
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        dbReference = firebaseDatabase.getReference();
+
+        writeBtn = findViewById(R.id.btn_write);
+        writeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                writeUser("david", "1231");
+            }
+        });
+
 
         // Initializing Layout listeners and getting references
         tv_userStatus = findViewById(R.id.tv_user_status);
@@ -110,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // Firebase Authorization Methods
+
     private void registerUser(String username, final String fullname, String password) {
 
         firebaseAuth.createUserWithEmailAndPassword(username, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -118,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     updateDisplayName(fullname);
                     Toast.makeText(MainActivity.this, "Register Successful", Toast.LENGTH_SHORT).show();
+                    writeUser(fullname, FirebaseAuth.getInstance().getCurrentUser().getUid());
                     onLogin();
                 }
                 else
@@ -175,5 +206,25 @@ public class MainActivity extends AppCompatActivity {
     private void onLogout() {
         tv_userStatus.setText("Logged out");
     }
+
+    // End of Firebase Authorization Methods
+
+    // Firebase Database Methods
+
+    private void writeUser(String fullname, String uID) {
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
+        //User user = new User();
+        //user.setFullname(fullname);
+        //user.setUID(uID);
+
+        ref.child(uID).setValue("user");
+
+    }
+
+
+
+
+
 
 }
