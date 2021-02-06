@@ -22,6 +22,7 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
 
     private FirebaseAuth firebaseAuth;
     Welcome welcomeFragment = new Welcome();
+    MainFragment mainFragment = new MainFragment();
     FirebaseUser currentUser;
 
     @Override
@@ -29,17 +30,16 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_container);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, welcomeFragment).commit();
 
         firebaseAuth = FirebaseAuth.getInstance();
 
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
         if(currentUser == null){
-            Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
+            getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, welcomeFragment).commit();
+
         }else {
-            Toast.makeText(this, "Logged in as" + currentUser.getDisplayName(), Toast.LENGTH_SHORT).show();
-            firebaseAuth.signOut();
+            getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, mainFragment).commit();
         }
     }
 
