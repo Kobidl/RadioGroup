@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,7 +26,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.Nullable;
+import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
 import com.komi.structures.Group;
+import com.komi.structures.GroupMessage;
 import com.komi.structures.User;
 
 import java.util.ArrayList;
@@ -37,10 +40,10 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
 
     // Firebase Database Variables
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference dbReference;
+    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    DatabaseReference UsersReference = firebaseDatabase.getReference().child(FirebaseDatabaseHelper.DB_USERS);
     List<Group> groups = new ArrayList<>();
-    Button writeBtn;
+    Button writeBtn, logBtn;
 
     private Button btn_signup, btn_login, btn_logout;
     TextView tv_userStatus;
@@ -55,14 +58,25 @@ public class MainActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
 
         // Initializing Firebase Database
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        dbReference = firebaseDatabase.getReference();
+        FirebaseDatabaseHelper.getInstance().setUsersListener();
 
         writeBtn = findViewById(R.id.btn_write);
         writeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 writeUser("david", "1231");
+            }
+        });
+
+        logBtn = findViewById(R.id.btn_log);
+        logBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<User> users = FirebaseDatabaseHelper.getInstance().getUsers();
+                Log.i("userslog", users.toString());
+                /*for(User user : users){
+                    Log.i("userslog", "User : " + user.toString());
+                }*/
             }
         });
 
@@ -89,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
                         // Register the user
                         registerUser(username, fullname, password);
+
                     }
                 }).show();
             }
@@ -141,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Firebase Authorization Methods
 
-    private void registerUser(String username, final String fullname, String password) {
+    private void registerUser(final String username, final String fullname, String password) {
 
         firebaseAuth.createUserWithEmailAndPassword(username, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -149,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     updateDisplayName(fullname);
                     Toast.makeText(MainActivity.this, "Register Successful", Toast.LENGTH_SHORT).show();
-                    writeUser(fullname, FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    FirebaseDatabaseHelper.getInstance().addUserToUsers(new User(FirebaseAuth.getInstance().getCurrentUser().getUid(), username, fullname));
                     onLogin();
                 }
                 else
@@ -214,7 +229,18 @@ public class MainActivity extends AppCompatActivity {
 
     private void writeUser(String fullname, String uID) {
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
+        Group group1 = new Group();
+        group1.setGroupID("1");
+        group1.setGroupName("Group 1");
+
+        Group group2 = new Group();
+        group2.setGroupID("2");
+        group2.setGroupName("Group 2");
+
+        FirebaseDatabaseHelper.getInstance().addGroupToGroups(group1);
+        FirebaseDatabaseHelper.getInstance().addGroupToGroups(group2);
+
+        /*DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
         User user = new User();
         user.setFullname(fullname);
         user.setUID(uID);
@@ -222,9 +248,9 @@ public class MainActivity extends AppCompatActivity {
         ref.child(uID).setValue(user, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                Toast.makeText(MainActivity.this, "complete", Toast.LENGTH_SHORT).show();
+
             }
-        });
+        });*/
 
     }
 }

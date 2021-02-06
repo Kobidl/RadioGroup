@@ -54,4 +54,12 @@
         android:gravity="center"
         android:layout_below="@id/btn_sign_up"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_log"
+        android:text="Log users"
+        android:gravity="center"
+        android:layout_below="@id/btn_sign_up"/>
+
 </LinearLayout>
