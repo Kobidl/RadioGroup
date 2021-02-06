@@ -1,5 +1,7 @@
 package com.komi.structures;
 
+import androidx.annotation.NonNull;
+
 public class GroupMessage {
 
     public static final int MESSAGE_TYPE_TEXT = 1;
@@ -79,5 +81,13 @@ public class GroupMessage {
 
     public void setGroup_ID(String group_ID) {
         this.group_ID = group_ID;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        String string = "\nMsgID : " + msg_ID + "\nGroupID : " + group_ID + "\nFromID : " + from_ID;
+
+        return string;
     }
 }

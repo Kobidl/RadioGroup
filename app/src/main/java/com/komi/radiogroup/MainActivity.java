@@ -20,18 +20,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.annotations.Nullable;
 import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
 import com.komi.structures.Group;
 import com.komi.structures.GroupMessage;
 import com.komi.structures.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,9 +37,8 @@ public class MainActivity extends AppCompatActivity {
     // Firebase Database Variables
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference UsersReference = firebaseDatabase.getReference().child(FirebaseDatabaseHelper.DB_USERS);
-    List<Group> groups = new ArrayList<>();
-    Button writeBtn, logBtn;
 
+    // Test Views
     private Button btn_signup, btn_login, btn_logout;
     TextView tv_userStatus;
 
@@ -58,27 +52,7 @@ public class MainActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
 
         // Initializing Firebase Database
-        FirebaseDatabaseHelper.getInstance().setUsersListener();
-
-        writeBtn = findViewById(R.id.btn_write);
-        writeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                writeUser("david", "1231");
-            }
-        });
-
-        logBtn = findViewById(R.id.btn_log);
-        logBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                List<User> users = FirebaseDatabaseHelper.getInstance().getUsers();
-                Log.i("userslog", users.toString());
-                /*for(User user : users){
-                    Log.i("userslog", "User : " + user.toString());
-                }*/
-            }
-        });
+        FirebaseDatabaseHelper.getInstance();
 
 
         // Initializing Layout listeners and getting references
@@ -154,6 +128,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Releasing Firebase DB update listeners
+        FirebaseDatabaseHelper.getInstance().removeListeners();
+    }
+
     // Firebase Authorization Methods
 
     private void registerUser(final String username, final String fullname, String password) {
@@ -225,32 +207,4 @@ public class MainActivity extends AppCompatActivity {
 
     // End of Firebase Authorization Methods
 
-    // Firebase Database Methods
-
-    private void writeUser(String fullname, String uID) {
-
-        Group group1 = new Group();
-        group1.setGroupID("1");
-        group1.setGroupName("Group 1");
-
-        Group group2 = new Group();
-        group2.setGroupID("2");
-        group2.setGroupName("Group 2");
-
-        FirebaseDatabaseHelper.getInstance().addGroupToGroups(group1);
-        FirebaseDatabaseHelper.getInstance().addGroupToGroups(group2);
-
-        /*DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users");
-        User user = new User();
-        user.setFullname(fullname);
-        user.setUID(uID);
-
-        ref.child(uID).setValue(user, new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-
-            }
-        });*/
-
-    }
 }

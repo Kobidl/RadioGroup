@@ -1,5 +1,7 @@
 package com.komi.structures;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 public class Group {
@@ -88,5 +90,14 @@ public class Group {
 
     public void addUserToUserList(User user) {
         userList.add(user);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+
+        String string = "\nGroupID : " + groupID + "\nGroupName : " + groupName + "\n";
+
+        return string;
     }
 }

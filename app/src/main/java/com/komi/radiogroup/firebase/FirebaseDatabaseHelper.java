@@ -27,9 +27,13 @@ public class FirebaseDatabaseHelper {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
 
-    DatabaseReference usersListenerRef;
+    DatabaseReference usersListenerRef, groupListenerRef, groupMessageListenerRef;
+
+    ValueEventListener usersListener, groupsListener, groupMessagesListener;
 
     final List<User> users = new ArrayList<>();
+    final List<Group> groups = new ArrayList<>();
+    final List<GroupMessage> groupMessages = new ArrayList<>();
 
     public static FirebaseDatabaseHelper getInstance() {
 
@@ -41,6 +45,15 @@ public class FirebaseDatabaseHelper {
     public FirebaseDatabaseHelper() {
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
+
+        // Getting References
+        usersListenerRef = firebaseDatabase.getReference().child(DB_USERS);
+        groupListenerRef = firebaseDatabase.getReference().child(DB_GROUPS);
+        groupMessageListenerRef = firebaseDatabase.getReference().child(DB_GROUP_MESSAGES);
+
+        // Setting users listener
+        setUsersListener();
+        setGroupsListener();
 
     }
 
@@ -62,17 +75,15 @@ public class FirebaseDatabaseHelper {
         reference.child(groupMessage.getGroup_ID()).child(groupMessage.getMsg_ID()).setValue(groupMessage);
     }
 
-    public ValueEventListener getUsersListener() {
-        users.clear();
+    private void setUsersListener() {
 
-        ValueEventListener listener = new ValueEventListener() {
+        usersListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 for (DataSnapshot snapshot1 : snapshot.getChildren()){
                     User temp = snapshot1.getValue(User.class);
                     if(!users.contains(temp)){
-                        Log.i("userslog", "Ondatachanges : adding user:" + temp.getFullname());
                         users.add(temp);
                     }
                 }
@@ -83,10 +94,83 @@ public class FirebaseDatabaseHelper {
 
             }
         };
-        return listener;
+
+        usersListenerRef.addListenerForSingleValueEvent(usersListener);
+    }
+
+    private void setGroupsListener() {
+
+        groupsListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (DataSnapshot snapshot1 : snapshot.getChildren()){
+                    Group temp = snapshot1.getValue(Group.class);
+                    if(!groups.contains(temp)){
+                        groups.add(temp);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        groupListenerRef.addListenerForSingleValueEvent(groupsListener);
+    }
+
+    // GroupID will be user to filter messages to only save ones with provided GroupID
+    public void setGroupMessageListener(final String groupID) {
+        groupMessageListenerRef = firebaseDatabase.getReference().child(DB_GROUP_MESSAGES).child(groupID);
+
+        groupMessagesListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (DataSnapshot snapshot1 : snapshot.getChildren()){
+                    GroupMessage temp = snapshot1.getValue(GroupMessage.class);
+                    if(!groupMessages.contains(temp)){
+                        if(temp.getGroup_ID().matches(groupID)) {
+                            Log.i("dbtestlog", "Ondatachanges : adding groupMessage from groupID: " + temp.getGroup_ID());
+                            groupMessages.add(temp);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        groupMessageListenerRef.addListenerForSingleValueEvent(groupMessagesListener);
+    }
+
+    public void removeListeners() {
+        removeUsersListener();
+        removeGroupsListener();
+        //removeGroupMessagesListener();
+    }
+
+    public void removeUsersListener() {
+        usersListenerRef.removeEventListener(usersListener);
+    }
+
+    public void removeGroupsListener() {
+        groupListenerRef.removeEventListener(groupsListener);
+    }
+
+    public void removeGroupMessagesListener() {
+        groupMessageListenerRef.removeEventListener(groupMessagesListener);
     }
 
     public List<User> getUsers() {
         return users;
     }
+    public List<Group> getGroups() { return groups;}
+    public List<GroupMessage> getGroupMessages() { return groupMessages;}
+
+
+
 }
