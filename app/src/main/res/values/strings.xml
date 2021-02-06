@@ -16,4 +16,16 @@
     <string name="cancel">Cancel</string>
     <string name="play">Play</string>
     <string name="stop">Stop</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="welcome">Welcome</string>
+    <string name="signin">Log In</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="repassword">Confrim Password</string>
+
+    <string name="signup">Sign Up</string>
+    <string name="signupdesc">Don\'t have an account?</string>
+    <string name="logindesc">Already have an account?</string>
+    <string name="user_name">Name</string>
 </resources>
