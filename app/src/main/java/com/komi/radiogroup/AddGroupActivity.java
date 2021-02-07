@@ -66,6 +66,7 @@ public class AddGroupActivity extends AppCompatActivity {
         setContentView(R.layout.new_group_layout);
         UUID uuid = UUID.randomUUID();
 
+        //Set toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.new_group);
         setSupportActionBar(toolbar);
@@ -73,17 +74,19 @@ public class AddGroupActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_24);
 
+        //Getting storage instance
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
         canSave = false;
+
+        //Creating new empty group
         group = new Group();
-
         group.setGroupID(uuid.toString());
-
         group.setGroupName("");
         group.setGroupDescription("");
 
 
+        //Init elements
         imageView = findViewById(R.id.new_group_view);
 
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -149,6 +152,8 @@ public class AddGroupActivity extends AppCompatActivity {
             }
         });
 
+
+        //Request image permissions
         if (Build.VERSION.SDK_INT >= 23) {
             int hasWritePermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             if (hasWritePermission != PackageManager.PERMISSION_GRANTED) {
@@ -161,6 +166,7 @@ public class AddGroupActivity extends AppCompatActivity {
         }
     }
 
+    //Determine if save button enabled
     private void checkCanSave() {
         if(!canSave && group.getGroupName().length() >0){
             saveBtn.setEnabled(true);
@@ -171,6 +177,8 @@ public class AddGroupActivity extends AppCompatActivity {
         }
     }
 
+
+    /* If back button pressed on toolbar */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == android.R.id.home){
@@ -231,7 +239,6 @@ public class AddGroupActivity extends AppCompatActivity {
         file = new File(Environment.getExternalStorageDirectory(), fileName);
 
         Uri imageUri = FileProvider.getUriForFile(AddGroupActivity.this,"com.komi.radiogroup.provider",file);
-        //Uri fileUri = Uri.fromFile(file);
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         startActivityForResult(intent, CAMERA_REQUEST);
@@ -250,6 +257,7 @@ public class AddGroupActivity extends AppCompatActivity {
         startActivityForResult(chooserIntent, PICK_IMAGE);
     }
 
+    /* No Permissions to access images */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -263,6 +271,7 @@ public class AddGroupActivity extends AppCompatActivity {
         }
     }
 
+    /* Camera / Gallery result */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -275,13 +284,16 @@ public class AddGroupActivity extends AppCompatActivity {
                 file = new File(getRealPathFromURI(imageUri));
 //                imageView.setImageDrawable(Drawable.createFromPath(file.getAbsolutePath()));
             }
+
+            /* Showing image */
             Glide.with(this)
                     .load(file.getAbsoluteFile())
                     .into(imageView);
             ((TextView) findViewById(R.id.upload_image_text)).setVisibility(View.INVISIBLE);
+
+            /* Uploading image to firbase storage */
             UUID uuid = UUID.randomUUID();
             final StorageReference imageRef = mStorageRef.child("images/"+uuid.toString()+"_"+file.getName());
-
             imageRef.putFile(Uri.fromFile(file.getAbsoluteFile()))
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -306,6 +318,7 @@ public class AddGroupActivity extends AppCompatActivity {
         }
     }
 
+    /* Extracting path from uri */
     private String getRealPathFromURI(Uri contentURI) {
         String result;
         Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);

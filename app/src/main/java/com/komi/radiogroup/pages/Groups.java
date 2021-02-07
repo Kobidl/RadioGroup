@@ -49,21 +49,16 @@ public class Groups extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_groups, container, false);
+
+        //Get groups from firebase db
         List<Group> groupList = FirebaseDatabaseHelper.getInstance().getGroups();
 
+        /* Init recycler elements */
         RecyclerView recyclerView = rootView.findViewById(R.id.groups_recycler);
         recyclerView.setHasFixedSize(true);
-
-        FloatingActionButton openNew = rootView.findViewById(R.id.group_add_btn);
-        openNew.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(rootView.getContext(), AddGroupActivity.class);
-                startActivity(intent);
-            }
-        });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
         GroupsAdapter groupsAdapter = new GroupsAdapter(groupList);
@@ -75,6 +70,16 @@ public class Groups extends Fragment {
         });
 
         recyclerView.setAdapter(groupsAdapter);
+
+        // Init floating btn
+        FloatingActionButton openNew = rootView.findViewById(R.id.group_add_btn);
+        openNew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(rootView.getContext(), AddGroupActivity.class);
+                startActivity(intent);
+            }
+        });
 
         return rootView;
     }
