@@ -155,14 +155,17 @@ public class FirebaseDatabaseHelper {
 
     public void removeUsersListener() {
         usersListenerRef.removeEventListener(usersListener);
+        users.clear();
     }
 
     public void removeGroupsListener() {
         groupListenerRef.removeEventListener(groupsListener);
+        groups.clear();
     }
 
     public void removeGroupMessagesListener() {
         groupMessageListenerRef.removeEventListener(groupMessagesListener);
+        groupMessages.clear();
     }
 
     public List<User> getUsers() {
