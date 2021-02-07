@@ -25,6 +25,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.komi.radiogroup.userlater.MusicPlayerService;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,7 +41,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static com.komi.radiogroup.MusicPlayerService.PLAYER_BROADCAST;
+import static com.komi.radiogroup.userlater.MusicPlayerService.PLAYER_BROADCAST;
 
 public class MainActivity2 extends AppCompatActivity {
 
@@ -96,13 +98,13 @@ public class MainActivity2 extends AppCompatActivity {
 
             @Override
             public void onSongClicked(int position, View view) {
-                Intent intent = new Intent(MainActivity2.this,FullPageActivity.class);
+//                Intent intent = new Intent(MainActivity2.this,FullPageActivity.class);
 //                if(currentPlaying != position) {
 //                    currentPlaying = position;
 //                    playMusic();
 //                }
-                intent.putExtra("song_idx", position);
-                startActivity(intent);
+//                intent.putExtra("song_idx", position);
+//                startActivity(intent);
 //                songAdapter.notifyDataSetChanged();
             }
         });
@@ -200,13 +202,13 @@ public class MainActivity2 extends AppCompatActivity {
 
 
         ImageButton addNewSong = findViewById(R.id.add_new_song_btn);
-        addNewSong.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity2.this,NewSongActivity.class);
-                startActivityForResult(new Intent(intent),NEW_SONG_ACTIVITY);
-            }
-        });
+//        addNewSong.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(MainActivity2.this, NewSongActivity.class);
+//                startActivityForResult(new Intent(intent),NEW_SONG_ACTIVITY);
+//            }
+//        });
 
         currentPlaying = getIntent().getIntExtra("current_playing",currentPlaying);
 
@@ -218,7 +220,7 @@ public class MainActivity2 extends AppCompatActivity {
 
     private void notifyOpen() {
         Intent intent = new Intent(
-                this,MusicPlayerService.class);
+                this, MusicPlayerService.class);
         intent.putExtra("command","app_created");
         startService(intent);
     }

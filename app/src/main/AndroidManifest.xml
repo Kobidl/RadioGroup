@@ -29,15 +29,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".NewSongActivity" android:screenOrientation="portrait" android:launchMode="singleTask"/>
-        <activity android:name=".FullPageActivity" android:screenOrientation="portrait" android:launchMode="singleTask">
-        </activity>
-
         <activity android:name=".RecorderActivity" android:screenOrientation="portrait" android:launchMode="singleTask">
 
         </activity>
 
-        <service android:name=".MusicPlayerService"/>
+        <service android:name=".userlater.MusicPlayerService"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

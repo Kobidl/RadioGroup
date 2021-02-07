@@ -106,7 +106,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
                         .into(holder.imageView);
             }catch (Exception e){
                 holder.imageView.setPadding(10,10,10,10);
-                holder.imageView.setImageResource(R.drawable.ic_music_note);
             }
         }
         if(currentPlaying != position && holder.playing){
@@ -114,7 +113,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
             holder.imageView.clearAnimation();
             holder.playing = false;
         }else if(currentPlaying == position && !holder.playing){
-            holder.playSongBtn.setImageResource(R.drawable.ic_baseline_stop_40);
             holder.playing = true;
         }
         if(holder.playing && holder.imageView.getAnimation() == null){

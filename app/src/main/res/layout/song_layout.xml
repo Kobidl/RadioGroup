@@ -25,7 +25,6 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:id="@+id/song_card_image"
-            android:src="@drawable/ic_music_note"
             android:scaleType="fitXY"
             android:padding="10dp"
         />

@@ -1,4 +1,4 @@
-package com.komi.radiogroup;
+package com.komi.radiogroup.userlater;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -17,6 +17,9 @@ import android.widget.RemoteViews;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.komi.radiogroup.MainActivity2;
+import com.komi.radiogroup.R;
+import com.komi.radiogroup.Song;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -233,7 +236,6 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
     private void updateNotifView(Song song) {
         remoteViews.setTextViewText(R.id.notif_song_name, song.getName());
         if (song.getImage() == null  || song.getImage().isEmpty()) {
-            remoteViews.setImageViewResource(R.id.notif_song_image, R.drawable.ic_music_note);
             remoteViews.setViewPadding(R.id.notif_song_image,15,15,15,15);
             manager.notify(NOTIF_ID, builder.build());
         }else{
