@@ -1,5 +1,6 @@
 package com.komi.radiogroup;
 
+import android.content.BroadcastReceiver;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -16,6 +17,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.FirebaseDatabase;
+import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
+import com.komi.radiogroup.firebase.FirebaseMessagingHelper;
 import com.komi.radiogroup.pages.Welcome;
 
 public class MainContainer extends AppCompatActivity implements Welcome.OnWelcomeFragmentListener {
@@ -32,6 +36,13 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
 
 
         firebaseAuth = FirebaseAuth.getInstance();
+
+        // Initializing Firebase Database
+        FirebaseDatabaseHelper.getInstance();
+
+        // Initializing Firebase Messaging
+//        FirebaseMessagingHelper.getInstance(MainActivity.this).sendMessageToTopic("A", msg_et.getText().toString());
+
 
         //todo: check if registered by
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
