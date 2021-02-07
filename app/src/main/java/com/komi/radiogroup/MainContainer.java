@@ -37,8 +37,8 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
 
         if(currentUser == null){
             getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, welcomeFragment).commit();
-
         }else {
+
             getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, mainFragment).commit();
         }
     }
@@ -52,6 +52,8 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
     @Override
     public void onLogin() {
         currentUser = firebaseAuth.getCurrentUser();
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, mainFragment).commit();
+
     }
 
     private void updateDisplayName(String name) {
