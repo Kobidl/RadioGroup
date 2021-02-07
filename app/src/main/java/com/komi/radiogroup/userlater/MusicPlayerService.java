@@ -17,7 +17,6 @@ import android.widget.RemoteViews;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.komi.radiogroup.MainActivity2;
 import com.komi.radiogroup.R;
 import com.komi.radiogroup.Song;
 
@@ -55,7 +54,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
         super.onCreate();
         if(songs==null){
             try {
-                songs = MainActivity2.songs;
+                songs = null;
             }catch (Exception ignored){};
         }
 
@@ -102,10 +101,10 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
 
         builder.setCustomContentView(remoteViews);
 
-        Intent intent = new Intent(this, MainActivity2.class);
-        intent.putExtra("current_playing", 1);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pendingIntent);
+//        Intent intent = new Intent(this, MainActivity2.class);
+//        intent.putExtra("current_playing", 1);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        builder.setContentIntent(pendingIntent);
 
         builder.setSmallIcon(android.R.drawable.ic_media_play);
 

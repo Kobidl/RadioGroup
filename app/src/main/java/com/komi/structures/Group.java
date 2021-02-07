@@ -15,7 +15,7 @@ public class Group {
     private boolean isPrivate;
     private List<User> userList;
 
-    public Group(String groupID, String adminID, String groupName, String profilePicturePath, String groupDescription, String timeStamp, boolean isPrivate) {
+    public Group(String groupID, String adminID, String groupName, String profilePicturePath, String groupDescription, String timeStamp, boolean isPrivate,List<User> userList) {
         this.groupID = groupID;
         this.adminID = adminID;
         this.groupName = groupName;
@@ -23,6 +23,8 @@ public class Group {
         this.groupDescription = groupDescription;
         this.timeStamp = timeStamp;
         this.isPrivate = isPrivate;
+        this.userList = userList;
+
     }
 
     public Group() {

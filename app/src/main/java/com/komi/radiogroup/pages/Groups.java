@@ -3,47 +3,32 @@ package com.komi.radiogroup.pages;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.komi.radiogroup.GroupsAdapter;
 import com.komi.radiogroup.R;
+import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
+import com.komi.structures.Group;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Groups#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.List;
+
 public class Groups extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public Groups() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Groups.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Groups newInstance(String param1, String param2) {
+
+    public static Groups newInstance() {
         Groups fragment = new Groups();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,16 +36,33 @@ public class Groups extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+//        if (getArguments() != null) {
+//            mParam1 = getArguments().getString(ARG_PARAM1);
+//            mParam2 = getArguments().getString(ARG_PARAM2);
+//        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_groups, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_groups, container, false);
+        List<Group> groupList = FirebaseDatabaseHelper.getInstance().getGroups();
+
+        RecyclerView recyclerView = rootView.findViewById(R.id.groups_recycler);
+        recyclerView.setHasFixedSize(true);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
+        GroupsAdapter groupsAdapter = new GroupsAdapter(groupList);
+        groupsAdapter.setListener(new GroupsAdapter.GroupListener() {
+            @Override
+            public void onClick(int position, View view) {
+
+            }
+        });
+
+        recyclerView.setAdapter(groupsAdapter);
+
+        return rootView;
     }
 }

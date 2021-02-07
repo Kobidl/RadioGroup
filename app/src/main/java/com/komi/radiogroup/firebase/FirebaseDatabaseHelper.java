@@ -105,6 +105,7 @@ public class FirebaseDatabaseHelper {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 for (DataSnapshot snapshot1 : snapshot.getChildren()){
+
                     Group temp = snapshot1.getValue(Group.class);
                     if(!groups.contains(temp)){
                         groups.add(temp);
