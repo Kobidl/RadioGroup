@@ -33,6 +33,7 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
 
         firebaseAuth = FirebaseAuth.getInstance();
 
+        //todo: check if registered by
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
         if(currentUser == null){
