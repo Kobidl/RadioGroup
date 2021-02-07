@@ -45,5 +45,29 @@
             android:layout_below="@id/btn_sign_up"/>
 
     </RelativeLayout>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Group A"
+        android:id="@+id/group_a_cb"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Group B"
+        android:id="@+id/group_b_cb"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter message text"
+        android:id="@+id/et_msg_txt"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send"
+        android:id="@+id/btn_send"/>
     
 </LinearLayout>

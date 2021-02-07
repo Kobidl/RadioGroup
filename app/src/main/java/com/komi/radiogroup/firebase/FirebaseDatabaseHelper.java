@@ -150,7 +150,7 @@ public class FirebaseDatabaseHelper {
     public void removeListeners() {
         removeUsersListener();
         removeGroupsListener();
-        //removeGroupMessagesListener();
+        //removeGroupMessagesListener(); GroupMessages listener may be null
     }
 
     public void removeUsersListener() {
