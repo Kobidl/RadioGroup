@@ -29,9 +29,15 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".RecorderActivity" android:screenOrientation="portrait" android:launchMode="singleTask">
+        <activity
+            android:name=".RecorderActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" />
 
-        </activity>
+        <activity
+            android:name=".AddGroupActivity"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait" />
 
         <service android:name=".userlater.MusicPlayerService"/>
 

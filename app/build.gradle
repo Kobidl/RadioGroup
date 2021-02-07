@@ -48,6 +48,7 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-database:19.6.0'
     implementation 'com.google.firebase:firebase-messaging:21.0.1'
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
 
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 

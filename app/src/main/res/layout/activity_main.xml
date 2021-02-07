@@ -19,7 +19,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
+                    android:id="@+id/toolbar5"
                     android:minHeight="?attr/actionBarSize"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
