@@ -50,7 +50,6 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
         if(currentUser == null){
             getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, welcomeFragment).commit();
         }else {
-
             getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, mainFragment).commit();
         }
     }
@@ -59,13 +58,14 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
     public void onRegister(String name) {
         currentUser = firebaseAuth.getCurrentUser();
         updateDisplayName(name);
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, mainFragment).commit();
     }
 
     @Override
     public void onLogin() {
-        currentUser = firebaseAuth.getCurrentUser();
+        Toast.makeText(this, "hello login", Toast.LENGTH_SHORT).show();
         getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, mainFragment).commit();
-
+        currentUser = firebaseAuth.getCurrentUser();
     }
 
     private void updateDisplayName(String name) {

@@ -132,7 +132,8 @@ public class Welcome extends Fragment
                 loginSignupBtn.revertAnimation();
                 if (task.isSuccessful()) {
                     Toast.makeText(rootView.getContext(), "Register Successful", Toast.LENGTH_SHORT).show();
-                    callback.onLogin();
+                    String name = nameET.getText().toString();
+                    callback.onRegister(name);
                 }
                 else
                     Toast.makeText(rootView.getContext(), "Register Failed", Toast.LENGTH_SHORT).show();
@@ -147,8 +148,7 @@ public class Welcome extends Fragment
                 loginSignupBtn.revertAnimation();
                 if(task.isSuccessful()) {
                     Toast.makeText(rootView.getContext(), "User login successful", Toast.LENGTH_SHORT).show();
-                    String name = nameET.getText().toString();
-                    callback.onRegister(name);
+                    callback.onLogin();
                 }
                 else
                     Toast.makeText(rootView.getContext(), "User login failed", Toast.LENGTH_SHORT).show();
