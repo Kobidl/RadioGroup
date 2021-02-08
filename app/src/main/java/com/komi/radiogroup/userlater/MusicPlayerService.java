@@ -17,8 +17,10 @@ import android.widget.RemoteViews;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.komi.radiogroup.GroupActivity;
 import com.komi.radiogroup.R;
 import com.komi.radiogroup.Song;
+import com.komi.structures.VoiceRecord;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,15 +31,15 @@ import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class MusicPlayerService extends Service implements MediaPlayer.OnCompletionListener,MediaPlayer.OnPreparedListener{
-    public static final String PLAYER_BROADCAST = "com.kobidl.kdplayer.songchanged";
+    public static final String PLAYER_BROADCAST = "com.komi.radiogroup.songchanged";
 
     NotificationManager manager;
     NotificationCompat.Builder builder;
-    String channelId = "KD_MUSIC_CHANNEL";
+    String channelId = "KM_MUSIC_CHANNEL";
     final int NOTIF_ID = 1;
 
     private MediaPlayer player = new MediaPlayer();
-    ArrayList<Song> songs;
+    ArrayList<VoiceRecord> voiceRecords;
     int currentPlaying = -1;
     RemoteViews remoteViews;
 
@@ -52,11 +54,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
     @Override
     public void onCreate() {
         super.onCreate();
-        if(songs==null){
-            try {
-                songs = null;
-            }catch (Exception ignored){};
-        }
+        voiceRecords = new ArrayList<>();
 
         player.setOnCompletionListener(this);
         player.setOnPreparedListener(this);
@@ -64,7 +62,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
 
         manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        String channelName = "Music channel";
+        String channelName = "Group Channel";
         if (Build.VERSION.SDK_INT >= 26) {
             NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
             manager.createNotificationChannel(channel);
@@ -75,24 +73,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
         remoteViews = new RemoteViews(getPackageName(), R.layout.music_notif);
 
         Intent playIntent = new Intent(this, MusicPlayerService.class);
-        playIntent.putExtra("command", "play");
-        PendingIntent playPendingIntent = PendingIntent.getService(this, 0, playIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.play_btn, playPendingIntent);
-        Intent pauseIntent = new Intent(this, MusicPlayerService.class);
 
-        pauseIntent.putExtra("command", "pause");
-        PendingIntent pausePendingIntent = PendingIntent.getService(this, 1, pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.pause_btn, pausePendingIntent);
-
-        Intent nextIntent = new Intent(this, MusicPlayerService.class);
-        nextIntent.putExtra("command", "next");
-        PendingIntent nextPendingIntent = PendingIntent.getService(this, 2, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.next_btn, nextPendingIntent);
-
-        Intent prevIntent = new Intent(this, MusicPlayerService.class);
-        prevIntent.putExtra("command", "prev");
-        PendingIntent prevPendingIntent = PendingIntent.getService(this, 3, prevIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.prev_btn, prevPendingIntent);
 
         Intent closeIntent = new Intent(this, MusicPlayerService.class);
         closeIntent.putExtra("command", "close");
@@ -101,10 +82,10 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
 
         builder.setCustomContentView(remoteViews);
 
-//        Intent intent = new Intent(this, MainActivity2.class);
-//        intent.putExtra("current_playing", 1);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//        builder.setContentIntent(pendingIntent);
+        Intent intent = new Intent(this, GroupActivity.class);
+        intent.putExtra("current_playing", 1);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
 
         builder.setSmallIcon(android.R.drawable.ic_media_play);
 
@@ -115,7 +96,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
     }
 
     private void registerReceiver() {
-        IntentFilter filter = new IntentFilter("com.kobidl.kdplayer.songchanged");
+        IntentFilter filter = new IntentFilter(PLAYER_BROADCAST);
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -123,7 +104,6 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
             }
         };
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,filter);
-
     }
 
 
@@ -132,65 +112,65 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
         String command = intent.getStringExtra("command");
         int song;
         switch (command){
-            case "new_instance":
+            case "start_listening":
                 if(!player.isPlaying()) {
-                    songs = intent.getParcelableArrayListExtra("list");
-                    try {
-                        player.setDataSource(songs.get(currentPlaying).getUrl());
-                        player.prepareAsync();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+//                    songs = intent.getParcelableArrayListExtra("list");
+//                    try {
+//                        player.setDataSource(songs.get(currentPlaying).getUrl());
+//                        player.prepareAsync();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
                 }
                 break;
-            case "play_song":
-                songs = intent.getParcelableArrayListExtra("list");
-                song = intent.getIntExtra("song_idx",-1);
-                if(song == -1){
-                    song = 0;
-                }
-                playSong(song);
-                break;
-            case "play":
-                if(songs == null){
-                    songs = intent.getParcelableArrayListExtra("songs");
-                }
-                song = intent.getIntExtra("song_idx",-1);
-                if(song == -1) {
-                    if (!player.isPlaying()) {
-                        player.start();
-                    }
-                }else if (!player.isPlaying() && song == currentPlaying){
-                    player.start();
-                    notify("resume");
-                } else{
-                    playSong(song);
-                }
-                break;
-            case "next":
-                if(player.isPlaying())
-                    player.stop();
-                playSong(currentPlaying+1);
-                break;
-            case "prev":
-                if(player.isPlaying())
-                    player.stop();
-                playSong(currentPlaying-1);
-                break;
+//            case "play_song":
+//                songs = intent.getParcelableArrayListExtra("list");
+//                song = intent.getIntExtra("song_idx",-1);
+//                if(song == -1){
+//                    song = 0;
+//                }
+//                playSong(song);
+//                break;
+//            case "play":
+//                if(songs == null){
+//                    songs = intent.getParcelableArrayListExtra("songs");
+//                }
+//                song = intent.getIntExtra("song_idx",-1);
+//                if(song == -1) {
+//                    if (!player.isPlaying()) {
+//                        player.start();
+//                    }
+//                }else if (!player.isPlaying() && song == currentPlaying){
+//                    player.start();
+//                    notify("resume");
+//                } else{
+//                    playSong(song);
+//                }
+//                break;
+//            case "next":
+//                if(player.isPlaying())
+//                    player.stop();
+//                playSong(currentPlaying+1);
+//                break;
+//            case "prev":
+//                if(player.isPlaying())
+//                    player.stop();
+//                playSong(currentPlaying-1);
+//                break;
             case "close":
                 notify("stop");
                 stopSelf();
                 break;
-            case "pause":
-                if(player.isPlaying()) {
-                    player.pause();
-                    notify("pause");
-                }
-                break;
-            case "update_list":
-                songs = intent.getParcelableArrayListExtra("list");
-                currentPlaying = intent.getIntExtra("playing",currentPlaying);
-                break;
+//            case "pause":
+//                if(player.isPlaying()) {
+//                    player.pause();
+//                    notify("pause");
+//                }
+//                break;
+//            case "update_list":
+//                songs = intent.getParcelableArrayListExtra("list");
+//                currentPlaying = intent.getIntExtra("playing",currentPlaying);
+//                break;
             case "app_created":
                 notify("start");
                 break;
@@ -211,25 +191,25 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
     }
 
     private void playSong(int songIdx){
-        currentPlaying = songIdx;
-
-        if (currentPlaying == songs.size()) {
-            currentPlaying = 0;
-        }
-        else if (currentPlaying < 0) {
-            currentPlaying = songs.size() - 1;
-        }
-
-        player.reset();
-        try {
-            Song song = songs.get(currentPlaying);
-            updateNotifView(song);
-            player.setDataSource(song.getUrl());
-            player.prepareAsync();
-            notify("start");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        currentPlaying = songIdx;
+//
+//        if (currentPlaying == songs.size()) {
+//            currentPlaying = 0;
+//        }
+//        else if (currentPlaying < 0) {
+//            currentPlaying = songs.size() - 1;
+//        }
+//
+//        player.reset();
+//        try {
+//            Song song = songs.get(currentPlaying);
+//            updateNotifView(song);
+//            player.setDataSource(song.getUrl());
+//            player.prepareAsync();
+//            notify("start");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private void updateNotifView(Song song) {

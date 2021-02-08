@@ -2,9 +2,11 @@ package com.komi.structures;
 
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-public class Group {
+public class Group implements Serializable {
 
     private String groupID;
     private String adminID;
@@ -28,6 +30,7 @@ public class Group {
     }
 
     public Group() {
+        userList = new ArrayList<User>();
     }
 
     public String getGroupID() {

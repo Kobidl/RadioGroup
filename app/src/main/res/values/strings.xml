@@ -33,4 +33,8 @@
     <string name="new_group">Create Group</string>
     <string name="new_group_name">Name</string>
     <string name="description">Description</string>
+    <string name="about">About</string>
+    <string name="members">Members</string>
+    <string name="start_listening">Start Listening</string>
+    <string name="stop_listening">Stop Listening</string>
 </resources>

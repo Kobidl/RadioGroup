@@ -2,7 +2,9 @@ package com.komi.structures;
 
 import androidx.annotation.NonNull;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     private String UID;
     private String username;

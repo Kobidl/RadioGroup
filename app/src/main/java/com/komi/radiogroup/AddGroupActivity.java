@@ -36,11 +36,14 @@ import androidx.core.content.FileProvider;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
 import com.komi.structures.Group;
+import com.komi.structures.User;
 
 import java.io.File;
 import java.util.Objects;
@@ -59,6 +62,7 @@ public class AddGroupActivity extends AppCompatActivity {
     Group group;
 
     private StorageReference mStorageRef;
+    FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,8 +88,11 @@ public class AddGroupActivity extends AppCompatActivity {
         group.setGroupID(uuid.toString());
         group.setGroupName("");
         group.setGroupDescription("");
-
-
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        group.setAdminID(currentUser.getUid());
+        User user = new User(currentUser.getUid(),currentUser.getDisplayName(),currentUser.getDisplayName());
+        group.addUserToUserList(user);
         //Init elements
         imageView = findViewById(R.id.new_group_view);
 

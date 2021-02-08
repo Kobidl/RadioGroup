@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.komi.radiogroup.AddGroupActivity;
+import com.komi.radiogroup.GroupActivity;
 import com.komi.radiogroup.GroupsAdapter;
 import com.komi.radiogroup.R;
 import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
@@ -54,7 +55,7 @@ public class Groups extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_groups, container, false);
 
         //Get groups from firebase db
-        List<Group> groupList = FirebaseDatabaseHelper.getInstance().getGroups();
+        final List<Group> groupList = FirebaseDatabaseHelper.getInstance().getGroups();
 
         /* Init recycler elements */
         RecyclerView recyclerView = rootView.findViewById(R.id.groups_recycler);
@@ -65,7 +66,10 @@ public class Groups extends Fragment {
         groupsAdapter.setListener(new GroupsAdapter.GroupListener() {
             @Override
             public void onClick(int position, View view) {
-
+                Intent intent = new Intent(rootView.getContext(), GroupActivity.class);
+                Group group = groupList.get(position);
+                intent.putExtra("group",group);
+                startActivity(intent);
             }
         });
 
@@ -89,3 +93,4 @@ public class Groups extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
     }
 }
+
