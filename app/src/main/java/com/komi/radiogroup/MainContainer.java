@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
 import com.komi.radiogroup.firebase.FirebaseMessagingHelper;
 import com.komi.radiogroup.pages.Welcome;
+import com.komi.structures.User;
 
 public class MainContainer extends AppCompatActivity implements Welcome.OnWelcomeFragmentListener {
 
@@ -34,7 +35,6 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_container);
 
-
         firebaseAuth = FirebaseAuth.getInstance();
 
         // Initializing Firebase Database
@@ -42,7 +42,6 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
 
         // Initializing Firebase Messaging
 //        FirebaseMessagingHelper.getInstance(MainActivity.this).sendMessageToTopic("A", msg_et.getText().toString());
-
 
         //todo: check if registered by
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
@@ -59,11 +58,18 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
         currentUser = firebaseAuth.getCurrentUser();
         updateDisplayName(name);
         getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, mainFragment).commit();
+
+        // Adding new user to database
+        User newUser = new User();
+        newUser.setUID(currentUser.getUid());
+        newUser.setUsername(currentUser.getEmail());
+        newUser.setFullname(name);
+        newUser.setBio("Bio");
+        FirebaseDatabaseHelper.getInstance().addUserToUsers(newUser);
     }
 
     @Override
     public void onLogin() {
-        Toast.makeText(this, "hello login", Toast.LENGTH_SHORT).show();
         getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, mainFragment).commit();
         currentUser = firebaseAuth.getCurrentUser();
     }
@@ -85,7 +91,7 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
             Toast.makeText(MainContainer.this, "Cant update display name : Not logged in", Toast.LENGTH_SHORT).show();
     }
 
-//
+
 //    private void logoutUser() {
 //        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 //        if (firebaseUser != null)
