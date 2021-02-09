@@ -36,6 +36,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -418,7 +419,7 @@ public class Profile extends Fragment {
                     .into(iv_profile_pic);
             //((TextView) findViewById(R.id.upload_image_text)).setVisibility(View.INVISIBLE);
 
-            /* Uploading image to firbase storage */
+            /* Uploading image to firebase storage */
             UUID uuid = UUID.randomUUID();
             final StorageReference imageRef = mStorageRef.child("images/"+uuid.toString()+"_"+file.getName());
             imageRef.putFile(Uri.fromFile(file.getAbsoluteFile()))
@@ -432,6 +433,9 @@ public class Profile extends Fragment {
                                     user.setProfilePicturePath(url);
                                     //Saving user to db
                                     FirebaseDatabaseHelper.getInstance().addUserToUsers(user);
+                                    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                                    // TODO: decide if necessary
+                                    currentUser.updateProfile(new UserProfileChangeRequest.Builder().setPhotoUri(uri).build());
                                 }
                             });
                         }
