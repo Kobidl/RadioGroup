@@ -7,6 +7,7 @@ import android.os.Parcelable;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
+import com.komi.radiogroup.pages.GroupRadioFragment;
 import com.komi.radiogroup.userlater.MusicPlayerService;
 import com.komi.structures.Group;
 
@@ -25,9 +27,9 @@ import java.util.UUID;
 
 public class GroupActivity extends AppCompatActivity {
 
-    private boolean listening = false;
-    Button startStopListening;
-    Group group;
+    public static boolean listening = false;
+    public static Group group;
+    GroupRadioFragment groupRadioFragment = new GroupRadioFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,32 +44,7 @@ public class GroupActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_24);
 
-        TextView nameTV = findViewById(R.id.group_name_tv);
-        TextView descTV = findViewById(R.id.group_desc_tv);
-        TextView membersTV = findViewById(R.id.group_members_tv);
-        membersTV.setText(getResources().getText(R.string.members) + ":" + group.getUserList().size());
-
-        startStopListening = findViewById(R.id.btn_start_listening);
-        startStopListening.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listening = !listening;
-                if(listening)
-                    playMusic();
-                else
-                    stopMusic();
-            }
-        });
-
-        nameTV.setText(group.getGroupName());
-        descTV.setText(group.getGroupDescription());
-
-        ImageView imageView = findViewById(R.id.group_image_view);
-        Glide.with(this)
-                    .load(group.getProfilePicturePath())
-                    .into(imageView);
-
-
+        getSupportFragmentManager().beginTransaction().replace(R.id.group_frame_layout, groupRadioFragment).commit();
     }
 
     /* If back button pressed on toolbar */
@@ -77,25 +54,6 @@ public class GroupActivity extends AppCompatActivity {
             finish();
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void playMusic(){
-        Intent intent = new Intent(
-                this, MusicPlayerService.class);
-        intent.putExtra("command","start_listening");
-        intent.putExtra("group",group);
-        startService(intent);
-        startStopListening.setText(R.string.stop_listening);
-    }
-
-    private void stopMusic(){
-        try {
-            Intent intent = new Intent(this, MusicPlayerService.class);
-            stopService(intent);
-            startStopListening.setText(R.string.start_listening);
-        }catch (Exception e){
-
-        }
     }
 
 }
