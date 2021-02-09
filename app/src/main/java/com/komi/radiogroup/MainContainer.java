@@ -27,6 +27,7 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
     private FirebaseAuth firebaseAuth;
     Welcome welcomeFragment = new Welcome();
     MainFragment mainFragment = new MainFragment();
+
     FirebaseUser currentUser;
 
     @Override

@@ -10,9 +10,9 @@ public class RecordingItem implements Parcelable {
     private int mId;
     private int mLength;
     private long mTime;
+    private String mFileUrl;
 
-    public RecordingItem()
-    {
+    public RecordingItem() {
     }
 
     public RecordingItem(Parcel in) {
@@ -21,6 +21,7 @@ public class RecordingItem implements Parcelable {
         mId = in.readInt();
         mLength = in.readInt();
         mTime = in.readLong();
+        mFileUrl = in.readString();
     }
 
     public String getFilePath() {
@@ -80,6 +81,7 @@ public class RecordingItem implements Parcelable {
         dest.writeLong(mTime);
         dest.writeString(mFilePath);
         dest.writeString(mName);
+        dest.writeString(mFileUrl);
     }
 
     @Override
@@ -87,4 +89,11 @@ public class RecordingItem implements Parcelable {
         return 0;
     }
 
+    public void setFileUrl(String url) {
+        this.mFileUrl = url;
+    }
+
+    public String getFileUrl() {
+        return this.mFileUrl;
+    }
 }

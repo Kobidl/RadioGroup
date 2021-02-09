@@ -91,6 +91,7 @@ public class AddGroupActivity extends AppCompatActivity {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         group.setAdminID(currentUser.getUid());
+
         User user = new User(currentUser.getUid(),currentUser.getDisplayName(),currentUser.getDisplayName());
         group.addUserToUserList(user);
         //Init elements
@@ -115,7 +116,7 @@ public class AddGroupActivity extends AppCompatActivity {
 //                     data.putExtra("group", (Parcelable) group);
                      setResult(RESULT_OK, data);
                      finish();
-                 }
+                 };
              }
          });
 

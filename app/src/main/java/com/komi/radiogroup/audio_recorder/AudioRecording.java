@@ -77,38 +77,39 @@ public class AudioRecording {
         mRecorder.release();
         mElapsedMillis = (System.currentTimeMillis() - mStartingTimeMillis);
         String path = mContext.getCacheDir() + mFileName;
-        RecordingItem recordingItem = new RecordingItem();
+        final RecordingItem recordingItem = new RecordingItem();
         recordingItem.setFilePath(mContext.getCacheDir() + mFileName);
         recordingItem.setName(mFileName);
-        recordingItem.setLength((int)mElapsedMillis);
+        recordingItem.setLength((int) mElapsedMillis);
         recordingItem.setTime(System.currentTimeMillis());
 
         Uri file = Uri.fromFile(new File(path));
-        final StorageReference recordRef = mStorageRef.child("records/"+mFileName);
+        final StorageReference recordRef = mStorageRef.child("records/" + mFileName);
 
-        recordRef.putFile(file)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        recordRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                String url = uri.toString();
-                                Log.d("cloud path", url);
-                                Toast.makeText(mContext, "path: " + url, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                        // ...
-                    }
-                });
         if (cancel == false) {
-            audioListener.onStop(recordingItem);
+
+            recordRef.putFile(file)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            recordRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    String url = uri.toString();
+                                    recordingItem.setFileUrl(url);
+                                    audioListener.onStop(recordingItem);
+
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle unsuccessful uploads
+                            // ...
+                        }
+                    });
         } else {
             audioListener.onCancel();
         }

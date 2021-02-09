@@ -13,16 +13,21 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.komi.radiogroup.GroupActivity;
 import com.komi.radiogroup.R;
+import com.komi.radiogroup.firebase.MyFirebaseMessagingService;
 import com.komi.structures.Group;
 import com.komi.structures.VoiceRecord;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,10 +45,14 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
     private MediaPlayer player = new MediaPlayer();
     private Group group;
     ArrayList<VoiceRecord> voiceRecords;
-    int currentPlaying = -1;
+    boolean playing = false;
     RemoteViews remoteViews;
+    FirebaseMessaging messaging = FirebaseMessaging.getInstance();
+
+    List<String> messages;
 
     private BroadcastReceiver broadcastReceiver;
+    private String userId;
 
     @Nullable
     @Override
@@ -91,15 +100,25 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
 
         startForeground(NOTIF_ID, builder.build());
 
+        messages = new ArrayList<>();
+
         registerReceiver();
+
 
     }
 
     private void registerReceiver() {
-        IntentFilter filter = new IntentFilter(PLAYER_BROADCAST);
+        IntentFilter filter = new IntentFilter(MyFirebaseMessagingService.FCM_MESSAGE_RECEIVER);
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                String message = intent.getStringExtra("message");
+                String senderId = intent.getStringExtra("sender_id");
+                if(!senderId.equals(userId)) {
+                    messages.add(message);
+                    if (!playing)
+                        playSong();
+                }
 
             }
         };
@@ -114,63 +133,16 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
             case "start_listening":
                 if(!player.isPlaying()) {
                     group = (Group) intent.getSerializableExtra("group");
+                    userId = intent.getStringExtra("user_id");
                     updateNotifView(group);
-//                    try {
-//                        player.setDataSource(songs.get(currentPlaying).getUrl());
-//                        player.prepareAsync();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
+                    messaging.subscribeToTopic(group.getGroupID());
                 }
                 break;
-//            case "play_song":
-//                songs = intent.getParcelableArrayListExtra("list");
-//                song = intent.getIntExtra("song_idx",-1);
-//                if(song == -1){
-//                    song = 0;
-//                }
-//                playSong(song);
-//                break;
-//            case "play":
-//                if(songs == null){
-//                    songs = intent.getParcelableArrayListExtra("songs");
-//                }
-//                song = intent.getIntExtra("song_idx",-1);
-//                if(song == -1) {
-//                    if (!player.isPlaying()) {
-//                        player.start();
-//                    }
-//                }else if (!player.isPlaying() && song == currentPlaying){
-//                    player.start();
-//                    notify("resume");
-//                } else{
-//                    playSong(song);
-//                }
-//                break;
-//            case "next":
-//                if(player.isPlaying())
-//                    player.stop();
-//                playSong(currentPlaying+1);
-//                break;
-//            case "prev":
-//                if(player.isPlaying())
-//                    player.stop();
-//                playSong(currentPlaying-1);
-//                break;
             case "close":
                 notify("stop");
+                messaging.unsubscribeFromTopic(group.getGroupID());
                 stopSelf();
                 break;
-//            case "pause":
-//                if(player.isPlaying()) {
-//                    player.pause();
-//                    notify("pause");
-//                }
-//                break;
-//            case "update_list":
-//                songs = intent.getParcelableArrayListExtra("list");
-//                currentPlaying = intent.getIntExtra("playing",currentPlaying);
-//                break;
             case "app_created":
                 notify("start");
                 break;
@@ -187,29 +159,24 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
                 player.stop();
             player.release();
         }
+        messaging.unsubscribeFromTopic(group.getGroupID());
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
     }
 
-    private void playSong(int songIdx){
-//        currentPlaying = songIdx;
-//
-//        if (currentPlaying == songs.size()) {
-//            currentPlaying = 0;
-//        }
-//        else if (currentPlaying < 0) {
-//            currentPlaying = songs.size() - 1;
-//        }
-//
-//        player.reset();
-//        try {
-//            Song song = songs.get(currentPlaying);
-//            updateNotifView(song);
-//            player.setDataSource(song.getUrl());
-//            player.prepareAsync();
-//            notify("start");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+    private void playSong(){
+        player.reset();
+        try {
+            //updateNotifView(song);
+            if(messages.size() > 0) {
+                playing = true;
+                player.setDataSource(messages.get(0));
+                player.prepareAsync();
+                messages.remove(0);
+                //notify("start");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void updateNotifView(Group group) {
@@ -235,14 +202,23 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
     private void notify(String command) {
         Intent intent = new Intent(PLAYER_BROADCAST);
         intent.putExtra("command",command);
-        intent.putExtra("song_idx",currentPlaying);
+        //intent.putExtra("song_idx",currentPlaying);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
-        playSong(currentPlaying+1);
+        if(messages.size()>0){
+            playSong();
+        }else{
+            stopPlaying();
+        }
         //stopSelf();
+    }
+
+    private void stopPlaying() {
+        player.reset();
+        playing = false;
     }
 
     @Override
