@@ -27,13 +27,14 @@ public class GroupActivity extends AppCompatActivity {
 
     private boolean listening = false;
     Button startStopListening;
+    Group group;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.group_activity_layout);
 
-        Group group = (Group) getIntent().getSerializableExtra("group");
+        group = (Group) getIntent().getSerializableExtra("group");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(group.getGroupName());
         setSupportActionBar(toolbar);
@@ -82,6 +83,7 @@ public class GroupActivity extends AppCompatActivity {
         Intent intent = new Intent(
                 this, MusicPlayerService.class);
         intent.putExtra("command","start_listening");
+        intent.putExtra("group",group);
         startService(intent);
         startStopListening.setText(R.string.stop_listening);
     }

@@ -19,10 +19,9 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.komi.radiogroup.GroupActivity;
 import com.komi.radiogroup.R;
-import com.komi.radiogroup.Song;
+import com.komi.structures.Group;
 import com.komi.structures.VoiceRecord;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
@@ -39,6 +38,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
     final int NOTIF_ID = 1;
 
     private MediaPlayer player = new MediaPlayer();
+    private Group group;
     ArrayList<VoiceRecord> voiceRecords;
     int currentPlaying = -1;
     RemoteViews remoteViews;
@@ -110,11 +110,11 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
     @Override
     public int onStartCommand(Intent intent,int flags,int startId){
         String command = intent.getStringExtra("command");
-        int song;
         switch (command){
             case "start_listening":
                 if(!player.isPlaying()) {
-//                    songs = intent.getParcelableArrayListExtra("list");
+                    group = (Group) intent.getSerializableExtra("group");
+                    updateNotifView(group);
 //                    try {
 //                        player.setDataSource(songs.get(currentPlaying).getUrl());
 //                        player.prepareAsync();
@@ -212,19 +212,19 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
 //        }
     }
 
-    private void updateNotifView(Song song) {
-        remoteViews.setTextViewText(R.id.notif_song_name, song.getName());
-        if (song.getImage() == null  || song.getImage().isEmpty()) {
-            remoteViews.setViewPadding(R.id.notif_song_image,15,15,15,15);
+    private void updateNotifView(Group group) {
+        remoteViews.setTextViewText(R.id.notif_group_name, group.getGroupName());
+        if (group.getProfilePicturePath() == null  || group.getProfilePicturePath().isEmpty()) {
+            remoteViews.setViewPadding(R.id.notif_group_image,15,15,15,15);
             manager.notify(NOTIF_ID, builder.build());
         }else{
-            remoteViews.setImageViewResource(R.id.notif_song_image,android.R.color.transparent);
+            remoteViews.setImageViewResource(R.id.notif_group_image,android.R.color.transparent);
             manager.notify(NOTIF_ID, builder.build());
-            Glide.with(this).asBitmap().load(song.getImage()).into(new SimpleTarget<Bitmap>() {
+            Glide.with(this).asBitmap().load(group.getProfilePicturePath()).into(new SimpleTarget<Bitmap>() {
                 @Override
                 public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                    remoteViews.setViewPadding(R.id.notif_song_image,0,0,0,0);
-                    remoteViews.setImageViewBitmap(R.id.notif_song_image, resource);
+                    remoteViews.setViewPadding(R.id.notif_group_image,0,0,0,0);
+                    remoteViews.setImageViewBitmap(R.id.notif_group_image, resource);
                     manager.notify(NOTIF_ID, builder.build());
                 }
             });
