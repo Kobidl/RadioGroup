@@ -1,11 +1,15 @@
 package com.komi.radiogroup.pages;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.provider.Settings;
 import android.util.Log;
@@ -32,6 +36,7 @@ import com.komi.radiogroup.audio_recorder.AudioListener;
 import com.komi.radiogroup.audio_recorder.AudioRecordButton;
 import com.komi.radiogroup.audio_recorder.AudioRecording;
 import com.komi.radiogroup.audio_recorder.RecordingItem;
+import com.komi.radiogroup.firebase.MyFirebaseMessagingService;
 import com.komi.radiogroup.userlater.MusicPlayerService;
 import com.komi.structures.Group;
 
@@ -46,6 +51,7 @@ import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static com.komi.radiogroup.GroupActivity.group;
 import static com.komi.radiogroup.GroupActivity.listening;
+import static com.komi.radiogroup.userlater.MusicPlayerService.PLAYER_BROADCAST;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,6 +70,7 @@ public class GroupRadioFragment extends Fragment {
     View rootView;
     FirebaseAuth firebaseAuth;
     private String userId;
+    private BroadcastReceiver broadcastReceiver;
 
     public GroupRadioFragment() {
         // Required empty public constructor
@@ -115,13 +122,11 @@ public class GroupRadioFragment extends Fragment {
         mAudioRecordButton.setOnAudioListener(new AudioListener() {
             @Override
             public void onStop(RecordingItem recordingItem) {
-                Toast.makeText(rootView.getContext(), "Audio..", Toast.LENGTH_SHORT).show();
                 sendMessage(recordingItem);
             }
 
             @Override
             public void onCancel() {
-                Toast.makeText(rootView.getContext(), "Cancel", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -145,6 +150,8 @@ public class GroupRadioFragment extends Fragment {
                 }
             }
         });
+
+        registerReceiver();
 
         return rootView;
     }
@@ -188,6 +195,8 @@ public class GroupRadioFragment extends Fragment {
     }
 
     private void playMusic(){
+        stopMusic();
+
         Intent intent = new Intent(rootView.getContext(), MusicPlayerService.class);
         intent.putExtra("command","start_listening");
         intent.putExtra("group",group);
@@ -198,9 +207,10 @@ public class GroupRadioFragment extends Fragment {
 
     private void stopMusic(){
         try {
+            startStopListening.setText(R.string.start_listening);
+
             Intent intent = new Intent(rootView.getContext(), MusicPlayerService.class);
             rootView.getContext().stopService(intent);
-            startStopListening.setText(R.string.start_listening);
         }catch (Exception e){
 
         }
@@ -209,5 +219,35 @@ public class GroupRadioFragment extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    private void registerReceiver() {
+        IntentFilter filter = new IntentFilter(PLAYER_BROADCAST);
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String command = intent.getStringExtra("command");
+                switch (command){
+                    case "closed":
+                        stopMusic();
+                        break;
+                    case "start_playing":
+                        mAudioRecordButton.setEnabled(false);
+                        break;
+                    case "stop_playing":
+                        mAudioRecordButton.setEnabled(true);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
+        LocalBroadcastManager.getInstance(rootView.getContext()).registerReceiver(broadcastReceiver,filter);
+    }
+
+    @Override
+    public void onDestroyView() {
+        LocalBroadcastManager.getInstance(rootView.getContext()).unregisterReceiver(broadcastReceiver);
+        super.onDestroyView();
     }
 }

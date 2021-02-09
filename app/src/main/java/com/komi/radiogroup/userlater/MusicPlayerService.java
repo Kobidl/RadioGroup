@@ -139,12 +139,12 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
                 }
                 break;
             case "close":
-                notify("stop");
+                notify("closed");
                 messaging.unsubscribeFromTopic(group.getGroupID());
                 stopSelf();
                 break;
             case "app_created":
-                notify("start");
+                notify("created");
                 break;
         }
 
@@ -172,7 +172,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
                 player.setDataSource(messages.get(0));
                 player.prepareAsync();
                 messages.remove(0);
-                //notify("start");
+                notify("start_playing");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -202,7 +202,6 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
     private void notify(String command) {
         Intent intent = new Intent(PLAYER_BROADCAST);
         intent.putExtra("command",command);
-        //intent.putExtra("song_idx",currentPlaying);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
@@ -219,6 +218,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
     private void stopPlaying() {
         player.reset();
         playing = false;
+        notify("stop_playing");
     }
 
     @Override
