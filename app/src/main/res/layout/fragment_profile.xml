@@ -16,7 +16,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_margin="25dp"
-            android:src="@drawable/ic_baseline_radio_24"
+            android:src="@drawable/default_profile_pic"
             android:id="@+id/iv_profile_pic"/>
 
         <RelativeLayout
