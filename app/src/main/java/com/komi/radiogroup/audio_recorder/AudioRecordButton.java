@@ -54,6 +54,8 @@ public class AudioRecordButton extends RelativeLayout {
     private boolean isPlaying = false;
     private boolean isPausing = false;
 
+    private boolean enabled = true;
+
 
     private WindowManager.LayoutParams params;
 
@@ -85,6 +87,7 @@ public class AudioRecordButton extends RelativeLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if(!enabled) return true;
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 if (!isPlaying && !isPausing) {
@@ -310,6 +313,16 @@ public class AudioRecordButton extends RelativeLayout {
 
         this.initialXImageButton = this.mImageButton.getX();
 
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        this.enabled = enabled;
+        if(enabled)
+            this.mImageView.setBackground(drawableMicVoice != null ? drawableMicVoice : ContextCompat.getDrawable(mContext, R.drawable.mic_shape));
+        else
+            this.mImageView.setBackground(drawableMicVoice != null ? drawableMicVoice : ContextCompat.getDrawable(mContext, R.drawable.mic_shape_disabled));
     }
 
     public void changeImageView() {

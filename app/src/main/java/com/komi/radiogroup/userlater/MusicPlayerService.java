@@ -13,16 +13,21 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.komi.radiogroup.MainActivity2;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.komi.radiogroup.GroupActivity;
 import com.komi.radiogroup.R;
-import com.komi.radiogroup.Song;
+import com.komi.radiogroup.firebase.MyFirebaseMessagingService;
+import com.komi.structures.Group;
+import com.komi.structures.VoiceRecord;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,19 +35,24 @@ import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class MusicPlayerService extends Service implements MediaPlayer.OnCompletionListener,MediaPlayer.OnPreparedListener{
-    public static final String PLAYER_BROADCAST = "com.kobidl.kdplayer.songchanged";
+    public static final String PLAYER_BROADCAST = "com.komi.radiogroup.songchanged";
 
     NotificationManager manager;
     NotificationCompat.Builder builder;
-    String channelId = "KD_MUSIC_CHANNEL";
+    String channelId = "KM_MUSIC_CHANNEL";
     final int NOTIF_ID = 1;
 
     private MediaPlayer player = new MediaPlayer();
-    ArrayList<Song> songs;
-    int currentPlaying = -1;
+    private Group group;
+    ArrayList<VoiceRecord> voiceRecords;
+    boolean playing = false;
     RemoteViews remoteViews;
+    FirebaseMessaging messaging = FirebaseMessaging.getInstance();
+
+    List<String> messages;
 
     private BroadcastReceiver broadcastReceiver;
+    private String userId;
 
     @Nullable
     @Override
@@ -53,11 +63,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
     @Override
     public void onCreate() {
         super.onCreate();
-        if(songs==null){
-            try {
-                songs = MainActivity2.songs;
-            }catch (Exception ignored){};
-        }
+        voiceRecords = new ArrayList<>();
 
         player.setOnCompletionListener(this);
         player.setOnPreparedListener(this);
@@ -65,7 +71,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
 
         manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        String channelName = "Music channel";
+        String channelName = "Group Channel";
         if (Build.VERSION.SDK_INT >= 26) {
             NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
             manager.createNotificationChannel(channel);
@@ -76,24 +82,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
         remoteViews = new RemoteViews(getPackageName(), R.layout.music_notif);
 
         Intent playIntent = new Intent(this, MusicPlayerService.class);
-        playIntent.putExtra("command", "play");
-        PendingIntent playPendingIntent = PendingIntent.getService(this, 0, playIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.play_btn, playPendingIntent);
-        Intent pauseIntent = new Intent(this, MusicPlayerService.class);
 
-        pauseIntent.putExtra("command", "pause");
-        PendingIntent pausePendingIntent = PendingIntent.getService(this, 1, pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.pause_btn, pausePendingIntent);
-
-        Intent nextIntent = new Intent(this, MusicPlayerService.class);
-        nextIntent.putExtra("command", "next");
-        PendingIntent nextPendingIntent = PendingIntent.getService(this, 2, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.next_btn, nextPendingIntent);
-
-        Intent prevIntent = new Intent(this, MusicPlayerService.class);
-        prevIntent.putExtra("command", "prev");
-        PendingIntent prevPendingIntent = PendingIntent.getService(this, 3, prevIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.prev_btn, prevPendingIntent);
 
         Intent closeIntent = new Intent(this, MusicPlayerService.class);
         closeIntent.putExtra("command", "close");
@@ -102,7 +91,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
 
         builder.setCustomContentView(remoteViews);
 
-        Intent intent = new Intent(this, MainActivity2.class);
+        Intent intent = new Intent(this, GroupActivity.class);
         intent.putExtra("current_playing", 1);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
@@ -111,89 +100,51 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
 
         startForeground(NOTIF_ID, builder.build());
 
+        messages = new ArrayList<>();
+
         registerReceiver();
+
 
     }
 
     private void registerReceiver() {
-        IntentFilter filter = new IntentFilter("com.kobidl.kdplayer.songchanged");
+        IntentFilter filter = new IntentFilter(MyFirebaseMessagingService.FCM_MESSAGE_RECEIVER);
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                String message = intent.getStringExtra("message");
+                String senderId = intent.getStringExtra("sender_id");
+                if(!senderId.equals(userId)) {
+                    messages.add(message);
+                    if (!playing)
+                        playSong();
+                }
 
             }
         };
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,filter);
-
     }
 
 
     @Override
     public int onStartCommand(Intent intent,int flags,int startId){
         String command = intent.getStringExtra("command");
-        int song;
         switch (command){
-            case "new_instance":
+            case "start_listening":
                 if(!player.isPlaying()) {
-                    songs = intent.getParcelableArrayListExtra("list");
-                    try {
-                        player.setDataSource(songs.get(currentPlaying).getUrl());
-                        player.prepareAsync();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    group = (Group) intent.getSerializableExtra("group");
+                    userId = intent.getStringExtra("user_id");
+                    updateNotifView(group);
+                    messaging.subscribeToTopic(group.getGroupID());
                 }
-                break;
-            case "play_song":
-                songs = intent.getParcelableArrayListExtra("list");
-                song = intent.getIntExtra("song_idx",-1);
-                if(song == -1){
-                    song = 0;
-                }
-                playSong(song);
-                break;
-            case "play":
-                if(songs == null){
-                    songs = intent.getParcelableArrayListExtra("songs");
-                }
-                song = intent.getIntExtra("song_idx",-1);
-                if(song == -1) {
-                    if (!player.isPlaying()) {
-                        player.start();
-                    }
-                }else if (!player.isPlaying() && song == currentPlaying){
-                    player.start();
-                    notify("resume");
-                } else{
-                    playSong(song);
-                }
-                break;
-            case "next":
-                if(player.isPlaying())
-                    player.stop();
-                playSong(currentPlaying+1);
-                break;
-            case "prev":
-                if(player.isPlaying())
-                    player.stop();
-                playSong(currentPlaying-1);
                 break;
             case "close":
-                notify("stop");
+                notify("closed");
+                messaging.unsubscribeFromTopic(group.getGroupID());
                 stopSelf();
                 break;
-            case "pause":
-                if(player.isPlaying()) {
-                    player.pause();
-                    notify("pause");
-                }
-                break;
-            case "update_list":
-                songs = intent.getParcelableArrayListExtra("list");
-                currentPlaying = intent.getIntExtra("playing",currentPlaying);
-                break;
             case "app_created":
-                notify("start");
+                notify("created");
                 break;
         }
 
@@ -208,44 +159,39 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
                 player.stop();
             player.release();
         }
+        messaging.unsubscribeFromTopic(group.getGroupID());
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
     }
 
-    private void playSong(int songIdx){
-        currentPlaying = songIdx;
-
-        if (currentPlaying == songs.size()) {
-            currentPlaying = 0;
-        }
-        else if (currentPlaying < 0) {
-            currentPlaying = songs.size() - 1;
-        }
-
+    private void playSong(){
         player.reset();
         try {
-            Song song = songs.get(currentPlaying);
-            updateNotifView(song);
-            player.setDataSource(song.getUrl());
-            player.prepareAsync();
-            notify("start");
+            //updateNotifView(song);
+            if(messages.size() > 0) {
+                playing = true;
+                player.setDataSource(messages.get(0));
+                player.prepareAsync();
+                messages.remove(0);
+                notify("start_playing");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void updateNotifView(Song song) {
-        remoteViews.setTextViewText(R.id.notif_song_name, song.getName());
-        if (song.getImage() == null  || song.getImage().isEmpty()) {
-            remoteViews.setViewPadding(R.id.notif_song_image,15,15,15,15);
+    private void updateNotifView(Group group) {
+        remoteViews.setTextViewText(R.id.notif_group_name, group.getGroupName());
+        if (group.getProfilePicturePath() == null  || group.getProfilePicturePath().isEmpty()) {
+            remoteViews.setViewPadding(R.id.notif_group_image,15,15,15,15);
             manager.notify(NOTIF_ID, builder.build());
         }else{
-            remoteViews.setImageViewResource(R.id.notif_song_image,android.R.color.transparent);
+            remoteViews.setImageViewResource(R.id.notif_group_image,android.R.color.transparent);
             manager.notify(NOTIF_ID, builder.build());
-            Glide.with(this).asBitmap().load(song.getImage()).into(new SimpleTarget<Bitmap>() {
+            Glide.with(this).asBitmap().load(group.getProfilePicturePath()).into(new SimpleTarget<Bitmap>() {
                 @Override
                 public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                    remoteViews.setViewPadding(R.id.notif_song_image,0,0,0,0);
-                    remoteViews.setImageViewBitmap(R.id.notif_song_image, resource);
+                    remoteViews.setViewPadding(R.id.notif_group_image,0,0,0,0);
+                    remoteViews.setImageViewBitmap(R.id.notif_group_image, resource);
                     manager.notify(NOTIF_ID, builder.build());
                 }
             });
@@ -256,14 +202,23 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
     private void notify(String command) {
         Intent intent = new Intent(PLAYER_BROADCAST);
         intent.putExtra("command",command);
-        intent.putExtra("song_idx",currentPlaying);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
-        playSong(currentPlaying+1);
+        if(messages.size()>0){
+            playSong();
+        }else{
+            stopPlaying();
+        }
         //stopSelf();
+    }
+
+    private void stopPlaying() {
+        player.reset();
+        playing = false;
+        notify("stop_playing");
     }
 
     @Override

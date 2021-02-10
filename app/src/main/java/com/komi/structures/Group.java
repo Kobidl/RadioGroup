@@ -2,9 +2,11 @@ package com.komi.structures;
 
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-public class Group {
+public class Group implements Serializable {
 
     private String groupID;
     private String adminID;
@@ -15,7 +17,7 @@ public class Group {
     private boolean isPrivate;
     private List<User> userList;
 
-    public Group(String groupID, String adminID, String groupName, String profilePicturePath, String groupDescription, String timeStamp, boolean isPrivate) {
+    public Group(String groupID, String adminID, String groupName, String profilePicturePath, String groupDescription, String timeStamp, boolean isPrivate,List<User> userList) {
         this.groupID = groupID;
         this.adminID = adminID;
         this.groupName = groupName;
@@ -23,9 +25,12 @@ public class Group {
         this.groupDescription = groupDescription;
         this.timeStamp = timeStamp;
         this.isPrivate = isPrivate;
+        this.userList = userList;
+
     }
 
     public Group() {
+        userList = new ArrayList<User>();
     }
 
     public String getGroupID() {

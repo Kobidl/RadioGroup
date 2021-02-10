@@ -15,7 +15,9 @@ import com.komi.structures.GroupMessage;
 import com.komi.structures.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class FirebaseDatabaseHelper {
 
@@ -31,9 +33,10 @@ public class FirebaseDatabaseHelper {
 
     ValueEventListener usersListener, groupsListener, groupMessagesListener;
 
-    final List<User> users = new ArrayList<>();
+    final HashMap<String,User> users = new HashMap<>();
     final List<Group> groups = new ArrayList<>();
     final List<GroupMessage> groupMessages = new ArrayList<>();
+    User user = null;
 
     public static FirebaseDatabaseHelper getInstance() {
 
@@ -83,8 +86,8 @@ public class FirebaseDatabaseHelper {
 
                 for (DataSnapshot snapshot1 : snapshot.getChildren()){
                     User temp = snapshot1.getValue(User.class);
-                    if(!users.contains(temp)){
-                        users.add(temp);
+                    if(!users.containsKey(temp.getUID())){
+                        users.put(temp.getUID(), temp);
                     }
                 }
             }
@@ -105,6 +108,7 @@ public class FirebaseDatabaseHelper {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 for (DataSnapshot snapshot1 : snapshot.getChildren()){
+
                     Group temp = snapshot1.getValue(Group.class);
                     if(!groups.contains(temp)){
                         groups.add(temp);
@@ -168,7 +172,44 @@ public class FirebaseDatabaseHelper {
         groupMessages.clear();
     }
 
-    public List<User> getUsers() {
+    public User getUserByUID(final String UID) { //This method must be ran async since it has a loop waiting for data
+
+        DatabaseReference databaseReference = firebaseDatabase.getReference().child(DB_USERS);
+        ValueEventListener listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snapshot1 : snapshot.getChildren()){
+                    User temp = snapshot1.getValue(User.class);
+                    if(temp.getUID().matches(UID)){
+                        user = temp;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        databaseReference.addListenerForSingleValueEvent(listener);
+
+        while (user == null){ // waiting until listener fetches the user
+            try {
+                TimeUnit.MILLISECONDS.sleep(250);
+            }
+            catch (InterruptedException ex){
+                ex.printStackTrace();
+            }
+        }
+
+        User temp = user;
+        user = null;
+        databaseReference.removeEventListener(listener);
+        return temp;
+    }
+
+    public HashMap<String,User> getUsers() {
         return users;
     }
     public List<Group> getGroups() { return groups;}

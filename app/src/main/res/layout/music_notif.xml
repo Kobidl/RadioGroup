@@ -4,10 +4,10 @@
     android:layout_height="fill_parent"
     android:padding="10dp">
     <ImageView
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:background="@drawable/notif_image_view"
-        android:id="@+id/notif_song_image"
+        android:id="@+id/notif_group_image"
         android:scaleType="centerCrop"
         />
     <LinearLayout
@@ -16,45 +16,25 @@
         android:layout_weight="1"
         android:orientation="vertical"
         >
-<!--    <RelativeLayout-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content">-->
-<!--        <ImageButton-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:src="@drawable/ic_baseline_close_24"-->
-<!--            android:background="@drawable/control_btn_style"-->
-<!--            android:layout_margin="5dp"-->
-<!--            android:id="@+id/close_btn" />-->
 
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:id="@+id/song_title"-->
-<!--            android:text="KD Player"-->
-<!--            android:layout_centerInParent="true"-->
-<!--            android:padding="5dp"-->
-<!--            android:textSize="20sp"/>-->
-<!--    </RelativeLayout>-->
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        >
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Song Name"
-            android:textSize="18sp"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:layout_gravity="center"
-            android:id="@+id/notif_song_name"
-            />
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Song Name"
+                android:textSize="18sp"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:layout_gravity="center"
+                android:id="@+id/notif_group_name"
+                />
             <ImageButton
                 android:layout_width="30dp"
                 android:layout_height="30dp"
@@ -63,54 +43,7 @@
                 android:scaleType="fitXY"
                 android:id="@+id/close_btn"
                 android:layout_gravity="center"/>
-    </LinearLayout>
+        </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="0dp">
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:src="@android:drawable/ic_media_previous"
-            android:background="@drawable/notif_control_btn"
-            android:layout_margin="5dp"
-            android:id="@+id/prev_btn"
-            />
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:src="@android:drawable/ic_media_play"
-            android:id="@+id/play_btn"
-            android:background="@drawable/notif_control_btn"
-            android:layout_margin="5dp"
-
-            />
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:src="@android:drawable/ic_media_pause"
-            android:background="@drawable/notif_control_btn"
-            android:layout_margin="5dp"
-            android:id="@+id/pause_btn"
-            />
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:src="@android:drawable/ic_media_next"
-            android:background="@drawable/notif_control_btn"
-            android:layout_margin="5dp"
-            android:id="@+id/next_btn"
-            />
-
-    </LinearLayout>
     </LinearLayout>
 </LinearLayout>

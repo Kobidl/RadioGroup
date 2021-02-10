@@ -10,17 +10,19 @@ public class GroupMessage {
     private String msg_ID;
     private String group_ID;
     private String from_ID;
+    private String from_name;
     private String duration;
-    private String timeStamp;
+    private long timeInMillis;
     private String body;
     private int type;
 
-    public GroupMessage(String msg_ID, String group_ID, String from_ID, String duration, String timeStamp, String body, int type) {
+    public GroupMessage(String msg_ID, String group_ID, String from_name, String from_ID, String duration, long timeInMillis, String body, int type) {
         this.msg_ID = msg_ID;
         this.group_ID = group_ID;
         this.from_ID = from_ID;
+        this.from_name = from_name;
         this.duration = duration;
-        this.timeStamp = timeStamp;
+        this.timeInMillis = timeInMillis;
         this.body = body;
         this.type = type;
     }
@@ -43,12 +45,12 @@ public class GroupMessage {
         this.duration = duration;
     }
 
-    public String getTimeStamp() {
-        return timeStamp;
+    public long getTimeInMillis() {
+        return timeInMillis;
     }
 
-    public void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
+    public void setTimeInMillis(long timeInMillis) {
+        this.timeInMillis = timeInMillis;
     }
 
     public String getBody() {
@@ -81,6 +83,14 @@ public class GroupMessage {
 
     public void setGroup_ID(String group_ID) {
         this.group_ID = group_ID;
+    }
+
+    public String getFrom_name() {
+        return from_name;
+    }
+
+    public void setFrom_name(String from_name) {
+        this.from_name = from_name;
     }
 
     @NonNull

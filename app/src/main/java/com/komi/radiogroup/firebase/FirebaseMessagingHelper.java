@@ -83,5 +83,12 @@ public class FirebaseMessagingHelper {
         queue.start();
     }
 
+    public void subscribeToTopic(String topicName) {
+        firebaseMessaging.subscribeToTopic(topicName);
+    }
+
+    public void unsubscribeFromTopic(String topicName) {
+        firebaseMessaging.unsubscribeFromTopic(topicName);
+    }
 
 }
