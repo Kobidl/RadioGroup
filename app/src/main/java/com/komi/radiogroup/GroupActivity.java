@@ -18,6 +18,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.komi.radiogroup.pages.GroupRadioFragment;
+import com.komi.radiogroup.pages.GroupTextFragment;
 import com.komi.radiogroup.userlater.MusicPlayerService;
 import com.komi.structures.Group;
 
@@ -30,6 +31,7 @@ public class GroupActivity extends AppCompatActivity {
     public static boolean listening = false;
     public static Group group;
     GroupRadioFragment groupRadioFragment = new GroupRadioFragment();
+    GroupTextFragment groupTextFragment = new GroupTextFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,8 @@ public class GroupActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_24);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.group_frame_layout, groupRadioFragment).commit();
+        groupTextFragment.setGroup(group);
+        getSupportFragmentManager().beginTransaction().replace(R.id.group_frame_layout, groupTextFragment).commit();
     }
 
     /* If back button pressed on toolbar */
