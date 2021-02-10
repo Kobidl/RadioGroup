@@ -1,30 +1,18 @@
 package com.komi.radiogroup;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
 
-import com.bumptech.glide.Glide;
+import com.google.android.material.tabs.TabLayout;
 import com.komi.radiogroup.pages.GroupRadioFragment;
 import com.komi.radiogroup.pages.GroupTextFragment;
-import com.komi.radiogroup.userlater.MusicPlayerService;
 import com.komi.structures.Group;
-
-import org.w3c.dom.Text;
-
-import java.util.UUID;
 
 public class GroupActivity extends AppCompatActivity {
 
@@ -32,6 +20,9 @@ public class GroupActivity extends AppCompatActivity {
     public static Group group;
     GroupRadioFragment groupRadioFragment = new GroupRadioFragment();
     GroupTextFragment groupTextFragment = new GroupTextFragment();
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
+    private GroupTabAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +37,20 @@ public class GroupActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_24);
 
+        tabLayout = (TabLayout) findViewById(R.id.group_tab_layout);
+        viewPager = (ViewPager) findViewById(R.id.group_view_pager);
+
+        adapter = new GroupTabAdapter(getSupportFragmentManager(),1);
+        adapter.addFragment(new GroupRadioFragment(), "Radio");
+        adapter.addFragment(new GroupTextFragment(), "Chat");
+
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
+
         //groupTextFragment.setGroup(group);
         //getSupportFragmentManager().beginTransaction().replace(R.id.group_frame_layout, groupTextFragment).commit();
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.group_frame_layout, groupRadioFragment).commit();
+//        getSupportFragmentManager().beginTransaction().replace(R.id.group_frame_layout, groupRadioFragment).commit();
     }
 
     /* If back button pressed on toolbar */

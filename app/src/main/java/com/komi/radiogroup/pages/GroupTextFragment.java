@@ -36,9 +36,10 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.UUID;
 
+import static com.komi.radiogroup.GroupActivity.group;
+
 public class GroupTextFragment extends Fragment {
 
-    Group group;
     View rootView;
 
     RecyclerView feedRecyclerView;
@@ -116,10 +117,6 @@ public class GroupTextFragment extends Fragment {
 
         // Unsubscribing from group messaging topic
         //FirebaseMessagingHelper.getInstance(getContext()).unsubscribeFromTopic(group.getGroupID());
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
     }
 
     private void registerMessagesListener(String groupID) {
