@@ -32,14 +32,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.komi.radiogroup.MainContainer;
 import com.komi.radiogroup.R;
 import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
 import com.komi.structures.User;
@@ -296,6 +299,8 @@ public class Profile extends Fragment {
                                 editor.putString(SP_FULLNAME, user.getFullname());
                                 editor.putString(SP_BIO, user.getBio());
                                 editor.apply();
+                                //Updating new user display name in Auth
+                                updateDisplayName(user.getFullname());
 
                                 mDialog.dismiss();
                             }
@@ -466,4 +471,15 @@ public class Profile extends Fragment {
         return result;
     }
 
+    private void updateDisplayName(String name) {
+        if (currentUser != null) {
+            currentUser.updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(name).build()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                }
+            });
+        }
+        else
+            return;
+    }
 }
