@@ -12,21 +12,39 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="User fullname"
-            android:textSize="18sp"
-            android:layout_marginHorizontal="5dp"
-            android:textColor="@color/colorPrimary"
-            android:id="@+id/tv_msg_name"/>
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="18sp"
+                android:layout_marginHorizontal="10dp"
+                android:textColor="@color/colorPrimary"
+                android:id="@+id/tv_msg_name"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="18sp"
+                android:layout_marginHorizontal="10dp"
+                android:textColor="@color/colorOrange"
+                android:id="@+id/tv_msg_name_user"
+                android:layout_alignParentRight="true"/>
+
+        </RelativeLayout>
+
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Message content"
             android:textSize="16sp"
-            android:layout_marginHorizontal="5dp"
+            android:layout_marginHorizontal="10dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:id="@+id/tv_msg_body"/>
