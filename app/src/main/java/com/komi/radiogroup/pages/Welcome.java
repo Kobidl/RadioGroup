@@ -125,7 +125,7 @@ public class Welcome extends Fragment
         return rootView;
     }
 
-    public void onRegister(String email, String password, final String name) {
+    public void onRegister(final String email, final String password, final String name) {
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
