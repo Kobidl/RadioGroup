@@ -82,7 +82,8 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
 
         remoteViews = new RemoteViews(getPackageName(), R.layout.music_notif);
 
-        Intent playIntent = new Intent(this, MusicPlayerService.class);
+        //Intent playIntent = new Intent(this, MusicPlayerService.class);
+
 
 
         Intent closeIntent = new Intent(this, MusicPlayerService.class);

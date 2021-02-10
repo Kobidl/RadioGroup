@@ -2,7 +2,6 @@
 
 - Show chat from the end //Mishel
 
-- Fix notification radio channel issues //Kobi
 - Allow recording from notification //Kobi
 
 - Add : Join/Leave group //Mishel
@@ -15,8 +14,6 @@
     Add : Close group for admin
     Add : Edit group details for admin
 
-- Add tabs for group to select Text/Radio //Kobi
-
 - Explore page //Mishel
     Add : Allow refreshing group
     Add : Allow searching by group name
@@ -28,3 +25,7 @@
 - Profile page : show all groups created by user //Mishel
 
 - UI //God save us
+
+- Handle not allowing recording permissions - notif + btn in group
+
+- Coming from notif no groups shown

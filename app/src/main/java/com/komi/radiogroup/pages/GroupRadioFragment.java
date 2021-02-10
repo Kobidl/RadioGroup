@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,6 +46,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.RECORD_AUDIO;
@@ -143,6 +145,7 @@ public class GroupRadioFragment extends Fragment {
                 if(listening) {
                     playMusic();
                     mAudioRecordButton.setVisibility(View.VISIBLE);
+                    Objects.requireNonNull(getActivity()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                 }
                 else {
                     mAudioRecordButton.setVisibility(View.GONE);
@@ -154,9 +157,11 @@ public class GroupRadioFragment extends Fragment {
         if(listening){
             mAudioRecordButton.setVisibility(View.VISIBLE);
             startStopListening.setText(R.string.stop_listening);
+            Objects.requireNonNull(getActivity()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
 
         registerReceiver();
+
 
         return rootView;
     }
@@ -214,9 +219,9 @@ public class GroupRadioFragment extends Fragment {
     private void stopMusic(){
         try {
             startStopListening.setText(R.string.start_listening);
-
             Intent intent = new Intent(rootView.getContext(), MusicPlayerService.class);
             rootView.getContext().stopService(intent);
+            Objects.requireNonNull(getActivity()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }catch (Exception e){
 
         }
@@ -254,6 +259,7 @@ public class GroupRadioFragment extends Fragment {
     @Override
     public void onDestroyView() {
         LocalBroadcastManager.getInstance(rootView.getContext()).unregisterReceiver(broadcastReceiver);
+        Objects.requireNonNull(getActivity()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         super.onDestroyView();
     }
 }
