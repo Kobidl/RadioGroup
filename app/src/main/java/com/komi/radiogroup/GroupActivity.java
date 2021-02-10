@@ -46,10 +46,10 @@ public class GroupActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_24);
 
-        //groupTextFragment.setGroup(group);
-        //getSupportFragmentManager().beginTransaction().replace(R.id.group_frame_layout, groupTextFragment).commit();
+        groupTextFragment.setGroup(group);
+        getSupportFragmentManager().beginTransaction().replace(R.id.group_frame_layout, groupTextFragment).commit();
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.group_frame_layout, groupRadioFragment).commit();
+        //getSupportFragmentManager().beginTransaction().replace(R.id.group_frame_layout, groupRadioFragment).commit();
     }
 
     /* If back button pressed on toolbar */

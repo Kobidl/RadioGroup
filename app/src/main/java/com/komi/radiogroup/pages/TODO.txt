@@ -1,6 +1,6 @@
 
 
-- Show chat from the end //Mishel
+- Show chat from the end //Mishel  //COMPLETED
 
 - Fix notification radio channel issues //Kobi
 - Allow recording from notification //Kobi
