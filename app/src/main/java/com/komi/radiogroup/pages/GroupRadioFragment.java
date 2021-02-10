@@ -159,6 +159,7 @@ public class GroupRadioFragment extends Fragment {
     private void sendMessage(RecordingItem recordingItem) {
         final JSONObject rootObject = new JSONObject();
         try {
+            Log.i("testrecording","Groupid : " + group.getGroupID());
             rootObject.put("to", "/topics/" + group.getGroupID());
             rootObject.put("data", new JSONObject().put("message", recordingItem.getFileUrl()).put("sender_id", userId));
             String url = "https://fcm.googleapis.com/fcm/send";
@@ -171,7 +172,7 @@ public class GroupRadioFragment extends Fragment {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
+                    Log.i("testrecording","error when sending recording "+error.toString());
                 }
             }) {
                 @Override
@@ -188,7 +189,7 @@ public class GroupRadioFragment extends Fragment {
                 }
             };
             queue.add(request);
-            queue.start();
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

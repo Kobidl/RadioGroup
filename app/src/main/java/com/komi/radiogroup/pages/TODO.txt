@@ -1,0 +1,30 @@
+
+
+- Show chat from the end //Mishel
+
+- Fix notification radio channel issues //Kobi
+- Allow recording from notification //Kobi
+
+- Add : Join/Leave group //Mishel
+
+- Group Detailed view:
+    Add : View user list in group and onclick user show profile //Mishel
+    Add : Leave group button //Mishel
+    Add : Invite link for admin //Kobi
+    Add : Change privacy for admin
+    Add : Close group for admin
+    Add : Edit group details for admin
+
+- Add tabs for group to select Text/Radio //Kobi
+
+- Explore page //Mishel
+    Add : Allow refreshing group
+    Add : Allow searching by group name
+
+- When creating a group allow selecting Private/Public //Race
+
+- Groups page : show all groups user is member of and allow filtering //Kobi
+
+- Profile page : show all groups created by user //Mishel
+
+- UI //God save us
