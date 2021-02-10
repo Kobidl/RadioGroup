@@ -1,17 +1,20 @@
 package com.komi.structures;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 
-public class User implements Serializable {
+public class User implements Parcelable {
 
-    private String UID;
-    private String username;
-    private String fullname;
-    private String bio;
-    private String profilePicturePath;
-    private String timeStamp;
+    private String UID = "";
+    private String username = "";
+    private String fullname = "";
+    private String bio = "";
+    private String profilePicturePath = "";
+    private String timeStamp = "";
 
     public User(String UID, String username, String fullname, String bio, String profilePicturePath, String timeStamp) {
         this.UID = UID;
@@ -32,6 +35,27 @@ public class User implements Serializable {
     }
 
     public User() {}
+
+    protected User(Parcel in) {
+        UID = in.readString();
+        username = in.readString();
+        fullname = in.readString();
+        bio = in.readString();
+        profilePicturePath = in.readString();
+        timeStamp = in.readString();
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     public String getUID() {
         return UID;
@@ -87,5 +111,20 @@ public class User implements Serializable {
 
         String string = "\nUsername : " + username + "\nUID : " + UID + "\nFullname : " + fullname;
         return string;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(UID);
+        parcel.writeString(username);
+        parcel.writeString(fullname);
+        parcel.writeString(bio);
+        parcel.writeString(profilePicturePath);
+        parcel.writeString(timeStamp);
     }
 }

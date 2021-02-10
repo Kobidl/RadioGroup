@@ -76,10 +76,10 @@ public class GroupRadioFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static GroupRadioFragment newInstance(Group group) {
+    public static GroupRadioFragment newInstance() {
         GroupRadioFragment fragment = new GroupRadioFragment();
         Bundle args = new Bundle();
-        args.putSerializable(GROUP_PARAM, group);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -151,6 +151,11 @@ public class GroupRadioFragment extends Fragment {
             }
         });
 
+        if(listening){
+            mAudioRecordButton.setVisibility(View.VISIBLE);
+            startStopListening.setText(R.string.stop_listening);
+        }
+
         registerReceiver();
 
         return rootView;
@@ -197,10 +202,10 @@ public class GroupRadioFragment extends Fragment {
 
     private void playMusic(){
         stopMusic();
-
+        String a = "start_listening";
         Intent intent = new Intent(rootView.getContext(), MusicPlayerService.class);
-        intent.putExtra("command","start_listening");
         intent.putExtra("group",group);
+        intent.putExtra("action",a);
         intent.putExtra("user_id",userId);
         rootView.getContext().startService(intent);
         startStopListening.setText(R.string.stop_listening);
@@ -227,7 +232,7 @@ public class GroupRadioFragment extends Fragment {
         broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                String command = intent.getStringExtra("command");
+                String command = intent.getStringExtra("action");
                 switch (command){
                     case "closed":
                         stopMusic();

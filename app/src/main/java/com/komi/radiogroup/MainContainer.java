@@ -1,6 +1,7 @@
 package com.komi.radiogroup;
 
 import android.content.BroadcastReceiver;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -21,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
 import com.komi.radiogroup.firebase.FirebaseMessagingHelper;
 import com.komi.radiogroup.pages.Welcome;
+import com.komi.structures.Group;
 import com.komi.structures.User;
 
 public class MainContainer extends AppCompatActivity implements Welcome.OnWelcomeFragmentListener {
@@ -52,6 +54,8 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
         }else {
             getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, mainFragment).commit();
         }
+
+
     }
 
     @Override

@@ -20,6 +20,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.komi.radiogroup.GroupActivity;
+import com.komi.radiogroup.MainContainer;
 import com.komi.radiogroup.R;
 import com.komi.radiogroup.firebase.MyFirebaseMessagingService;
 import com.komi.structures.Group;
@@ -43,7 +44,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
     final int NOTIF_ID = 1;
 
     private MediaPlayer player = new MediaPlayer();
-    private Group group;
+    private static Group group;
     ArrayList<VoiceRecord> voiceRecords;
     boolean playing = false;
     RemoteViews remoteViews;
@@ -85,16 +86,11 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
 
 
         Intent closeIntent = new Intent(this, MusicPlayerService.class);
-        closeIntent.putExtra("command", "close");
+        closeIntent.putExtra("action", "close");
         PendingIntent closePendingIntent = PendingIntent.getService(this, 4, closeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.close_btn, closePendingIntent);
 
         builder.setCustomContentView(remoteViews);
-
-        Intent intent = new Intent(this, GroupActivity.class);
-        intent.putExtra("current_playing", 1);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pendingIntent);
 
         builder.setSmallIcon(android.R.drawable.ic_media_play);
 
@@ -128,13 +124,20 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
 
     @Override
     public int onStartCommand(Intent intent,int flags,int startId){
-        String command = intent.getStringExtra("command");
+        String command = intent.getStringExtra("action");
+
         switch (command){
             case "start_listening":
                 if(!player.isPlaying()) {
-                    group = (Group) intent.getSerializableExtra("group");
+                    group = (Group) intent.getParcelableExtra("group");
                     userId = intent.getStringExtra("user_id");
                     updateNotifView(group);
+                    Intent openIntent = new Intent(this, GroupActivity.class);
+                    openIntent.putExtra("group",group);
+                    openIntent.putExtra("playing",true);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, openIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    builder.setContentIntent(pendingIntent);
+
                     messaging.subscribeToTopic(group.getGroupID());
                 }
                 break;
@@ -201,7 +204,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
 
     private void notify(String command) {
         Intent intent = new Intent(PLAYER_BROADCAST);
-        intent.putExtra("command",command);
+        intent.putExtra("action",command);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 

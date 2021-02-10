@@ -1,5 +1,6 @@
 package com.komi.radiogroup;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -29,7 +30,8 @@ public class GroupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.group_activity_layout);
 
-        group = (Group) getIntent().getSerializableExtra("group");
+        group = (Group) getIntent().getParcelableExtra("group");
+        listening = getIntent().getBooleanExtra("playing",false);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(group.getGroupName());
         setSupportActionBar(toolbar);
@@ -57,6 +59,9 @@ public class GroupActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == android.R.id.home){
+            Intent intent = new Intent(this,MainContainer.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+            startActivity(intent);
             finish();
         }
         return super.onOptionsItemSelected(item);
