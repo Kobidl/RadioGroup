@@ -1,6 +1,7 @@
 package com.komi.radiogroup;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,11 +66,12 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<GroupMessageAdapte
         if(groupMessage.getFrom_ID().matches(currentUser.getUid())){ // Case the message was send by the user
             holder.tv_name_user.setText("Me");
             holder.tv_name_other.setText("");
+            holder.tv_body.setGravity(Gravity.RIGHT);
         }
-        else{
+        else{ // Case the message is from another user
             holder.tv_name_other.setText(groupMessage.getFrom_name());
             holder.tv_name_user.setText("");
-
+            holder.tv_body.setGravity(Gravity.LEFT);
         }
         holder.tv_body.setText(groupMessage.getBody());
         holder.tv_time.setText(getDate(groupMessage.getTimeInMillis()));
