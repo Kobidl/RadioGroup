@@ -98,7 +98,6 @@ public class AudioRecording {
                                     String url = uri.toString();
                                     recordingItem.setFileUrl(url);
                                     audioListener.onStop(recordingItem);
-
                                 }
                             });
                         }
