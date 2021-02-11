@@ -78,6 +78,8 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewH
     public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
         Group group = groups.get(position);
         holder.name.setText(group.getGroupName());
+        Integer membersSize = group.getUserMap().size();
+        holder.members.setText(membersSize.toString());
 
         if(group.getProfilePicturePath() != null && !group.getProfilePicturePath().isEmpty()) {
             try {
