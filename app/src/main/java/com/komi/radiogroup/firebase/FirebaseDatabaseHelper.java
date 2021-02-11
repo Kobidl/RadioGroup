@@ -1,6 +1,5 @@
 package com.komi.radiogroup.firebase;
 
-import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -17,6 +16,7 @@ import com.komi.structures.User;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class FirebaseDatabaseHelper {
@@ -37,6 +37,13 @@ public class FirebaseDatabaseHelper {
     final List<Group> groups = new ArrayList<>();
     final List<GroupMessage> groupMessages = new ArrayList<>();
     User user = null;
+
+    // For join/leave group
+    boolean userAddedToGroup, userRemovedFromGroup = false;
+
+    // For groupsByUid
+    boolean finishedFetching = false;
+    List<Group> groupsByUid = new ArrayList<>();
 
     public static FirebaseDatabaseHelper getInstance() {
 
@@ -106,7 +113,7 @@ public class FirebaseDatabaseHelper {
         groupsListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
+                groups.clear();
                 for (DataSnapshot snapshot1 : snapshot.getChildren()){
 
                     Group temp = snapshot1.getValue(Group.class);
@@ -121,7 +128,7 @@ public class FirebaseDatabaseHelper {
 
             }
         };
-        groupListenerRef.addListenerForSingleValueEvent(groupsListener);
+        groupListenerRef.addValueEventListener(groupsListener);
     }
 
     // GroupID will be user to filter messages to only save ones with provided GroupID
@@ -209,12 +216,170 @@ public class FirebaseDatabaseHelper {
         return temp;
     }
 
+    public void addUserToGroup(final String userID, final String groupID){ // ******Must be run async
+        userAddedToGroup = false;
+        final DatabaseReference reference = firebaseDatabase.getReference().child(DB_GROUPS);
+        final ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snapshot1 : snapshot.getChildren()){
+                    final Group temp = snapshot1.getValue(Group.class);
+                    if(temp.getGroupID().matches(groupID)){
+                        if(!temp.getUserMap().containsKey(userID)){
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Map<String,User> userMap = temp.getUserMap();
+                                    User user = getUserByUID(userID);
+                                    userMap.put(userID, user);
+                                    temp.setUserMap(userMap);
+                                    addGroupToGroups(temp);
+                                    userAddedToGroup = true;
+                                }
+                            }).start();
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        };
+        reference.addListenerForSingleValueEvent(valueEventListener);
+
+        while(!userAddedToGroup){
+            try {
+                TimeUnit.MILLISECONDS.sleep(250);
+            }
+            catch (InterruptedException ex){
+                ex.printStackTrace();
+            }
+        }
+        userAddedToGroup = false;
+        reference.removeEventListener(valueEventListener);
+    }
+
+    public void removeUserFromGroup(final String userID, final String groupID){ // ******Must be run async
+        userRemovedFromGroup = false;
+        DatabaseReference reference = firebaseDatabase.getReference().child(DB_GROUPS);
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snapshot1 : snapshot.getChildren()){
+                    final Group temp = snapshot1.getValue(Group.class);
+                    if(temp.getGroupID().matches(groupID)){
+                        Map<String,User> userMap = temp.getUserMap();
+                        if(userMap.containsKey(userID)){
+                            userMap.remove(userID);
+                            temp.setUserMap(userMap);
+                            addGroupToGroups(temp);
+                            userRemovedFromGroup = true;
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        };
+
+        reference.addListenerForSingleValueEvent(valueEventListener);
+
+        while(!userRemovedFromGroup){
+            try {
+                TimeUnit.MILLISECONDS.sleep(250);
+            }
+            catch (InterruptedException ex){
+                ex.printStackTrace();
+            }
+        }
+        userRemovedFromGroup = false;
+        reference.removeEventListener(valueEventListener);
+    }
+
+    public List<Group> getGroupsByUID(final String UID){ //*****Must be run async
+        finishedFetching = false;
+        groupsByUid.clear();
+        DatabaseReference reference = firebaseDatabase.getReference().child(DB_GROUPS);
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snapshot1 : snapshot.getChildren()){
+                    Group temp = snapshot1.getValue(Group.class);
+                    if(temp.getUserMap().containsKey(UID)){
+                        groupsByUid.add(temp);
+                    }
+                }
+                finishedFetching = true;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        reference.addListenerForSingleValueEvent(valueEventListener);
+
+        while(!finishedFetching){
+            try {
+                TimeUnit.MILLISECONDS.sleep(250);
+            }
+            catch (InterruptedException ex){
+                ex.printStackTrace();
+            }
+        }
+        reference.removeEventListener(valueEventListener);
+        finishedFetching = false;
+        return groupsByUid;
+    }
+
+    public List<Group> getGroupsByAdminID(final String UID) { //*****Must be run async
+        finishedFetching = false;
+        groupsByUid.clear();
+        DatabaseReference reference = firebaseDatabase.getReference().child(DB_GROUPS);
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snapshot1 : snapshot.getChildren()){
+                    Group temp = snapshot1.getValue(Group.class);
+                    if(temp.getAdminID().matches(UID)){
+                        groupsByUid.add(temp);
+                    }
+                }
+                finishedFetching = true;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        reference.addListenerForSingleValueEvent(valueEventListener);
+
+        while(!finishedFetching){
+            try {
+                TimeUnit.MILLISECONDS.sleep(250);
+            }
+            catch (InterruptedException ex){
+                ex.printStackTrace();
+            }
+        }
+        reference.removeEventListener(valueEventListener);
+        finishedFetching = false;
+        return groupsByUid;
+    }
+
     public HashMap<String,User> getUsers() {
         return users;
     }
     public List<Group> getGroups() { return groups;}
     public List<GroupMessage> getGroupMessages() { return groupMessages;}
 
+    private void removeListenerFromRef(DatabaseReference reference, ValueEventListener listener) {
 
+
+    }
 
 }

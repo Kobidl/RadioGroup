@@ -49,10 +49,6 @@ public class GroupActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        //groupTextFragment.setGroup(group);
-        //getSupportFragmentManager().beginTransaction().replace(R.id.group_frame_layout, groupTextFragment).commit();
-
-//        getSupportFragmentManager().beginTransaction().replace(R.id.group_frame_layout, groupRadioFragment).commit();
     }
 
     /* If back button pressed on toolbar */

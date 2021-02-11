@@ -15,6 +15,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -42,12 +44,17 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.komi.radiogroup.GroupMessageAdapter;
 import com.komi.radiogroup.MainContainer;
 import com.komi.radiogroup.R;
 import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
+import com.komi.radiogroup.userlater.UserGroupsIsAdminAdapter;
+import com.komi.structures.Group;
 import com.komi.structures.User;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
@@ -80,6 +87,7 @@ public class Profile extends Fragment {
     FirebaseAuth firebaseAuth;
     FirebaseUser currentUser;
     User user;
+    List<Group> groupsByUser;
     File file;
     private StorageReference mStorageRef;
 
@@ -87,6 +95,9 @@ public class Profile extends Fragment {
     ImageView iv_profile_pic;
     TextView tv_fullName, tv_bio;
     Button btn_editProfile;
+
+    RecyclerView groupsRecyclerView;
+    UserGroupsIsAdminAdapter adapter;
 
     private boolean canTakeImage = false;
 
@@ -154,11 +165,12 @@ public class Profile extends Fragment {
 
         }
 
-        // Loading current users details into
+        // Loading current users details and Initializing user's Groups recyclerview
         new Thread(new Runnable() {
             @Override
             public void run() {
                 user = FirebaseDatabaseHelper.getInstance().getUserByUID(firebaseAuth.getCurrentUser().getUid());
+                groupsByUser = FirebaseDatabaseHelper.getInstance().getGroupsByAdminID(user.getUID());
 
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -185,6 +197,12 @@ public class Profile extends Fragment {
                         editor.putString(SP_BIO, user.getBio());
                         editor.apply();
 
+                        // Initialize groups by user recyclerView
+                        groupsRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_groups_by_user);
+                        groupsRecyclerView.setHasFixedSize(true);
+                        groupsRecyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext(),LinearLayoutManager.HORIZONTAL, false));
+                        adapter = new UserGroupsIsAdminAdapter(groupsByUser);
+                        groupsRecyclerView.setAdapter(adapter);
                     }
                 });
 
@@ -202,6 +220,7 @@ public class Profile extends Fragment {
         } else {
             canTakeImage = true;
         }
+
 
         btn_editProfile.setOnClickListener(new View.OnClickListener() {
             @Override

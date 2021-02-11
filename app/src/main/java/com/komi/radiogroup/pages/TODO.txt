@@ -1,10 +1,10 @@
 
 
-- Show chat from the end //Mishel
+- Show chat from the end //Mishel  //COMPLETED
 
 - Allow recording from notification //Kobi
 
-- Add : Join/Leave group //Mishel
+- Add : Join/Leave group //Mishel //COMPLETED **Functions have been implemented and
 
 - Group Detailed view:
     Add : View user list in group and onclick user show profile //Mishel
@@ -22,7 +22,7 @@
 
 - Groups page : show all groups user is member of and allow filtering //Kobi
 
-- Profile page : show all groups created by user //Mishel
+- Profile page : show all groups created by user //Mishel //COMPLETED
 
 - UI //God save us
 

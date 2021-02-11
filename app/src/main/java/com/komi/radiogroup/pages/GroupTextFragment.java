@@ -103,6 +103,7 @@ public class GroupTextFragment extends Fragment {
         groupMessageAdapter = new GroupMessageAdapter(getContext(), groupMessages);
         feedRecyclerView.setAdapter(groupMessageAdapter);
 
+
         registerMessagesListener(group.getGroupID());
 
         return rootView;
@@ -141,6 +142,7 @@ public class GroupTextFragment extends Fragment {
                 });
                 groupMessageAdapter.setGroupMessages(groupMessages);
                 groupMessageAdapter.notifyDataSetChanged();
+                feedRecyclerView.scrollToPosition(groupMessageAdapter.getItemCount()-1);
             }
 
             @Override

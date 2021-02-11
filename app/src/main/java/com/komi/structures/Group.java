@@ -7,7 +7,9 @@ import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Group implements Parcelable {
 
@@ -18,9 +20,9 @@ public class Group implements Parcelable {
     private String groupDescription = "";
     private String timeStamp = "";
     private boolean isPrivate = false;
-    private List<User> userList;
+    private Map<String,User> userMap = new HashMap<>();
 
-    public Group(String groupID, String adminID, String groupName, String profilePicturePath, String groupDescription, String timeStamp, boolean isPrivate,List<User> userList) {
+    public Group(String groupID, String adminID, String groupName, String profilePicturePath, String groupDescription, String timeStamp, boolean isPrivate,HashMap<String,User> userMap) {
         this.groupID = groupID;
         this.adminID = adminID;
         this.groupName = groupName;
@@ -28,12 +30,12 @@ public class Group implements Parcelable {
         this.groupDescription = groupDescription;
         this.timeStamp = timeStamp;
         this.isPrivate = isPrivate;
-        this.userList = userList;
+        this.userMap = userMap;
 
     }
 
     public Group() {
-        userList = new ArrayList<User>();
+        userMap = new HashMap<>();
     }
 
 
@@ -45,7 +47,10 @@ public class Group implements Parcelable {
         groupDescription = in.readString();
         timeStamp = in.readString();
         isPrivate = in.readByte() != 0;
-        userList = in.createTypedArrayList(User.CREATOR);
+        if(userMap == null){
+            userMap = new HashMap<>();
+        }
+        in.readMap(userMap,User.class.getClassLoader());
     }
 
     public static final Creator<Group> CREATOR = new Creator<Group>() {
@@ -116,12 +121,16 @@ public class Group implements Parcelable {
         isPrivate = aPrivate;
     }
 
-    public List<User> getUserList() {
-        return userList;
+    public Map<String,User> getUserMap() {
+        return userMap;
     }
 
     public void addUserToUserList(User user) {
-        userList.add(user);
+        userMap.put(user.getUID(), user);
+    }
+
+    public void setUserMap(Map<String, User> userMap) {
+        this.userMap = userMap;
     }
 
     @NonNull
@@ -147,7 +156,10 @@ public class Group implements Parcelable {
         parcel.writeString(groupDescription);
         parcel.writeString(timeStamp);
         parcel.writeByte((byte) (isPrivate ? 1 : 0));
-        parcel.writeList(userList);
+        if(userMap == null){
+            userMap = new HashMap<>();
+        }
+        parcel.writeMap(userMap);
     }
 
 }

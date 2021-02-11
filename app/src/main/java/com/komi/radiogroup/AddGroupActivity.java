@@ -200,6 +200,7 @@ public class AddGroupActivity extends AppCompatActivity {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.choose_image_dialog);
+        saveBtn.setEnabled(false);
 
         dialog.setOnKeyListener(new Dialog.OnKeyListener() {
 
@@ -208,6 +209,7 @@ public class AddGroupActivity extends AppCompatActivity {
                                  KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
                     dialog.dismiss();
+                    saveBtn.setEnabled(true);
                 }
                 return true;
             }
@@ -218,6 +220,7 @@ public class AddGroupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                saveBtn.setEnabled(true);
             }
         });
 
@@ -311,6 +314,7 @@ public class AddGroupActivity extends AppCompatActivity {
                                 public void onSuccess(Uri uri) {
                                     String url = uri.toString();
                                     group.setProfilePicturePath(url);
+                                    saveBtn.setEnabled(true);
                                 }
                             });
                         }
