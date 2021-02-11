@@ -145,7 +145,6 @@ public class GroupRadioFragment extends Fragment {
                     Objects.requireNonNull(getActivity()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
                 }
                 else {
-                    mAudioRecordButton.setVisibility(View.GONE);
                     stopMusic();
                 }
             }
@@ -204,21 +203,22 @@ public class GroupRadioFragment extends Fragment {
 
     private void playMusic(){
         stopMusic();
-        String a = "start_listening";
         Intent intent = new Intent(rootView.getContext(), MusicPlayerService.class);
-        intent.putExtra("group",group);
-        intent.putExtra("action",a);
+        intent.putExtra("action","start_listening");
         intent.putExtra("user_id",userId);
+        intent.putExtra("group",group);
         rootView.getContext().startService(intent);
         startStopListening.setText(R.string.stop_listening);
     }
 
     private void stopMusic(){
         try {
+            mAudioRecordButton.setVisibility(View.GONE);
             startStopListening.setText(R.string.start_listening);
             Intent intent = new Intent(rootView.getContext(), MusicPlayerService.class);
             rootView.getContext().stopService(intent);
             Objects.requireNonNull(getActivity()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         }catch (Exception e){
 
         }

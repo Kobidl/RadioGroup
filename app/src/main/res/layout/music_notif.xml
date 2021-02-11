@@ -46,16 +46,16 @@
                 android:layout_gravity="center"/>
         </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/save"
-            android:textColor="@android:color/white"
-            app:cornerRadius="6dp"
-            android:id="@+id/save_group"
-            android:enabled="true"
-            />
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/save"-->
+<!--            android:textColor="@android:color/white"-->
+<!--            app:cornerRadius="6dp"-->
+<!--            android:id="@+id/save_group"-->
+<!--            android:enabled="true"-->
+<!--            />-->
 
     </LinearLayout>
 
