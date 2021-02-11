@@ -44,6 +44,11 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".GroupDetails"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+
         <service android:name=".userlater.MusicPlayerService"/>
 
         <provider
@@ -55,6 +60,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/files_dir" />
         </provider>
+
 
         <service android:name=".firebase.MyFirebaseMessagingService">
             <intent-filter>

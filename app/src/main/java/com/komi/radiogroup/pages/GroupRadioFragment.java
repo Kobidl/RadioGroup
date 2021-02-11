@@ -95,18 +95,6 @@ public class GroupRadioFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_group_radio, container, false);
-        TextView nameTV = rootView.findViewById(R.id.group_name_tv);
-        TextView descTV = rootView.findViewById(R.id.group_desc_tv);
-        TextView membersTV = rootView.findViewById(R.id.group_members_tv);
-        membersTV.setText(getResources().getText(R.string.members) + ":" + group.getUserMap().size());
-
-        nameTV.setText(group.getGroupName());
-        descTV.setText(group.getGroupDescription());
-
-        ImageView imageView = rootView.findViewById(R.id.group_image_view);
-        Glide.with(this)
-                .load(group.getProfilePicturePath())
-                .into(imageView);
 
         ActivityCompat.requestPermissions(getActivity(), new String[]{WRITE_EXTERNAL_STORAGE, RECORD_AUDIO, READ_EXTERNAL_STORAGE},0);
 
