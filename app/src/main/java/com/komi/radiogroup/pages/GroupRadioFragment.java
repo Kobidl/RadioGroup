@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -30,13 +29,11 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.komi.radiogroup.R;
 import com.komi.radiogroup.audio_recorder.AudioListener;
 import com.komi.radiogroup.audio_recorder.AudioRecordButton;
 import com.komi.radiogroup.audio_recorder.AudioRecording;
 import com.komi.radiogroup.audio_recorder.RecordingItem;
-import com.komi.radiogroup.firebase.MyFirebaseMessagingService;
 import com.komi.radiogroup.userlater.MusicPlayerService;
 import com.komi.structures.Group;
 
@@ -99,7 +96,7 @@ public class GroupRadioFragment extends Fragment {
         TextView nameTV = rootView.findViewById(R.id.group_name_tv);
         TextView descTV = rootView.findViewById(R.id.group_desc_tv);
         TextView membersTV = rootView.findViewById(R.id.group_members_tv);
-        membersTV.setText(getResources().getText(R.string.members) + ":" + group.getUserList().size());
+        membersTV.setText(getResources().getText(R.string.members) + ":" + group.getUserMap().size());
 
         nameTV.setText(group.getGroupName());
         descTV.setText(group.getGroupDescription());

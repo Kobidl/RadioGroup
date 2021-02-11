@@ -5,7 +5,7 @@
 - Fix notification radio channel issues //Kobi
 - Allow recording from notification //Kobi
 
-- Add : Join/Leave group //Mishel
+- Add : Join/Leave group //Mishel //COMPLETED **Functions have been implemented and 
 
 - Group Detailed view:
     Add : View user list in group and onclick user show profile //Mishel

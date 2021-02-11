@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.komi.radiogroup.AddGroupActivity;
 import com.komi.radiogroup.GroupActivity;
 import com.komi.radiogroup.GroupsAdapter;
@@ -24,6 +25,7 @@ import java.util.List;
 
 public class Groups extends Fragment {
 
+    Group group;
 
     public Groups() {
         // Required empty public constructor
@@ -67,7 +69,8 @@ public class Groups extends Fragment {
             @Override
             public void onClick(int position, View view) {
                 Intent intent = new Intent(rootView.getContext(), GroupActivity.class);
-                Group group = groupList.get(position);
+                group = groupList.get(position);
+
                 intent.putExtra("group",group);
                 startActivity(intent);
             }

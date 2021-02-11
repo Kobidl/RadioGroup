@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Group implements Serializable {
@@ -15,9 +16,9 @@ public class Group implements Serializable {
     private String groupDescription;
     private String timeStamp;
     private boolean isPrivate;
-    private List<User> userList;
+    private HashMap<String,User> userMap;
 
-    public Group(String groupID, String adminID, String groupName, String profilePicturePath, String groupDescription, String timeStamp, boolean isPrivate,List<User> userList) {
+    public Group(String groupID, String adminID, String groupName, String profilePicturePath, String groupDescription, String timeStamp, boolean isPrivate,HashMap<String,User> userMap) {
         this.groupID = groupID;
         this.adminID = adminID;
         this.groupName = groupName;
@@ -25,12 +26,12 @@ public class Group implements Serializable {
         this.groupDescription = groupDescription;
         this.timeStamp = timeStamp;
         this.isPrivate = isPrivate;
-        this.userList = userList;
+        this.userMap = userMap;
 
     }
 
     public Group() {
-        userList = new ArrayList<User>();
+        userMap = new HashMap<>();
     }
 
     public String getGroupID() {
@@ -89,12 +90,16 @@ public class Group implements Serializable {
         isPrivate = aPrivate;
     }
 
-    public List<User> getUserList() {
-        return userList;
+    public HashMap<String,User> getUserMap() {
+        return userMap;
     }
 
     public void addUserToUserList(User user) {
-        userList.add(user);
+        userMap.put(user.getUID(), user);
+    }
+
+    public void setUserMap(HashMap<String, User> userMap) {
+        this.userMap = userMap;
     }
 
     @NonNull
