@@ -16,7 +16,7 @@ import java.util.List;
 
 public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewHolder> {
 
-    private final List<Group> groups;
+    private List<Group> groups;
     private GroupListener listener;
 
     public interface GroupListener {
@@ -97,5 +97,9 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewH
     @Override
     public int getItemCount() {
         return groups.size();
+    }
+
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
     }
 }
