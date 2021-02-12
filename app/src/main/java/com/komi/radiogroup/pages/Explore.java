@@ -1,49 +1,52 @@
 package com.komi.radiogroup.pages;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.komi.radiogroup.GroupActivity;
+import com.komi.radiogroup.GroupsAdapter;
 import com.komi.radiogroup.R;
+import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
+import com.komi.structures.Group;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Explore#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class Explore extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    View rootView;
+    Group group;
+    List<Group> groupList;
+    RecyclerView recyclerView;
+    GroupsAdapter groupsAdapter;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public Explore() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Explore.
-     */
-    // TODO: Rename and change types and number of parameters
     public static Explore newInstance(String param1, String param2) {
         Explore fragment = new Explore();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,16 +54,66 @@ public class Explore extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_explore, container, false);
+        rootView = inflater.inflate(R.layout.fragment_explore, container, false);
+
+        /* Init recycler elements */
+        recyclerView = rootView.findViewById(R.id.explore_recycler);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
+        groupList = new ArrayList<>();
+        groupsAdapter = new GroupsAdapter(groupList);
+        groupsAdapter.setListener(new GroupsAdapter.GroupListener() {
+            @Override
+            public void onClick(int position, View view) {
+                Intent intent = new Intent(rootView.getContext(), GroupActivity.class);
+                group = groupList.get(position);
+
+                intent.putExtra("group",group);
+                startActivity(intent);
+            }
+        });
+
+        recyclerView.setAdapter(groupsAdapter);
+
+        // Setting the group listener
+        setListenerWithSubstring(""); //Empty substring for init so we get all groups
+
+        // TODO: set a listener that will search on user input and get rid of the button
+        final EditText et_search = rootView.findViewById(R.id.et_search);
+        Button btn_search = rootView.findViewById(R.id.btn_search);
+        btn_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Updating the listener to search with the substring
+                String substring = et_search.getText().toString();
+                FirebaseDatabaseHelper.getInstance().removeExploreListener();
+                setListenerWithSubstring(substring);
+            }
+        });
+
+        return rootView;
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        FirebaseDatabaseHelper.getInstance().removeExploreListener();
+    }
+
+    public void setListenerWithSubstring(String substring) {
+        FirebaseDatabaseHelper.getInstance().setExploreListener(FirebaseAuth.getInstance().getCurrentUser().getUid(),substring ,new FirebaseDatabaseHelper.OnExploreDataChangedCallback() {
+            @Override
+            public void onDataReceived(List<Group> groups) {
+                groupsAdapter.setGroups(groups);
+                groupsAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
 }

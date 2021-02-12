@@ -29,9 +29,9 @@ public class FirebaseDatabaseHelper {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
 
-    DatabaseReference usersListenerRef, groupListenerRef, groupMessageListenerRef;
+    DatabaseReference usersListenerRef, groupListenerRef, groupMessageListenerRef, exploreListenerRef;
 
-    ValueEventListener usersListener, groupsListener, groupMessagesListener;
+    ValueEventListener usersListener, groupsListener, groupMessagesListener, exploreListener;
 
     final HashMap<String,User> users = new HashMap<>();
     final List<Group> groups = new ArrayList<>();
@@ -65,6 +65,10 @@ public class FirebaseDatabaseHelper {
         setUsersListener();
         setGroupsListener();
 
+    }
+
+    public interface OnExploreDataChangedCallback{
+        void onDataReceived(List<Group> groups);
     }
 
     public void addUserToUsers(User user) {
@@ -369,6 +373,32 @@ public class FirebaseDatabaseHelper {
         reference.removeEventListener(valueEventListener);
         finishedFetching = false;
         return groupsByUid;
+    }
+
+    public void setExploreListener(final String userID, final String subString, final OnExploreDataChangedCallback callback) {
+
+        exploreListenerRef = firebaseDatabase.getReference().child(DB_GROUPS);
+        exploreListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Group> groups = new ArrayList<>();
+                for (DataSnapshot snapshot1 : snapshot.getChildren()){
+                    Group temp = snapshot1.getValue(Group.class);
+                    if(!temp.getUserMap().containsKey(userID) && !temp.isPrivate() && temp.getGroupName().contains(subString) ){ //if user not in group and group is public and group name contains substring
+                        groups.add(temp);
+                    }
+                }
+                callback.onDataReceived(groups);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        };
+        exploreListenerRef.addValueEventListener(exploreListener);
+    }
+
+    public void removeExploreListener(){
+        exploreListenerRef.removeEventListener(exploreListener);
     }
 
     public HashMap<String,User> getUsers() {

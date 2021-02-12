@@ -4,7 +4,7 @@
 
 - Allow recording from notification //Kobi
 
-- Add : Join/Leave group //Mishel //COMPLETED **Functions have been implemented and
+- Add : Join/Leave group //Mishel //COMPLETED **Functions have been implemented
 
 - Group Detailed view:
     Add : View user list in group and onclick user show profile //Mishel
@@ -16,9 +16,9 @@
 
 - Explore page //Mishel
     Add : Allow refreshing group
-    Add : Allow searching by group name
+    Add : Allow searching by group name // COMPLETED
 
-- When creating a group allow selecting Private/Public //Race
+- When creating a group allow selecting Private/Public //Race //COMPLETED
 
 - Groups page : show all groups user is member of and allow filtering //Mishel //COMPLETED
 
@@ -29,3 +29,5 @@
 - Handle not allowing recording permissions - notif + btn in group
 
 - Coming from notif no groups shown
+
+- set a listener that will search on user input and get rid of the button
