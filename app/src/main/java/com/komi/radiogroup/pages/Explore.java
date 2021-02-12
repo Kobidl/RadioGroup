@@ -110,6 +110,7 @@ public class Explore extends Fragment {
         FirebaseDatabaseHelper.getInstance().setExploreListener(FirebaseAuth.getInstance().getCurrentUser().getUid(),substring ,new FirebaseDatabaseHelper.OnExploreDataChangedCallback() {
             @Override
             public void onDataReceived(List<Group> groups) {
+                groupList = groups;
                 groupsAdapter.setGroups(groups);
                 groupsAdapter.notifyDataSetChanged();
             }
