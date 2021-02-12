@@ -172,42 +172,43 @@ public class Profile extends Fragment {
                 user = FirebaseDatabaseHelper.getInstance().getUserByUID(firebaseAuth.getCurrentUser().getUid());
                 groupsByUser = FirebaseDatabaseHelper.getInstance().getGroupsByAdminID(user.getUID());
 
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                if(getActivity()!=null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
 
-                        tv_fullName.setText(user.getFullname());
-                        tv_bio.setText(user.getBio());
+                            tv_fullName.setText(user.getFullname());
+                            tv_bio.setText(user.getBio());
 
-                        // Getting profile pic from storage and setting it
-                        if(user.getProfilePicturePath() != null && !user.getProfilePicturePath().isEmpty()){
-                            Glide.with(getContext())
-                                    .load(user.getProfilePicturePath())
-                                    .into(iv_profile_pic);
+                            // Getting profile pic from storage and setting it
+                            if (user.getProfilePicturePath() != null && !user.getProfilePicturePath().isEmpty()) {
+                                Glide.with(getContext())
+                                        .load(user.getProfilePicturePath())
+                                        .into(iv_profile_pic);
+                            } else { // Set default profile pic
+                                iv_profile_pic.setImageResource(R.drawable.default_profile_pic);
+                            }
+
+                            // Saving latest profile info to shared preferences
+                            SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString(SP_UID, firebaseAuth.getCurrentUser().getUid());
+                            editor.putString(SP_FULLNAME, user.getFullname());
+                            editor.putString(SP_BIO, user.getBio());
+                            editor.apply();
+
+                            // Initialize groups by user recyclerView
+                            groupsRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_groups_by_user);
+                            groupsRecyclerView.setHasFixedSize(true);
+                            groupsRecyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.HORIZONTAL, false));
+                            adapter = new UserGroupsIsAdminAdapter(groupsByUser);
+                            groupsRecyclerView.setAdapter(adapter);
                         }
-                        else { // Set default profile pic
-                            iv_profile_pic.setImageResource(R.drawable.default_profile_pic);
-                        }
-
-                        // Saving latest profile info to shared preferences
-                        SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString(SP_UID, firebaseAuth.getCurrentUser().getUid());
-                        editor.putString(SP_FULLNAME, user.getFullname());
-                        editor.putString(SP_BIO, user.getBio());
-                        editor.apply();
-
-                        // Initialize groups by user recyclerView
-                        groupsRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_groups_by_user);
-                        groupsRecyclerView.setHasFixedSize(true);
-                        groupsRecyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext(),LinearLayoutManager.HORIZONTAL, false));
-                        adapter = new UserGroupsIsAdminAdapter(groupsByUser);
-                        groupsRecyclerView.setAdapter(adapter);
-                    }
-                });
-
+                    });
+                }
             }
         }).start();
+
 
         //Request image permissions
         if (Build.VERSION.SDK_INT >= 23) {
@@ -501,4 +502,10 @@ public class Profile extends Fragment {
         else
             return;
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
 }
+
