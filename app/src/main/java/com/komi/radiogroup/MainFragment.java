@@ -113,4 +113,5 @@ public class MainFragment extends Fragment {
         super.onDestroy();
         FirebaseDatabaseHelper.getInstance().removeListeners();
     }
+
 }

@@ -20,7 +20,7 @@
 
 - When creating a group allow selecting Private/Public //Race
 
-- Groups page : show all groups user is member of and allow filtering //Kobi
+- Groups page : show all groups user is member of and allow filtering //Mishel //COMPLETED
 
 - Profile page : show all groups created by user //Mishel //COMPLETED
 

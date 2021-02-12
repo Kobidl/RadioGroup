@@ -21,6 +21,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -58,6 +60,7 @@ public class AddGroupActivity extends AppCompatActivity {
     ImageView imageView;
     Button saveBtn;
     File file;
+    CheckBox cb_private;
 
     Group group;
 
@@ -88,12 +91,14 @@ public class AddGroupActivity extends AppCompatActivity {
         group.setGroupID(uuid.toString());
         group.setGroupName("");
         group.setGroupDescription("");
+        group.setPrivate(false);
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         group.setAdminID(currentUser.getUid());
 
         User user = new User(currentUser.getUid(),currentUser.getDisplayName(),currentUser.getDisplayName());
         group.addUserToUserList(user);
+
         //Init elements
         imageView = findViewById(R.id.new_group_view);
 
@@ -105,8 +110,6 @@ public class AddGroupActivity extends AppCompatActivity {
         });
 
          saveBtn = findViewById(R.id.save_group);
-
-
          saveBtn.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
@@ -117,6 +120,14 @@ public class AddGroupActivity extends AppCompatActivity {
                      setResult(RESULT_OK, data);
                      finish();
                  };
+             }
+         });
+
+         cb_private = findViewById(R.id.cb_private);
+         cb_private.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+             @Override
+             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                 group.setPrivate(isChecked);
              }
          });
 
