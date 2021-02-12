@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -71,12 +72,15 @@ public class AddGroupActivity extends AppCompatActivity {
         UUID uuid = UUID.randomUUID();
 
         //Set toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.new_group);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_24);
+        TextView titleTV = findViewById(R.id.toolbar_title);
+        titleTV.setText(R.string.new_group);
+        ImageButton backBtn = findViewById(R.id.toolbar_back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         //Getting storage instance
         mStorageRef = FirebaseStorage.getInstance().getReference();
@@ -186,14 +190,14 @@ public class AddGroupActivity extends AppCompatActivity {
     }
 
 
-    /* If back button pressed on toolbar */
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    /* If back button pressed on toolbar */
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        if(item.getItemId() == android.R.id.home){
+//            finish();
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     private void openPickDialog() {
         final Dialog dialog = new Dialog(this, R.style.WideDialog);

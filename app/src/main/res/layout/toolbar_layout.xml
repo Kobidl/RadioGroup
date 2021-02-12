@@ -1,23 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:minHeight="?attr/actionBarSize"
+    android:id="@+id/toolbar"
     android:layout_height="wrap_content"
+    app:titleTextColor="@android:color/white"
+    android:background="?attr/colorPrimary"
+    android:orientation="horizontal"
+    android:paddingStart="15dp"
+    android:paddingEnd="15dp"
     >
 
+   <ImageButton
+       android:layout_width="26dp"
+       android:layout_height="26dp"
+       android:scaleType="fitXY"
+       android:src="@drawable/ic_baseline_arrow_back_ios_24"
+       android:background="@android:color/transparent"
+       android:backgroundTint="@android:color/transparent"
+       android:layout_centerVertical="true"
+       android:id="@+id/toolbar_back_btn"
+       />
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:minHeight="?attr/actionBarSize"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:titleTextColor="@android:color/white"
-            android:background="?attr/colorPrimary">
-        </androidx.appcompat.widget.Toolbar>
-    </com.google.android.material.appbar.AppBarLayout>
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="@string/app_name"
+       android:textColor="@color/white"
+       android:layout_centerInParent="true"
+       android:textSize="20sp"
+       android:textStyle="bold"
+       android:id="@+id/toolbar_title"
+       />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>

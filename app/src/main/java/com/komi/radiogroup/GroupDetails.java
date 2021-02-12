@@ -1,32 +1,23 @@
 package com.komi.radiogroup;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.komi.structures.Group;
 import com.komi.structures.User;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 public class GroupDetails extends AppCompatActivity {
 
@@ -46,13 +37,16 @@ public class GroupDetails extends AppCompatActivity {
 
         imageView.setMaxHeight(metrics.widthPixels-100);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.group_details);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_ios_24);
+        //Set toolbar
+        TextView titleTV = findViewById(R.id.toolbar_title);
+        titleTV.setText(R.string.group_details);
+        ImageButton backBtn = findViewById(R.id.toolbar_back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         if(group.getProfilePicturePath() != null) {
             Glide.with(imageView).load(group.getProfilePicturePath()).into(imageView);
@@ -78,14 +72,6 @@ public class GroupDetails extends AppCompatActivity {
         recyclerView.setNestedScrollingEnabled(false);
 
 
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     public void leaveGroup(View view) {

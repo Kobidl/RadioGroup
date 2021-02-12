@@ -2,6 +2,7 @@ package com.komi.radiogroup;
 
 import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -42,6 +43,14 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
 
         // Initializing Firebase Database
         FirebaseDatabaseHelper.getInstance();
+
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        Uri data = intent.getData();
+
+        Log.d("action",action);
+        if(data!=null)
+            Log.d("data",data.toString());
 
         // Initializing Firebase Messaging
 //        FirebaseMessagingHelper.getInstance(MainActivity.this).sendMessageToTopic("A", msg_et.getText().toString());

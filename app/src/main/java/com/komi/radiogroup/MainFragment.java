@@ -16,6 +16,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -72,13 +74,12 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
-        ((AppCompatActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(toolbar);
-//        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
-//        assert actionBar != null;
-//        actionBar.setDisplayHomeAsUpEnabled(true);
-//        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
-        setHasOptionsMenu(true);
+
+        //Set toolbar
+        TextView titleTV = rootView.findViewById(R.id.toolbar_title);
+        titleTV.setText(R.string.group_details);
+        ImageButton backBtn = rootView.findViewById(R.id.toolbar_back_btn);
+        backBtn.setVisibility(View.GONE);
 
         bottomNavigationView = rootView.findViewById(R.id.bottom_navigation_view);
         bottomNavigationView.setSelectedItemId(R.id.bottom_navigation_item_profile);
