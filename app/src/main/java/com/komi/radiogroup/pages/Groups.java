@@ -27,6 +27,7 @@ import com.komi.radiogroup.R;
 import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
 import com.komi.structures.Group;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Groups extends Fragment {
@@ -37,8 +38,6 @@ public class Groups extends Fragment {
     RecyclerView recyclerView;
     GroupsAdapter groupsAdapter;
 
-    DatabaseReference groupsReference;
-    ValueEventListener listener;
 
     public Groups() {
         // Required empty public constructor
@@ -69,41 +68,31 @@ public class Groups extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_groups, container, false);
 
-        new Thread(new Runnable() {
+        groupList = new ArrayList<>();
+        recyclerView = rootView.findViewById(R.id.groups_recycler);
+        recyclerView.setHasFixedSize(true);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
+        groupsAdapter = new GroupsAdapter(groupList);
+        groupsAdapter.setListener(new GroupsAdapter.GroupListener() {
             @Override
-            public void run() {
-                //Get groups from firebase db
-                groupList = FirebaseDatabaseHelper.getInstance().getGroupsByUID(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            public void onClick(int position, View view) {
+                Intent intent = new Intent(rootView.getContext(), GroupActivity.class);
+                group = groupList.get(position);
 
-                if(getActivity() != null) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            /* Init recycler elements */
-                            recyclerView = rootView.findViewById(R.id.groups_recycler);
-                            recyclerView.setHasFixedSize(true);
-
-                            recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
-                            groupsAdapter = new GroupsAdapter(groupList);
-                            groupsAdapter.setListener(new GroupsAdapter.GroupListener() {
-                                @Override
-                                public void onClick(int position, View view) {
-                                    Intent intent = new Intent(rootView.getContext(), GroupActivity.class);
-                                    group = groupList.get(position);
-
-                                    intent.putExtra("group",group);
-                                    startActivity(intent);
-                                }
-                            });
-
-                            recyclerView.setAdapter(groupsAdapter);
-                            registerGroupsListener(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                        }
-                    });
-                }
-
+                intent.putExtra("group",group);
+                startActivity(intent);
             }
-        }).start();
+        });
+        recyclerView.setAdapter(groupsAdapter);
+
+        FirebaseDatabaseHelper.getInstance().setGroupsByUIDListener(FirebaseAuth.getInstance().getCurrentUser().getUid(), new FirebaseDatabaseHelper.OnGroupsDataChangedCallback() {
+            @Override
+            public void onDataReceived(List<Group> groups) {
+                groupsAdapter.setGroups(groups);
+                groupsAdapter.notifyDataSetChanged();
+            }
+        });
 
         // Init floating btn
         FloatingActionButton openNew = rootView.findViewById(R.id.group_add_btn);
@@ -129,31 +118,7 @@ public class Groups extends Fragment {
         super.onDestroyView();
 
         //Unregistering listener
-        groupsReference.removeEventListener(listener);
-    }
-
-    private void registerGroupsListener(final String userID) {
-        groupsReference = FirebaseDatabase.getInstance().getReference().child(FirebaseDatabaseHelper.DB_GROUPS);
-        listener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                groupList.clear();
-                for (DataSnapshot snapshot1 : snapshot.getChildren()){
-                    Group temp = snapshot1.getValue(Group.class);
-                    if(temp.getUserMap().containsKey(userID)){
-                        groupList.add(temp);
-                    }
-                }
-                groupsAdapter.setGroups(groupList);
-                groupsAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        };
-        groupsReference.addValueEventListener(listener);
+        FirebaseDatabaseHelper.getInstance().removeGroupsByUIDListener();
     }
 
 }

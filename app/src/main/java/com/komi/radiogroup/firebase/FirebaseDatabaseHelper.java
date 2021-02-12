@@ -63,11 +63,14 @@ public class FirebaseDatabaseHelper {
 
         // Setting users listener
         setUsersListener();
-        setGroupsListener();
 
     }
 
     public interface OnExploreDataChangedCallback{
+        void onDataReceived(List<Group> groups);
+    }
+
+    public interface OnGroupsDataChangedCallback{
         void onDataReceived(List<Group> groups);
     }
 
@@ -112,29 +115,6 @@ public class FirebaseDatabaseHelper {
         usersListenerRef.addListenerForSingleValueEvent(usersListener);
     }
 
-    private void setGroupsListener() {
-
-        groupsListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                groups.clear();
-                for (DataSnapshot snapshot1 : snapshot.getChildren()){
-
-                    Group temp = snapshot1.getValue(Group.class);
-                    if(!groups.contains(temp)){
-                        groups.add(temp);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        };
-        groupListenerRef.addValueEventListener(groupsListener);
-    }
-
     // GroupID will be user to filter messages to only save ones with provided GroupID
     public void setGroupMessageListener(final String groupID) {
         groupMessageListenerRef = firebaseDatabase.getReference().child(DB_GROUP_MESSAGES).child(groupID);
@@ -164,8 +144,6 @@ public class FirebaseDatabaseHelper {
 
     public void removeListeners() {
         removeUsersListener();
-        removeGroupsListener();
-        //removeGroupMessagesListener(); GroupMessages listener may be null
     }
 
     public void removeUsersListener() {
@@ -173,15 +151,6 @@ public class FirebaseDatabaseHelper {
         users.clear();
     }
 
-    public void removeGroupsListener() {
-        groupListenerRef.removeEventListener(groupsListener);
-        groups.clear();
-    }
-
-    public void removeGroupMessagesListener() {
-        groupMessageListenerRef.removeEventListener(groupMessagesListener);
-        groupMessages.clear();
-    }
 
     public User getUserByUID(final String UID) { //This method must be ran async since it has a loop waiting for data
 
@@ -301,20 +270,20 @@ public class FirebaseDatabaseHelper {
         reference.removeEventListener(valueEventListener);
     }
 
-    public List<Group> getGroupsByUID(final String UID){ //*****Must be run async
-        finishedFetching = false;
-        groupsByUid.clear();
-        DatabaseReference reference = firebaseDatabase.getReference().child(DB_GROUPS);
-        ValueEventListener valueEventListener = new ValueEventListener() {
+    public void setGroupsByUIDListener(final String UID, final OnGroupsDataChangedCallback callback) {
+
+        groupListenerRef = firebaseDatabase.getReference().child(DB_GROUPS);
+        groupsListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Group> groupList = new ArrayList<>();
                 for (DataSnapshot snapshot1 : snapshot.getChildren()){
                     Group temp = snapshot1.getValue(Group.class);
                     if(temp.getUserMap().containsKey(UID)){
-                        groupsByUid.add(temp);
+                        groupList.add(temp);
                     }
                 }
-                finishedFetching = true;
+                callback.onDataReceived(groupList);
             }
 
             @Override
@@ -322,20 +291,11 @@ public class FirebaseDatabaseHelper {
 
             }
         };
+        groupListenerRef.addListenerForSingleValueEvent(groupsListener);
+    }
 
-        reference.addListenerForSingleValueEvent(valueEventListener);
-
-        while(!finishedFetching){
-            try {
-                TimeUnit.MILLISECONDS.sleep(250);
-            }
-            catch (InterruptedException ex){
-                ex.printStackTrace();
-            }
-        }
-        reference.removeEventListener(valueEventListener);
-        finishedFetching = false;
-        return groupsByUid;
+    public void removeGroupsByUIDListener() {
+        groupListenerRef.removeEventListener(groupsListener);
     }
 
     public List<Group> getGroupsByAdminID(final String UID) { //*****Must be run async
@@ -404,11 +364,11 @@ public class FirebaseDatabaseHelper {
     public HashMap<String,User> getUsers() {
         return users;
     }
+
     public List<Group> getGroups() { return groups;}
     public List<GroupMessage> getGroupMessages() { return groupMessages;}
 
     private void removeListenerFromRef(DatabaseReference reference, ValueEventListener listener) {
-
 
     }
 
