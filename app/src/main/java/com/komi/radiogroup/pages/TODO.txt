@@ -1,18 +1,17 @@
 
-
 - Show chat from the end //Mishel  //COMPLETED
 
-- Allow recording from notification //Kobi
+- Allow recording from notification //Kobi // Can't do it
 
 - Add : Join/Leave group //Mishel //COMPLETED **Functions have been implemented and
 
 - Group Detailed view:
-    Add : View user list in group and onclick user show profile //Mishel
-    Add : Leave group button //Mishel
-    Add : Invite link for admin //Kobi
-    Add : Change privacy for admin
-    Add : Close group for admin
-    Add : Edit group details for admin
+    Add : View user list in group and onclick user show profile //Kobi
+    Add : Leave group button //Kobi
+    Add : Invite link for admin //Kobi //Half Done
+    Add : Change privacy for admin //Kobi
+    Add : Close group for admin //Kobi
+    Add : Edit group details for admin // Kobi
 
 - Explore page //Mishel
     Add : Allow refreshing group

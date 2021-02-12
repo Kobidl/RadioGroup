@@ -5,7 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardUseCompatPadding="true"
     android:elevation="8dp"
-    app:cardCornerRadius="10dp">
+    app:cardCornerRadius="10dp"
+    android:id="@+id/message_container">
 
     <LinearLayout
         android:layout_width="match_parent"

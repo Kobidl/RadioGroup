@@ -12,4 +12,5 @@
     <color name="seek_bar_progress">@color/colorPrimary</color>
     <color name="seek_bar_secondary_progress">@color/colorPrimary</color>
     <color name="lightBlack">#777</color>
+    <color name="colorLightBackground">#fcfcfc</color>
 </resources>

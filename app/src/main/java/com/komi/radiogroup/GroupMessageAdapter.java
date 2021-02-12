@@ -1,6 +1,7 @@
 package com.komi.radiogroup;
 
 import android.content.Context;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,9 +31,12 @@ import java.util.concurrent.TimeUnit;
 
 public class GroupMessageAdapter extends RecyclerView.Adapter<GroupMessageAdapter.GroupMessageViewHolder>{
 
+    private final DisplayMetrics metrics;
+
     public class GroupMessageViewHolder extends RecyclerView.ViewHolder {
 
         TextView tv_name_other, tv_name_user, tv_body, tv_time;
+        CardView message_container;
 
         public GroupMessageViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -39,6 +44,8 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<GroupMessageAdapte
             tv_name_user = itemView.findViewById(R.id.tv_msg_name_user);
             tv_body = itemView.findViewById(R.id.tv_msg_body);
             tv_time = itemView.findViewById(R.id.tv_msg_time);
+            message_container = itemView.findViewById(R.id.message_container);
+
         }
     }
 
@@ -50,6 +57,7 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<GroupMessageAdapte
         this.context = context;
         this.groupMessages = NgroupMessages;
         this.currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        metrics = context.getResources().getDisplayMetrics();
     }
 
     @NonNull
@@ -66,15 +74,24 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<GroupMessageAdapte
         if(groupMessage.getFrom_ID().matches(currentUser.getUid())){ // Case the message was send by the user
             holder.tv_name_user.setText("Me");
             holder.tv_name_other.setText("");
-            holder.tv_body.setGravity(Gravity.RIGHT);
+            holder.tv_body.setGravity(Gravity.END);
+            ViewGroup.MarginLayoutParams layoutParams =
+                    (ViewGroup.MarginLayoutParams) holder.message_container.getLayoutParams();
+            layoutParams.setMarginStart(metrics.widthPixels / 4);
+            holder.message_container.requestLayout();
         }
         else{ // Case the message is from another user
             holder.tv_name_other.setText(groupMessage.getFrom_name());
             holder.tv_name_user.setText("");
-            holder.tv_body.setGravity(Gravity.LEFT);
+            holder.tv_body.setGravity(Gravity.START);
+            ViewGroup.MarginLayoutParams layoutParams =
+                    (ViewGroup.MarginLayoutParams) holder.message_container.getLayoutParams();
+            layoutParams.setMarginEnd(metrics.widthPixels / 4);
+            holder.message_container.requestLayout();
         }
         holder.tv_body.setText(groupMessage.getBody());
         holder.tv_time.setText(getDate(groupMessage.getTimeInMillis()));
+
 
     }
 

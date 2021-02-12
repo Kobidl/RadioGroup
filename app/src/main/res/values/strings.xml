@@ -50,4 +50,5 @@
     <string name="total">Total</string>
     <string name="group_details">Group Details</string>
     <string name="username">UserName</string>
+    <string name="join_the_group">Join Group</string>
 </resources>

@@ -71,8 +71,8 @@ public class Profile extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private static final String SHARED_PREFS = "radioGroup_sp";
-    private static final String SP_UID = "latest_uid";
+    public static final String SHARED_PREFS = "radioGroup_sp";
+    public static final String SP_UID = "latest_uid";
     private static final String SP_FULLNAME = "latest_fullname";
     private static final String SP_BIO = "latest_bio";
 

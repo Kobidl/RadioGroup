@@ -162,4 +162,7 @@ public class Group implements Parcelable {
         parcel.writeMap(userMap);
     }
 
+    public void removeUserFromList(String userId) {
+        userMap.remove(userId);
+    }
 }
