@@ -84,15 +84,24 @@
         </LinearLayout>
     </ScrollView>
 
-    <com.google.android.material.button.MaterialButton
-        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+    <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:id="@+id/save_group"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        app:finalCornerAngle="50dp"
+        app:initialCornerAngle="6dp"
+        app:spinning_bar_color="#FFFFFF"
+        app:spinning_bar_padding="0dp"
+        app:spinning_bar_width="3dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:layout_gravity="center"
         android:text="@string/save"
-        android:textColor="@android:color/white"
         app:cornerRadius="6dp"
         android:layout_margin="15dp"
-        android:id="@+id/save_group"
         android:enabled="false"
         />
 

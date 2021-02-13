@@ -101,6 +101,7 @@ public class GroupActivity extends AppCompatActivity implements JoinGroupFragmen
     public void showGroupDetails(View view) {
         Intent intent = new Intent(this,GroupDetails.class);
         intent.putExtra("group",group);
+        intent.putExtra("user_id",userId);
         startActivity(intent);
     }
 

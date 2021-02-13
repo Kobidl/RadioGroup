@@ -13,8 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
-import com.komi.radiogroup.AddGroupActivity;
+import com.komi.radiogroup.EditGroupActivity;
 import com.komi.radiogroup.GroupActivity;
 import com.komi.radiogroup.GroupsAdapter;
 import com.komi.radiogroup.R;
@@ -83,7 +82,7 @@ public class Groups extends Fragment {
         openNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(rootView.getContext(), AddGroupActivity.class);
+                Intent intent = new Intent(rootView.getContext(), EditGroupActivity.class);
                 startActivity(intent);
             }
         });

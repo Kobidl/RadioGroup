@@ -1,7 +1,6 @@
 package com.komi.radiogroup;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,7 +16,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -26,12 +24,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
@@ -47,29 +42,30 @@ import com.komi.structures.Group;
 import com.komi.structures.User;
 
 import java.io.File;
-import java.util.Objects;
 import java.util.UUID;
 
-public class AddGroupActivity extends AppCompatActivity {
+import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
+
+public class EditGroupActivity extends AppCompatActivity {
 
     final int WRITE_PERMISSION_REQUEST = 1;
     final int CAMERA_REQUEST = 1;
     final int PICK_IMAGE = 2;
     boolean canSave;
     ImageView imageView;
-    Button saveBtn;
+    CircularProgressButton saveBtn;
     File file;
 
     Group group;
 
     private StorageReference mStorageRef;
-    FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_group_layout);
         UUID uuid = UUID.randomUUID();
+        group = (Group) getIntent().getParcelableExtra("group");
 
         //Set toolbar
         TextView titleTV = findViewById(R.id.toolbar_title);
@@ -82,51 +78,63 @@ public class AddGroupActivity extends AppCompatActivity {
             }
         });
 
+        //Init elements
+        final EditText newGroupName = findViewById(R.id.new_group_name);
+        final EditText newGroupDescription = findViewById(R.id.new_group_description);
+        imageView = findViewById(R.id.new_group_view);
+        saveBtn = (CircularProgressButton) findViewById(R.id.save_group);
+
         //Getting storage instance
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
         canSave = false;
 
-        //Creating new empty group
-        group = new Group();
-        group.setGroupID(uuid.toString());
-        group.setGroupName("");
-        group.setGroupDescription("");
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        group.setAdminID(currentUser.getUid());
+        if (group == null) {
+            //Creating new empty group
+            group = new Group();
+            group.setGroupID(uuid.toString());
+            group.setGroupName("");
+            group.setGroupDescription("");
+            FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+            group.setAdminID(currentUser.getUid());
 
-        User user = new User(currentUser.getUid(),currentUser.getDisplayName(),currentUser.getDisplayName());
-        group.addUserToUserList(user);
-        //Init elements
-        imageView = findViewById(R.id.new_group_view);
+            User user = new User(currentUser.getUid(), currentUser.getDisplayName(), currentUser.getDisplayName());
+            group.addUserToUserList(user);
+        } else {
+            newGroupName.setText(group.getGroupName());
+            newGroupDescription.setText(group.getGroupDescription());
+            Glide.with(this).load(group.getProfilePicturePath()).into(imageView);
+            checkCanSave();
+        }
+
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               openPickDialog();
+                openPickDialog();
             }
         });
 
-         saveBtn = findViewById(R.id.save_group);
 
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (canSave) {
+                    saveBtn.startAnimation();
+                    FirebaseDatabaseHelper.getInstance().addGroupToGroups(group, new FirebaseDatabaseHelper.OnGroupDataChangedCallback() {
+                        @Override
+                        public void onDataReceived(Group group) {
+                            Intent data = new Intent();
+                            data.putExtra("group", (Parcelable) group);
+                            setResult(RESULT_OK, data);
+                            finish();
+                        }
+                    });
+                }
+            }
+        });
 
-         saveBtn.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View view) {
-                 if(canSave){
-                     Intent data = new Intent();
-                     FirebaseDatabaseHelper.getInstance().addGroupToGroups(group);
-//                     data.putExtra("group", (Parcelable) group);
-                     setResult(RESULT_OK, data);
-                     finish();
-                 };
-             }
-         });
-
-        final EditText newGroupName = findViewById(R.id.new_group_name);
-
-        final EditText newGroupDescription = findViewById(R.id.new_group_description);
 
         newGroupName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -253,7 +261,7 @@ public class AddGroupActivity extends AppCompatActivity {
         String fileName = java.util.UUID.randomUUID().toString() + ".jpg";
         file = new File(Environment.getExternalStorageDirectory(), fileName);
 
-        Uri imageUri = FileProvider.getUriForFile(AddGroupActivity.this,"com.komi.radiogroup.provider",file);
+        Uri imageUri = FileProvider.getUriForFile(EditGroupActivity.this,"com.komi.radiogroup.provider",file);
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         startActivityForResult(intent, CAMERA_REQUEST);

@@ -107,11 +107,33 @@
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:backgroundTint="@android:color/holo_red_light"
-                    android:text="@string/leave_group"
-                    android:onClick="leaveGroup"/>
+                    android:text="@string/edit_group"
+                    android:layout_marginTop="20dp"
+                    android:textStyle="bold"
+                    app:finalCornerAngle="50dp"
+                    app:initialCornerAngle="6dp"
+                    android:id="@+id/group_details_edit_btn"
+                    android:visibility="gone"
+                    />
 
+                <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:id="@+id/leave_group_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp"
+                    app:finalCornerAngle="50dp"
+                    app:initialCornerAngle="6dp"
+                    app:spinning_bar_color="#FFFFFF"
+                    app:spinning_bar_padding="0dp"
+                    app:spinning_bar_width="3dp"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:text="@string/leave_group"
+                    android:backgroundTint="@android:color/holo_red_light"
+                    />
             </LinearLayout>
         </LinearLayout>
 

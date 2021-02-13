@@ -1,5 +1,7 @@
 package com.komi.radiogroup;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -8,20 +10,32 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.button.MaterialButton;
+import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
 import com.komi.structures.Group;
 import com.komi.structures.User;
 
+import java.text.BreakIterator;
 import java.util.Collections;
 import java.util.List;
 
+import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
+
 public class GroupDetails extends AppCompatActivity {
 
+    private static final int EDIT_DETAILS_RESULT_CODE = 1;
     Group group;
+    CircularProgressButton leaveBtn;
+    private String userId;
+    private ImageView imageView;
+    private TextView nameTV;
+    private TextView descTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +43,12 @@ public class GroupDetails extends AppCompatActivity {
         setContentView(R.layout.activity_group_details);
 
          group = getIntent().getParcelableExtra("group");
+         userId = getIntent().getStringExtra("user_id");
+         final boolean isAdmin = group.getAdminID().equals(userId);
 
         final LinearLayout innerLayout = findViewById(R.id.group_details_inner_layout);
 
-        final ImageView imageView = findViewById(R.id.group_details_image);
+        imageView = findViewById(R.id.group_details_image);
         DisplayMetrics metrics = this.getResources().getDisplayMetrics();
 
         imageView.setMaxHeight(metrics.widthPixels-100);
@@ -40,6 +56,7 @@ public class GroupDetails extends AppCompatActivity {
         //Set toolbar
         TextView titleTV = findViewById(R.id.toolbar_title);
         titleTV.setText(R.string.group_details);
+
         ImageButton backBtn = findViewById(R.id.toolbar_back_btn);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,18 +65,11 @@ public class GroupDetails extends AppCompatActivity {
             }
         });
 
-        if(group.getProfilePicturePath() != null) {
-            Glide.with(imageView).load(group.getProfilePicturePath()).into(imageView);
-        }else{
-            //todo: show empty image
-        }
+        nameTV = findViewById(R.id.group_details_name);
+        descTV = findViewById(R.id.group_details_desc);
 
+        setDetails();
 
-
-        TextView nameTV = findViewById(R.id.group_details_name);
-        nameTV.setText(group.getGroupName());
-        TextView descTV = findViewById(R.id.group_details_desc);
-        descTV.setText(group.getGroupDescription());
         TextView membersTV = findViewById(R.id.group_details_members);
         membersTV.setText(getResources().getString(R.string.total) + ":" + group.getUserMap().size());
 
@@ -71,10 +81,72 @@ public class GroupDetails extends AppCompatActivity {
         recyclerView.setAdapter(usersAdapter);
         recyclerView.setNestedScrollingEnabled(false);
 
+        leaveBtn = findViewById(R.id.leave_group_btn);
 
+        if(isAdmin){
+            leaveBtn.setText(R.string.close_group);
+            leaveBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    leaveBtn.startAnimation();
+                    FirebaseDatabaseHelper.getInstance().deleteGroup(group, new FirebaseDatabaseHelper.OnGroupDataChangedCallback() {
+                        @Override
+                        public void onDataReceived(Group group) {
+                            final Intent intent = new Intent(GroupDetails.this, MainContainer.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                        }
+                    });
+                }
+            });
+            MaterialButton editBtn = findViewById(R.id.group_details_edit_btn);
+            editBtn.setVisibility(View.VISIBLE);
+            editBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(GroupDetails.this, EditGroupActivity.class);
+                    intent.putExtra("group", group);
+                    startActivityForResult(intent, EDIT_DETAILS_RESULT_CODE);
+                }
+            });
+        }
+        else {
+            leaveBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    leaveBtn.startAnimation();
+                    FirebaseDatabaseHelper.getInstance().removeUserFromGroup(userId, group, new FirebaseDatabaseHelper.OnGroupDataChangedCallback() {
+                        @Override
+                        public void onDataReceived(Group group) {
+                            final Intent intent = new Intent(GroupDetails.this, MainContainer.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                        }
+                    });
+                }
+            });
+        }
+    }
+    
+    private void setDetails(){
+        nameTV.setText(group.getGroupName());
+        descTV.setText(group.getGroupDescription());
+        if(group.getProfilePicturePath() != null) {
+            Glide.with(imageView).load(group.getProfilePicturePath()).into(imageView);
+        }else{
+            //todo: show empty image
+        }
     }
 
-    public void leaveGroup(View view) {
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        
+        if(requestCode == EDIT_DETAILS_RESULT_CODE){
+            if(resultCode == Activity.RESULT_OK){
+                group = (Group) data.getParcelableExtra("group");
+                setDetails();
+            }
+        }
     }
 }

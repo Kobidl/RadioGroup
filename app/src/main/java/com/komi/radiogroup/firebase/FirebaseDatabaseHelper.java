@@ -75,10 +75,16 @@ public class FirebaseDatabaseHelper {
         reference.child(user.getUID()).setValue(user);
     }
 
-    public void addGroupToGroups(Group group) {
+
+    public void addGroupToGroups(final Group group, final OnGroupDataChangedCallback callback) {
         DatabaseReference reference = firebaseDatabase.getReference(DB_GROUPS);
 
-        reference.child(group.getGroupID()).setValue(group);
+        reference.child(group.getGroupID()).setValue(group).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                callback.onDataReceived(group);
+            }
+        });
     }
 
     public void addGroupMessage(GroupMessage groupMessage) {
@@ -181,6 +187,7 @@ public class FirebaseDatabaseHelper {
         groupMessages.clear();
     }
 
+
     public interface GetUserCallback{
         void OnDataReceived(User user);
     }
@@ -256,43 +263,39 @@ public class FirebaseDatabaseHelper {
         });
     }
 
-    public void removeUserFromGroup(final String userID, final String groupID){ // ******Must be run async
-        userRemovedFromGroup = false;
+
+    public void removeUserFromGroup(String userID, final Group group, final OnGroupDataChangedCallback callback){
         DatabaseReference reference = firebaseDatabase.getReference().child(DB_GROUPS);
-        ValueEventListener valueEventListener = new ValueEventListener() {
+        final Group newGroup = group;
+        newGroup.removeUserFromList(userID);
+        reference.child(group.getGroupID()).setValue(group).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot snapshot1 : snapshot.getChildren()){
-                    final Group temp = snapshot1.getValue(Group.class);
-                    if(temp.getGroupID().matches(groupID)){
-                        Map<String,User> userMap = temp.getUserMap();
-                        if(userMap.containsKey(userID)){
-                            userMap.remove(userID);
-                            temp.setUserMap(userMap);
-                            addGroupToGroups(temp);
-                            userRemovedFromGroup = true;
-                        }
-                    }
-                }
+            public void onSuccess(Void aVoid) {
+                callback.onDataReceived(newGroup);
             }
+        }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onFailure(@NonNull Exception e) {
+                callback.onDataReceived(group);
             }
-        };
-
-        reference.addListenerForSingleValueEvent(valueEventListener);
-
-        while(!userRemovedFromGroup){
-            try {
-                TimeUnit.MILLISECONDS.sleep(250);
-            }
-            catch (InterruptedException ex){
-                ex.printStackTrace();
-            }
-        }
-        userRemovedFromGroup = false;
-        reference.removeEventListener(valueEventListener);
+        });
     }
+
+    public void deleteGroup(final Group group, final OnGroupDataChangedCallback callback) {
+        DatabaseReference reference = firebaseDatabase.getReference().child(DB_GROUPS);
+        reference.child(group.getGroupID()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                callback.onDataReceived(null);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callback.onDataReceived(group);
+            }
+        });
+    }
+
 
     public List<Group> getGroupsByUID(final String UID){ //*****Must be run async
         finishedFetching = false;

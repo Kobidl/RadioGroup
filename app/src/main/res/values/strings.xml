@@ -51,4 +51,6 @@
     <string name="group_details">Group Details</string>
     <string name="username">UserName</string>
     <string name="join_the_group">Join Group</string>
+    <string name="close_group">Close Group</string>
+    <string name="edit_group">Edit Group</string>
 </resources>
