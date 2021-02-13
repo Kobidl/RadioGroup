@@ -1,6 +1,7 @@
 package com.komi.radiogroup;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
 import com.komi.structures.Group;
+import com.skydoves.androidribbon.RibbonView;
 
 import org.w3c.dom.Text;
 
@@ -22,6 +25,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewH
     private List<Group> groups;
     private GroupListener listener;
     private Context context;
+    private String userId;
 
     public interface GroupListener {
         void onClick(int position,View view);
@@ -34,7 +38,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewH
     public GroupsAdapter(Context context,List<Group> groups){
         this.context = context;
         this.groups = groups;
-
+        userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
     public class GroupViewHolder extends RecyclerView.ViewHolder{
@@ -44,6 +48,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewH
         ImageView privacyIV;
         TextView privacyTV;
         TextView descTV;
+        RibbonView ribbonView;
 
         public GroupViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -53,6 +58,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewH
             descTV = itemView.findViewById(R.id.group_desc);
             privacyIV = itemView.findViewById(R.id.group_privacy_icon);
             privacyTV = itemView.findViewById(R.id.group_privacy_desc);
+            ribbonView = (RibbonView) itemView.findViewById(R.id.group_ribbon);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -83,6 +89,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewH
         holder.privacyIV.setImageResource(context.getResources().getIdentifier(group.isPrivate() ? "ic_private" : "ic_public", "drawable", context.getPackageName()));
         holder.privacyTV.setText(context.getResources().getIdentifier(group.isPrivate() ? "private_str" : "public_str", "string", context.getPackageName()));
         if(group.getProfilePicturePath() != null && !group.getProfilePicturePath().isEmpty()) {
+            holder.imageView.setBackgroundColor(Color.TRANSPARENT);
             try {
             holder.imageView.setPadding(0,0,0,0);
                 Glide.with(holder.itemView.getContext())
@@ -92,9 +99,14 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewH
                 holder.imageView.setPadding(10,10,10,10);
             }
         }else{
-            holder.imageView.setVisibility(View.GONE);
+            holder.imageView.setImageResource(R.drawable.ic_baseline_image_24);
+            holder.imageView.setBackgroundColor(Color.parseColor("#dddddd"));
         }
-
+        if(userId.equals(group.getAdminID())){
+            holder.ribbonView.setVisibility(View.VISIBLE);
+        }else{
+            holder.ribbonView.setVisibility(View.GONE);
+        }
     }
 
     @Override
