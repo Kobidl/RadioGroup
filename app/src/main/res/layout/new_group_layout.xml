@@ -4,9 +4,18 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:backgroundTint="@color/colorDarkBackground"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
     <include layout="@layout/toolbar_layout" />
+
+    <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
+    <LinearLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="0px"
+        android:layout_height="0px"/>
+
 
     <ScrollView
         android:layout_width="match_parent"
@@ -32,6 +41,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
+                    android:background="@color/colorLightBackground"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -48,9 +58,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
+                    android:background="@color/colorLightBackground"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Private Group"
+                android:id="@+id/cb_private"
+                android:layout_margin="15dp"/>
 
             <RelativeLayout
                 android:layout_width="200dp"
@@ -82,18 +100,13 @@
 
             </RelativeLayout>
 
-            <CheckBox
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Private Group"
-                android:id="@+id/cb_private"
-                android:layout_margin="15dp"/>
+
 
         </LinearLayout>
     </ScrollView>
 
     <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
-        style="@style/Widget.AppCompat.Button.Colored"
+        style="@style/Widget.AppCompat.Button"
         android:id="@+id/save_group"
         android:layout_width="match_parent"
         android:layout_height="50dp"
