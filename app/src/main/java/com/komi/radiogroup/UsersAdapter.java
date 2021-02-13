@@ -14,12 +14,13 @@ import com.komi.structures.Group;
 import com.komi.structures.User;
 
 import java.net.CookieHandler;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHolder> {
 
 //    private UserListener listener;
-    private List<User> users;
+    private List<User> users = new ArrayList<>();
 
 //    public interface UserListener {
 //        void onClick(int position, View view);
@@ -36,12 +37,12 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     public class UserViewHolder extends RecyclerView.ViewHolder{
         TextView name;
         ImageView imageView;
-        TextView username;
+        TextView bio;
 
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.user_card_name);
-            username = itemView.findViewById(R.id.user_card_username);
+            bio = itemView.findViewById(R.id.user_card_bio);
             imageView = itemView.findViewById(R.id.user_card_image);
 //            itemView.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -66,7 +67,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
 
         User user = users.get(position);
         holder.name.setText(user.getFullname());
-        holder.username.setText(user.getUsername());
+        holder.bio.setText(user.getBio());
 
         if(user.getProfilePicturePath() != null && !user.getProfilePicturePath().isEmpty()) {
             try {
@@ -84,5 +85,9 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
     @Override
     public int getItemCount() {
         return users.size();
+    }
+
+    public void setUsers(List<User> users){
+        this.users = users;
     }
 }

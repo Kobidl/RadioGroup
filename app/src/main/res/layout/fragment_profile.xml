@@ -55,6 +55,7 @@
 
     </LinearLayout>
 
+
     <include layout="@layout/divider"/>
 
     <LinearLayout
@@ -67,7 +68,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Groups by this user"
+            android:text="@string/groups_by_this_user"
             android:textStyle="bold"
             android:textSize="16sp"
             android:layout_marginHorizontal="6dp"/>
