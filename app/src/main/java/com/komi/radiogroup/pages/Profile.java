@@ -84,10 +84,11 @@ public class Profile extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    String userID;
     FirebaseAuth firebaseAuth;
     FirebaseUser currentUser;
     User user;
-    List<Group> groupsByUser;
+    List<Group> groupsByUser = new ArrayList<>();
     File file;
     private StorageReference mStorageRef;
 
@@ -144,6 +145,9 @@ public class Profile extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
         currentUser = firebaseAuth.getCurrentUser();
 
+        // TODO: to allow loading this page for any user we need to pass a uid parameter and set it here
+        userID = firebaseAuth.getCurrentUser().getUid();
+
         iv_profile_pic = rootView.findViewById(R.id.iv_profile_pic);
         tv_fullName = rootView.findViewById(R.id.tv_full_name);
         tv_bio = rootView.findViewById(R.id.tv_bio);
@@ -165,49 +169,47 @@ public class Profile extends Fragment {
 
         }
 
-        // Loading current users details and Initializing user's Groups recyclerview
-        new Thread(new Runnable() {
+        // Initializing user's Groups recyclerview and setting Listeners for data
+        groupsRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_groups_by_user);
+        groupsRecyclerView.setHasFixedSize(true);
+        groupsRecyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.HORIZONTAL, false));
+        adapter = new UserGroupsIsAdminAdapter(groupsByUser);
+        groupsRecyclerView.setAdapter(adapter);
+
+        FirebaseDatabaseHelper.getInstance().setGroupsByAdminIDListener(userID, new FirebaseDatabaseHelper.OnGroupsDataChangedCallback() {
             @Override
-            public void run() {
-                user = FirebaseDatabaseHelper.getInstance().getUserByUID(firebaseAuth.getCurrentUser().getUid());
-                groupsByUser = FirebaseDatabaseHelper.getInstance().getGroupsByAdminID(user.getUID());
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        tv_fullName.setText(user.getFullname());
-                        tv_bio.setText(user.getBio());
-
-                        // Getting profile pic from storage and setting it
-                        if(user.getProfilePicturePath() != null && !user.getProfilePicturePath().isEmpty()){
-                            Glide.with(getContext())
-                                    .load(user.getProfilePicturePath())
-                                    .into(iv_profile_pic);
-                        }
-                        else { // Set default profile pic
-                            iv_profile_pic.setImageResource(R.drawable.default_profile_pic);
-                        }
-
-                        // Saving latest profile info to shared preferences
-                        SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString(SP_UID, firebaseAuth.getCurrentUser().getUid());
-                        editor.putString(SP_FULLNAME, user.getFullname());
-                        editor.putString(SP_BIO, user.getBio());
-                        editor.apply();
-
-                        // Initialize groups by user recyclerView
-                        groupsRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_groups_by_user);
-                        groupsRecyclerView.setHasFixedSize(true);
-                        groupsRecyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext(),LinearLayoutManager.HORIZONTAL, false));
-                        adapter = new UserGroupsIsAdminAdapter(groupsByUser);
-                        groupsRecyclerView.setAdapter(adapter);
-                    }
-                });
-
+            public void onDataReceived(List<Group> groups) {
+                adapter.setGroups(groups);
+                adapter.notifyDataSetChanged();
             }
-        }).start();
+        });
+
+        FirebaseDatabaseHelper.getInstance().setUserByUidListener(userID, new FirebaseDatabaseHelper.OnUserDataChangedCallback() {
+            @Override
+            public void onDataReceived(User nUser) {
+                user = nUser;
+                tv_fullName.setText(user.getFullname());
+                tv_bio.setText(user.getBio());
+
+                // Getting profile pic from storage and setting it
+                if (user.getProfilePicturePath() != null && !user.getProfilePicturePath().isEmpty()) {
+                    Glide.with(getContext())
+                            .load(user.getProfilePicturePath())
+                            .into(iv_profile_pic);
+                } else { // Set default profile pic
+                    iv_profile_pic.setImageResource(R.drawable.default_profile_pic);
+                }
+
+                // Saving latest profile info to shared preferences
+                SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(SP_UID, firebaseAuth.getCurrentUser().getUid());
+                editor.putString(SP_FULLNAME, user.getFullname());
+                editor.putString(SP_BIO, user.getBio());
+                editor.apply();
+            }
+        });
+
 
         //Request image permissions
         if (Build.VERSION.SDK_INT >= 23) {
@@ -457,9 +459,8 @@ public class Profile extends Fragment {
                                     user.setProfilePicturePath(url);
                                     //Saving user to db
                                     FirebaseDatabaseHelper.getInstance().addUserToUsers(user);
-                                    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
                                     // TODO: decide if necessary
-                                    currentUser.updateProfile(new UserProfileChangeRequest.Builder().setPhotoUri(uri).build());
+                                    //currentUser.updateProfile(new UserProfileChangeRequest.Builder().setPhotoUri(uri).build());
                                 }
                             });
                         }
@@ -501,4 +502,12 @@ public class Profile extends Fragment {
         else
             return;
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        FirebaseDatabaseHelper.getInstance().removeGroupsByAdminIDListener();
+        FirebaseDatabaseHelper.getInstance().removeUserByUIDListener();
+    }
 }
+

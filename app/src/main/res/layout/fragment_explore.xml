@@ -5,10 +5,32 @@
     android:layout_height="match_parent"
     tools:context=".pages.Explore">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Explore" />
+        android:orientation="vertical">
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="0dp"
+            android:layout_marginBottom="10dp"
+            android:hint="@string/search_group_name">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:background="#ffffff"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <view class="androidx.recyclerview.widget.RecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/explore_recycler"
+            android:paddingBottom="40dp" />
+
+    </LinearLayout>
 </FrameLayout>

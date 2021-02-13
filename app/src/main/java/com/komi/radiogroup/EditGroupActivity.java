@@ -19,6 +19,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -55,6 +57,7 @@ public class EditGroupActivity extends AppCompatActivity {
     ImageView imageView;
     CircularProgressButton saveBtn;
     File file;
+    CheckBox cb_private;
 
     Group group;
 
@@ -83,11 +86,18 @@ public class EditGroupActivity extends AppCompatActivity {
         final EditText newGroupDescription = findViewById(R.id.new_group_description);
         imageView = findViewById(R.id.new_group_view);
         saveBtn = (CircularProgressButton) findViewById(R.id.save_group);
-
+        cb_private = findViewById(R.id.cb_private);
+        cb_private.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                group.setPrivate(isChecked);
+            }
+        });
         //Getting storage instance
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
         canSave = false;
+
 
         if (group == null) {
             //Creating new empty group
@@ -104,11 +114,12 @@ public class EditGroupActivity extends AppCompatActivity {
         } else {
             newGroupName.setText(group.getGroupName());
             newGroupDescription.setText(group.getGroupDescription());
+            cb_private.setChecked(group.isPrivate());
             Glide.with(this).load(group.getProfilePicturePath()).into(imageView);
             checkCanSave();
         }
 
-
+        //Init elements
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -116,6 +127,7 @@ public class EditGroupActivity extends AppCompatActivity {
             }
         });
 
+        saveBtn = findViewById(R.id.save_group);
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,6 +146,7 @@ public class EditGroupActivity extends AppCompatActivity {
                 }
             }
         });
+
 
 
         newGroupName.addTextChangedListener(new TextWatcher() {

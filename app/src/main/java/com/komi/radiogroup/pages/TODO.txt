@@ -3,7 +3,7 @@
 
 - Allow recording from notification //Kobi // Can't do it
 
-- Add : Join/Leave group //Mishel //COMPLETED **Functions have been implemented and
+- Add : Join/Leave group //Mishel //COMPLETED **Functions have been implemented
 
 - Group Detailed view:
     Add : View user list in group and onclick user show profile //Kobi
@@ -14,12 +14,16 @@
     Add : Edit group details for admin // Kobi //Done
 
 - Explore page //Mishel
-    Add : Allow refreshing group
-    Add : Allow searching by group name
+    Add : Allow refreshing group // COMPLETED **Refreshes automatically
+    Add : Allow searching by group name // COMPLETED
 
-- When creating a group allow selecting Private/Public //Race
+- When creating a group allow selecting Private/Public //Race //COMPLETED
 
+<<<<<<< HEAD
 - Groups page : show all groups user is member of and allow filtering //Kobi //COMPLETED
+=======
+- Groups page : show all groups user is member of and allow filtering //Mishel //COMPLETED
+>>>>>>> 00abacb93cf0ba05ba807d57a552bdd91afcdac5
 
 - Profile page : show all groups created by user //Mishel //COMPLETED
 
@@ -29,6 +33,9 @@
 
 - Coming from notif no groups shown
 
+<<<<<<< HEAD
 - Update all groups after leaving a group
 
 - Test Close group
+=======
+>>>>>>> 00abacb93cf0ba05ba807d57a552bdd91afcdac5
