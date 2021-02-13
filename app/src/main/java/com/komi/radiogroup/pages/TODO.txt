@@ -3,24 +3,22 @@
 
 - Handle not allowing recording permissions - notif + btn in group
 
-- Update all groups after leaving a group
-
-- Test Close group
-
 - Localization // Mishel
 
-- Loaders
+- Loaders //Kobi
 
-- Empty pages
+- Empty pages // Kobi
 
 - Edit Profile page -> email + password
 
-- Handle errors messages
+- Handle errors messages on login
 
-- Handle log title
+- Handle log title //Kobi
 
-- Handle long description
+- Handle long description //Kobi
 
 - mark my group
 
-- show public private
+- show public private outside // Kobi
+
+- Change search bar on icon clicked
