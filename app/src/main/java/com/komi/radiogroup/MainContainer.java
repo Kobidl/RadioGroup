@@ -2,10 +2,12 @@ package com.komi.radiogroup;
 
 import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -48,9 +50,9 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
         Intent intent = getIntent();
         Uri initUrl = intent.getData();
 
-        if(initUrl!=null){
-            Intent gIntent = new Intent(this,GroupActivity.class);
-            gIntent.putExtra("group_id",initUrl.toString().replace(APP_URL,"").replace("/",""));
+        if(initUrl!=null) {
+            Intent gIntent = new Intent(this, GroupActivity.class);
+            gIntent.putExtra("group_id", initUrl.toString().replace(APP_URL, "").replace("/", ""));
             startActivity(gIntent);
         }
 
@@ -66,7 +68,6 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
         }else {
             getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, mainFragment).commit();
         }
-
 
     }
 

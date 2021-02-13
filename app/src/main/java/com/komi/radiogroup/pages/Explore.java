@@ -1,6 +1,7 @@
 package com.komi.radiogroup.pages;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -39,6 +42,7 @@ public class Explore extends Fragment {
     List<Group> groupList;
     RecyclerView recyclerView;
     GroupsAdapter groupsAdapter;
+    private FrameLayout loader;
 
 
     public Explore() {
@@ -81,6 +85,11 @@ public class Explore extends Fragment {
             }
         });
 
+        loader = rootView.findViewById(R.id.loader);
+        ImageView loaderIV = rootView.findViewById(R.id.loader_image_view);
+        final AnimationDrawable loaderAnimation = (AnimationDrawable) loaderIV.getDrawable();
+        loaderAnimation.start();
+
         recyclerView.setAdapter(groupsAdapter);
 
         // Setting the group listener
@@ -104,6 +113,7 @@ public class Explore extends Fragment {
                 // Updating the listener to search with the substring
                 String substring = s.toString().trim();
                 FirebaseDatabaseHelper.getInstance().removeExploreListener();
+                loader.setVisibility(View.VISIBLE);
                 setListenerWithSubstring(substring);
             }
         });
@@ -124,6 +134,7 @@ public class Explore extends Fragment {
                 groupList = groups;
                 groupsAdapter.setGroups(groups);
                 groupsAdapter.notifyDataSetChanged();
+                loader.setVisibility(View.GONE);
             }
         });
     }

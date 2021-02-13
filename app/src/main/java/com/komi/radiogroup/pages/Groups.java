@@ -1,10 +1,13 @@
 package com.komi.radiogroup.pages;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -79,12 +82,19 @@ public class Groups extends Fragment {
         });
         recyclerView.setAdapter(groupsAdapter);
 
+        final FrameLayout loader = rootView.findViewById(R.id.loader);
+        ImageView loaderIV = rootView.findViewById(R.id.loader_image_view);
+        final AnimationDrawable loaderAnimation = (AnimationDrawable) loaderIV.getDrawable();
+        loaderAnimation.start();
+
         FirebaseDatabaseHelper.getInstance().setGroupsByUIDListener(FirebaseAuth.getInstance().getCurrentUser().getUid(), new FirebaseDatabaseHelper.OnGroupsDataChangedCallback() {
             @Override
             public void onDataReceived(List<Group> groups) {
                 groupList = groups;
                 groupsAdapter.setGroups(groups);
                 groupsAdapter.notifyDataSetChanged();
+                loaderAnimation.stop();
+                loader.setVisibility(View.GONE);
             }
         });
 

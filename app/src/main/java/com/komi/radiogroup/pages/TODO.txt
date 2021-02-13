@@ -13,12 +13,12 @@
 
 - Handle errors messages on login
 
-- mark my group
-
 - Change search bar on icon clicked
 
-- Icon
+- Application Icon
 
 - Sort Groups
 
 - Tiles fonts
+
+- Put good groups and remove junks

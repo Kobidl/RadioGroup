@@ -3,10 +3,12 @@ package com.komi.radiogroup;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -75,6 +77,11 @@ public class GroupActivity extends AppCompatActivity implements JoinGroupFragmen
         adapter = new GroupTabAdapter(getSupportFragmentManager(),1);
 
         if(group==null){
+            final FrameLayout loader = findViewById(R.id.loader);
+            ImageView loaderIV = findViewById(R.id.loader_image_view);
+            final AnimationDrawable loaderAnimation = (AnimationDrawable) loaderIV.getDrawable();
+            loaderAnimation.start();
+
             String groupId = getIntent().getStringExtra("group_id");
             if(groupId!=null) {
                 FirebaseDatabaseHelper.getInstance().getGroupById(groupId, new FirebaseDatabaseHelper.OnGroupDataChangedCallback() {
@@ -84,6 +91,7 @@ public class GroupActivity extends AppCompatActivity implements JoinGroupFragmen
                         setUIGroupDetails();
                         viewPager.setAdapter(adapter);
                         tabLayout.setupWithViewPager(viewPager);
+                        loader.setVisibility(View.GONE);
                     }
                 });
             }
