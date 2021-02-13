@@ -74,5 +74,11 @@ public class UserGroupsIsAdminAdapter extends RecyclerView.Adapter<UserGroupsIsA
         return groups.size();
     }
 
+    public List<Group> getGroups() {
+        return groups;
+    }
 
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
+    }
 }
