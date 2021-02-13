@@ -15,7 +15,7 @@
     Add : Edit group details for admin
 
 - Explore page //Mishel
-    Add : Allow refreshing group
+    Add : Allow refreshing group // COMPLETED **Refreshes automatically
     Add : Allow searching by group name // COMPLETED
 
 - When creating a group allow selecting Private/Public //Race //COMPLETED
@@ -30,4 +30,3 @@
 
 - Coming from notif no groups shown
 
-- set a listener that will search on user input and get rid of the button

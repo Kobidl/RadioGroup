@@ -38,4 +38,5 @@
     <string name="start_listening">Start Listening</string>
     <string name="stop_listening">Stop Listening</string>
     <string name="you">You</string>
+    <string name="search_group_name">Search group name</string>
 </resources>

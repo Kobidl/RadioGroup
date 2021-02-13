@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,12 +88,21 @@ public class Explore extends Fragment {
 
         // TODO: set a listener that will search on user input and get rid of the button
         final EditText et_search = rootView.findViewById(R.id.et_search);
-        Button btn_search = rootView.findViewById(R.id.btn_search);
-        btn_search.setOnClickListener(new View.OnClickListener() {
+        et_search.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
                 // Updating the listener to search with the substring
-                String substring = et_search.getText().toString();
+                String substring = s.toString().trim();
                 FirebaseDatabaseHelper.getInstance().removeExploreListener();
                 setListenerWithSubstring(substring);
             }

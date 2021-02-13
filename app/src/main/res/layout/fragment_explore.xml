@@ -10,41 +10,27 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="bottom"
-            android:id="@+id/rl_txt_input">
+            android:layout_marginHorizontal="0dp"
+            android:layout_marginBottom="10dp"
+            android:hint="@string/search_group_name">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/et_search"
-                android:hint="Search group name"
-                android:layout_toStartOf="@id/btn_search"
-                android:background="#ffffff"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="5dp"
-                android:padding="5dp"/>
+                android:singleLine="true"
+                android:background="#ffffff"/>
 
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Search"
-                android:layout_alignParentEnd="true"
-                android:id="@+id/btn_search"
-                android:textColor="#000000"/>
-
-        </RelativeLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <view class="androidx.recyclerview.widget.RecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/explore_recycler"
-            android:paddingBottom="40dp"
-            android:layout_marginTop="5dp"/>
+            android:paddingBottom="40dp" />
 
     </LinearLayout>
 </FrameLayout>
