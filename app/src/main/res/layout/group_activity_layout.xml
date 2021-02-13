@@ -40,13 +40,17 @@
                 />
         </androidx.cardview.widget.CardView>
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="10dp"
             android:layout_height="wrap_content"
             android:id="@+id/group_title_text"
             android:textSize="20sp"
             android:layout_marginLeft="10dp"
             android:layout_gravity="center"
             android:textColor="@color/colorPrimary"
+            android:lines="1"
+            android:ellipsize="end"
             />
     </LinearLayout>
 

@@ -13,7 +13,6 @@
 
 - Handle errors messages on login
 
-- Handle log title //Kobi
 
 - Handle long description //Kobi
 
@@ -22,3 +21,6 @@
 - show public private outside // Kobi
 
 - Change search bar on icon clicked
+
+- Icon
+
