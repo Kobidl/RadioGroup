@@ -33,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -74,6 +75,7 @@ public class Profile extends Fragment {
     public static final String SP_UID = "latest_uid";
     private static final String SP_FULLNAME = "latest_fullname";
     private static final String SP_BIO = "latest_bio";
+    private static final String SP_IMAGE = "latest_image";
 
     final int WRITE_PERMISSION_REQUEST = 1;
     final int CAMERA_REQUEST = 1;
@@ -100,6 +102,7 @@ public class Profile extends Fragment {
     UserGroupsIsAdminAdapter adapter;
 
     private boolean canTakeImage = false;
+    private SharedPreferences sharedPreferences;
 
     public Profile() {
         // Required empty public constructor
@@ -147,7 +150,7 @@ public class Profile extends Fragment {
         // TODO: to allow loading this page for any user we need to pass a uid parameter and set it here
         userID = firebaseAuth.getCurrentUser().getUid();
 
-        final SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         String latest_UID = sharedPreferences.getString(SP_UID, null);
 
 
@@ -170,11 +173,14 @@ public class Profile extends Fragment {
         if(latest_UID != null && latest_UID.matches(firebaseAuth.getCurrentUser().getUid())){
             String latest_fullname = sharedPreferences.getString(SP_FULLNAME, null);
             String latest_bio = sharedPreferences.getString(SP_BIO, null);
-
+            String latest_image = sharedPreferences.getString(SP_IMAGE,null);
             if (latest_fullname != null)
                 tv_fullName.setText(latest_fullname);
             if (latest_bio != null)
                 tv_bio.setText(latest_bio);
+            if(latest_image != null ){
+                Glide.with(this).load(latest_image).diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_profile_pic);
+            }
 
 
         }
@@ -206,17 +212,19 @@ public class Profile extends Fragment {
                     if (getActivity() != null) {
                         Glide.with(getContext())
                                 .load(user.getProfilePicturePath())
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(iv_profile_pic);
                     } else { // Set default profile pic
                         iv_profile_pic.setImageResource(R.drawable.default_profile_pic);
                     }
 
                     // Saving latest profile info to shared preferences
-                    SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+                    sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(SP_UID, firebaseAuth.getCurrentUser().getUid());
                     editor.putString(SP_FULLNAME, user.getFullname());
                     editor.putString(SP_BIO, user.getBio());
+                    editor.putString(SP_IMAGE, user.getProfilePicturePath());
                     editor.apply();
                 }
             }
@@ -459,6 +467,7 @@ public class Profile extends Fragment {
             /* Showing image */
             Glide.with(this)
                     .load(file.getAbsoluteFile())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(iv_profile_pic);
             //((TextView) findViewById(R.id.upload_image_text)).setVisibility(View.INVISIBLE);
 
@@ -474,6 +483,7 @@ public class Profile extends Fragment {
                                 public void onSuccess(Uri uri) {
                                     String url = uri.toString();
                                     user.setProfilePicturePath(url);
+                                    sharedPreferences.edit().putString(SP_IMAGE,url).apply();
                                     //Saving user to db
                                     FirebaseDatabaseHelper.getInstance().addUserToUsers(user);
                                     // TODO: decide if necessary
