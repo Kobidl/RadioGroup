@@ -78,4 +78,6 @@
     <string name="privacy">Privacy</string>
     <string name="private_str">Private</string>
     <string name="public_str">Public</string>
+    <string name="profile_name">Profile Name</string>
+
 </resources>

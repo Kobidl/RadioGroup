@@ -84,4 +84,6 @@
     <string name="private_group">Private Group</string>
     <string name="message_content">Message content</string>
     <string name="bio">Bio</string>
+    <string name="profile_name">Profile Name</string>
+
 </resources>

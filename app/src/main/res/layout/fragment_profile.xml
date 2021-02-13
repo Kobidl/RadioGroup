@@ -92,4 +92,18 @@
         android:layout_marginBottom="10dp"
         android:backgroundTint="@android:color/holo_red_light"
         />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:id="@+id/edit_profile_btn"
+        android:src="@drawable/ic_edit_file"
+        android:layout_margin="20dp"
+        android:background="@color/colorPrimary"
+        android:backgroundTint="@color/colorPrimary"
+        app:tint="@color/white"
+        />
+
+
 </LinearLayout>

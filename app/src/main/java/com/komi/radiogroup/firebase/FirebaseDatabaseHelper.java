@@ -120,7 +120,7 @@ public class FirebaseDatabaseHelper {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         };
-        userByUidListenerRef.addListenerForSingleValueEvent(userByUidListener);
+        userByUidListenerRef.addValueEventListener(userByUidListener);
     }
 
     public void removeUserByUIDListener() {
