@@ -1,11 +1,4 @@
 
-- Group Detailed view:
-    Add : View user list in group and onclick user show profile //Kobi
-    Add : Leave group button //Kobi // Half Done
-    Add : Invite link for admin //Kobi //Half Done
-    Add : Close group for admin //Kobi //Half Done
-    Add : Edit group details for admin // Kobi //Done
-
 - UI //God save us
 
 - Handle not allowing recording permissions - notif + btn in group

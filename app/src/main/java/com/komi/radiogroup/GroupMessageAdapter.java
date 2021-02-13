@@ -79,6 +79,7 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<GroupMessageAdapte
             ViewGroup.MarginLayoutParams layoutParams =
                     (ViewGroup.MarginLayoutParams) holder.message_container.getLayoutParams();
             layoutParams.setMarginStart(metrics.widthPixels / 4);
+            layoutParams.setMarginEnd(0);
             holder.message_container.requestLayout();
             holder.message_container.setCardBackgroundColor(context.getColor(R.color.my_message));
         }
@@ -89,6 +90,7 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<GroupMessageAdapte
             ViewGroup.MarginLayoutParams layoutParams =
                     (ViewGroup.MarginLayoutParams) holder.message_container.getLayoutParams();
             layoutParams.setMarginEnd(metrics.widthPixels / 4);
+            layoutParams.setMarginStart(0);
             holder.message_container.requestLayout();
             holder.message_container.setCardBackgroundColor(context.getColor(R.color.other_message));
         }
