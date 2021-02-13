@@ -149,7 +149,7 @@ public class FirebaseDatabaseHelper {
 
             }
         };
-        groupListenerRef.addListenerForSingleValueEvent(groupsListener);
+        groupListenerRef.addValueEventListener(groupsListener);
     }
 
     public void removeGroupsByUIDListener() {
