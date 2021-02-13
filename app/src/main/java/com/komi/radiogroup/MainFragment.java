@@ -76,7 +76,7 @@ public class MainFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         //Set toolbar
-        TextView titleTV = rootView.findViewById(R.id.toolbar_title);
+        final TextView titleTV = rootView.findViewById(R.id.toolbar_title);
         titleTV.setText(R.string.group_details);
         ImageButton backBtn = rootView.findViewById(R.id.toolbar_back_btn);
         backBtn.setVisibility(View.GONE);
@@ -90,17 +90,20 @@ public class MainFragment extends Fragment {
                     case R.id.bottom_navigation_item_profile:
                         assert getFragmentManager() != null;
                         getFragmentManager().beginTransaction().replace(R.id.main_frame_layout, profileFragment).commit();
+                        titleTV.setText(R.string.profile);
 //                        toolbarMenu.findItem(R.id.add_group_btn).setVisible(false);
                         return true;
                     case R.id.bottom_navigation_item_explore:
                         assert getFragmentManager() != null;
                         getFragmentManager().beginTransaction().replace(R.id.main_frame_layout, exploreFragment).commit();
+                        titleTV.setText(R.string.explore);
 //                        toolbarMenu.findItem(R.id.add_group_btn).setVisible(false);
                         return true;
                     case R.id.bottom_navigation_item_group:
                         assert getFragmentManager() != null;
 //                        toolbarMenu.findItem(R.id.add_group_btn).setVisible(true).setEnabled(true);
                         getFragmentManager().beginTransaction().replace(R.id.main_frame_layout, groupsFragment).commit();
+                        titleTV.setText(R.string.app_name);
                         return true;
                 }
                 return false;

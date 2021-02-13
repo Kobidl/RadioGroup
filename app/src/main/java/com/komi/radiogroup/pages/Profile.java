@@ -151,7 +151,7 @@ public class Profile extends Fragment {
         iv_profile_pic = rootView.findViewById(R.id.iv_profile_pic);
         tv_fullName = rootView.findViewById(R.id.tv_full_name);
         tv_bio = rootView.findViewById(R.id.tv_bio);
-        btn_editProfile = rootView.findViewById(R.id.btn_edit_profile);
+        //btn_editProfile = rootView.findViewById(R.id.btn_edit_profile);
 
         SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         String latest_UID = sharedPreferences.getString(SP_UID, null);
@@ -193,20 +193,22 @@ public class Profile extends Fragment {
 
                 // Getting profile pic from storage and setting it
                 if (user.getProfilePicturePath() != null && !user.getProfilePicturePath().isEmpty()) {
-                    Glide.with(getContext())
-                            .load(user.getProfilePicturePath())
-                            .into(iv_profile_pic);
-                } else { // Set default profile pic
-                    iv_profile_pic.setImageResource(R.drawable.default_profile_pic);
-                }
+                    if (getActivity() != null) {
+                        Glide.with(getContext())
+                                .load(user.getProfilePicturePath())
+                                .into(iv_profile_pic);
+                    } else { // Set default profile pic
+                        iv_profile_pic.setImageResource(R.drawable.default_profile_pic);
+                    }
 
-                // Saving latest profile info to shared preferences
-                SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(SP_UID, firebaseAuth.getCurrentUser().getUid());
-                editor.putString(SP_FULLNAME, user.getFullname());
-                editor.putString(SP_BIO, user.getBio());
-                editor.apply();
+                    // Saving latest profile info to shared preferences
+                    SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(SP_UID, firebaseAuth.getCurrentUser().getUid());
+                    editor.putString(SP_FULLNAME, user.getFullname());
+                    editor.putString(SP_BIO, user.getBio());
+                    editor.apply();
+                }
             }
         });
 
@@ -223,122 +225,127 @@ public class Profile extends Fragment {
             canTakeImage = true;
         }
 
-
-        btn_editProfile.setOnClickListener(new View.OnClickListener() {
+        iv_profile_pic.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
-                // Starting edit profile dialog
-                final Dialog dialog = new Dialog(getContext(), R.style.WideDialog);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setCancelable(false);
-                dialog.setContentView(R.layout.edit_profile_dialog);
-                dialog.setOnKeyListener(new Dialog.OnKeyListener() {
-
-                    @Override
-                    public boolean onKey(DialogInterface arg0, int keyCode,
-                                         KeyEvent event) {
-                        if (keyCode == KeyEvent.KEYCODE_BACK) {
-                            dialog.dismiss();
-                        }
-                        return true;
-                    }
-                });
-
-
-                //Close edit profile dialog
-                Button closeDialogBtn = (Button) dialog.findViewById(R.id.close_dialog_btn);
-                closeDialogBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-
-                //Edit profile pic
-                LinearLayout editProfilePic = (LinearLayout) dialog.findViewById(R.id.edit_image);
-                editProfilePic.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-                        openPickDialog();
-                    }
-                });
-
-                if(!canTakeImage) {
-                    editProfilePic.setVisibility(View.INVISIBLE);
-                }
-                else {
-                    editProfilePic.setVisibility(View.VISIBLE);
-                }
-
-
-                //Edit profile name
-                LinearLayout editFullnameNBioBtn = (LinearLayout) dialog.findViewById(R.id.edit_fullname_bio);
-                editFullnameNBioBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-
-                        final Dialog mDialog = new Dialog(getContext(), R.style.WideDialog);
-                        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        mDialog.setCancelable(false);
-                        mDialog.setContentView(R.layout.edit_name_bio_dialog);
-
-                        final EditText et_name = mDialog.findViewById(R.id.et_fullname);
-                        final EditText et_bio = mDialog.findViewById(R.id.et_bio);
-
-                        et_name.setText(user.getFullname());
-                        et_bio.setText(user.getBio());
-
-                        Button btn_close = mDialog.findViewById(R.id.close_dialog_btn);
-                        btn_close.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                mDialog.dismiss();
-                            }
-                        });
-
-                        Button btn_save = mDialog.findViewById(R.id.save_dialog_btn);
-                        btn_save.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                String newName = et_name.getText().toString();
-                                String newBio = et_bio.getText().toString();
-                                user.setFullname(newName);
-                                user.setBio(newBio);
-
-                                //Updating new user info in UI
-                                tv_fullName.setText(newName);
-                                tv_bio.setText(newBio);
-                                //Updating new user info in database
-                                FirebaseDatabaseHelper.getInstance().addUserToUsers(user);
-                                //Updating new user info in shared prefs
-                                SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString(SP_UID, firebaseAuth.getCurrentUser().getUid());
-                                editor.putString(SP_FULLNAME, user.getFullname());
-                                editor.putString(SP_BIO, user.getBio());
-                                editor.apply();
-                                //Updating new user display name in Auth
-                                updateDisplayName(user.getFullname());
-
-                                mDialog.dismiss();
-                            }
-                        });
-
-                        mDialog.show();
-                    }
-                });
-
-                dialog.show();
+            public void onClick(View view) {
+                openPickDialog();
             }
         });
+
+//        btn_editProfile.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                // Starting edit profile dialog
+//                final Dialog dialog = new Dialog(getContext(), R.style.WideDialog);
+//                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//                dialog.setCancelable(false);
+//                dialog.setContentView(R.layout.edit_profile_dialog);
+//                dialog.setOnKeyListener(new Dialog.OnKeyListener() {
+//
+//                    @Override
+//                    public boolean onKey(DialogInterface arg0, int keyCode,
+//                                         KeyEvent event) {
+//                        if (keyCode == KeyEvent.KEYCODE_BACK) {
+//                            dialog.dismiss();
+//                        }
+//                        return true;
+//                    }
+//                });
+//
+//
+//                //Close edit profile dialog
+//                Button closeDialogBtn = (Button) dialog.findViewById(R.id.close_dialog_btn);
+//                closeDialogBtn.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        dialog.dismiss();
+//                    }
+//                });
+//
+//                //Edit profile pic
+//                LinearLayout editProfilePic = (LinearLayout) dialog.findViewById(R.id.edit_image);
+//                editProfilePic.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        dialog.dismiss();
+//                        openPickDialog();
+//                    }
+//                });
+//
+//                if(!canTakeImage) {
+//                    editProfilePic.setVisibility(View.INVISIBLE);
+//                }
+//                else {
+//                    editProfilePic.setVisibility(View.VISIBLE);
+//                }
+//
+//
+//                //Edit profile name
+//                LinearLayout editFullnameNBioBtn = (LinearLayout) dialog.findViewById(R.id.edit_fullname_bio);
+//                editFullnameNBioBtn.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        dialog.dismiss();
+//
+//                        final Dialog mDialog = new Dialog(getContext(), R.style.WideDialog);
+//                        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//                        mDialog.setCancelable(false);
+//                        mDialog.setContentView(R.layout.edit_name_bio_dialog);
+//
+//                        final EditText et_name = mDialog.findViewById(R.id.et_fullname);
+//                        final EditText et_bio = mDialog.findViewById(R.id.et_bio);
+//
+//                        et_name.setText(user.getFullname());
+//                        et_bio.setText(user.getBio());
+//
+//                        Button btn_close = mDialog.findViewById(R.id.close_dialog_btn);
+//                        btn_close.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                mDialog.dismiss();
+//                            }
+//                        });
+//
+//                        Button btn_save = mDialog.findViewById(R.id.save_dialog_btn);
+//                        btn_save.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                String newName = et_name.getText().toString();
+//                                String newBio = et_bio.getText().toString();
+//                                user.setFullname(newName);
+//                                user.setBio(newBio);
+//
+//                                //Updating new user info in UI
+//                                tv_fullName.setText(newName);
+//                                tv_bio.setText(newBio);
+//                                //Updating new user info in database
+//                                FirebaseDatabaseHelper.getInstance().addUserToUsers(user);
+//                                //Updating new user info in shared prefs
+//                                SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+//                                SharedPreferences.Editor editor = sharedPreferences.edit();
+//                                editor.putString(SP_UID, firebaseAuth.getCurrentUser().getUid());
+//                                editor.putString(SP_FULLNAME, user.getFullname());
+//                                editor.putString(SP_BIO, user.getBio());
+//                                editor.apply();
+//                                //Updating new user display name in Auth
+//                                updateDisplayName(user.getFullname());
+//
+//                                mDialog.dismiss();
+//                            }
+//                        });
+//
+//                        mDialog.show();
+//                    }
+//                });
+//
+//                dialog.show();
+//            }
+//        });
 
 
         return rootView;
     }
-
 
 
     private void openPickDialog() {

@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -70,6 +72,10 @@ public class GroupRadioFragment extends Fragment {
     FirebaseAuth firebaseAuth;
     private String userId;
     private BroadcastReceiver broadcastReceiver;
+    private ImageView statusImage;
+    protected AnimationDrawable statusAnimation;
+    private TextView startBtnHelperTV;
+    private TextView recordHelperTV;
 
     public GroupRadioFragment() {
         // Required empty public constructor
@@ -100,8 +106,14 @@ public class GroupRadioFragment extends Fragment {
 
         ActivityCompat.requestPermissions(getActivity(), new String[]{WRITE_EXTERNAL_STORAGE}, 0);
 
-        audioRecording = new AudioRecording(rootView.getContext());
         mAudioRecordButton = (AudioRecordButton) rootView.findViewById(R.id.group_audio_record_button);
+
+
+
+        startBtnHelperTV = rootView.findViewById(R.id.join_group_btn_helper);
+        recordHelperTV  = rootView.findViewById(R.id.record_btn_helper);
+
+        statusImage = rootView.findViewById(R.id.radio_status_img);
 
         userId = Settings.Secure.getString(getContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
@@ -129,8 +141,7 @@ public class GroupRadioFragment extends Fragment {
                 listening = !listening;
                 if(listening) {
                     playMusic();
-                    mAudioRecordButton.setVisibility(View.VISIBLE);
-                    Objects.requireNonNull(getActivity()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
                 }
                 else {
                     stopMusic();
@@ -138,13 +149,23 @@ public class GroupRadioFragment extends Fragment {
             }
         });
 
+
+
         if(listening){
             mAudioRecordButton.setVisibility(View.VISIBLE);
             startStopListening.setText(R.string.stop_listening);
             Objects.requireNonNull(getActivity()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            startStopListening.setBackgroundColor(rootView.getContext().getColor(R.color.red));
+            startBtnHelperTV.setText(R.string.click_here_leave_channel);
+            recordHelperTV.setVisibility(View.VISIBLE);
+            statusImage.setImageResource(R.drawable.online_animation);
+            statusAnimation = (AnimationDrawable) statusImage.getDrawable();
+            statusAnimation.start();
         }
 
         registerReceiver();
+
+
 
 
         return rootView;
@@ -153,7 +174,6 @@ public class GroupRadioFragment extends Fragment {
     private void sendMessage(RecordingItem recordingItem) {
         final JSONObject rootObject = new JSONObject();
         try {
-            Log.i("testrecording","Groupid : " + group.getGroupID());
             rootObject.put("to", "/topics/" + group.getGroupID());
             rootObject.put("data", new JSONObject().put("message", recordingItem.getFileUrl()).put("sender_id", userId));
             String url = "https://fcm.googleapis.com/fcm/send";
@@ -191,22 +211,33 @@ public class GroupRadioFragment extends Fragment {
 
     private void playMusic(){
         stopMusic();
+        statusImage.setImageResource(R.drawable.online_animation);
+        statusAnimation = (AnimationDrawable) statusImage.getDrawable();
+        statusAnimation.start();
+        mAudioRecordButton.setVisibility(View.VISIBLE);
+        Objects.requireNonNull(getActivity()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         Intent intent = new Intent(rootView.getContext(), MusicPlayerService.class);
         intent.putExtra("action","start_listening");
         intent.putExtra("user_id",userId);
         intent.putExtra("group",group);
         rootView.getContext().startService(intent);
         startStopListening.setText(R.string.stop_listening);
+        startStopListening.setBackgroundColor(rootView.getContext().getColor(R.color.red));
+        startBtnHelperTV.setText(R.string.click_here_leave_channel);
+        recordHelperTV.setVisibility(View.VISIBLE);
     }
 
     private void stopMusic(){
         try {
+            statusImage.setImageResource(R.drawable.offline);
             mAudioRecordButton.setVisibility(View.GONE);
             startStopListening.setText(R.string.start_listening);
             Intent intent = new Intent(rootView.getContext(), MusicPlayerService.class);
             rootView.getContext().stopService(intent);
             Objects.requireNonNull(getActivity()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
+            startStopListening.setBackgroundColor(rootView.getContext().getColor(R.color.colorPrimary));
+            recordHelperTV.setVisibility(View.GONE);
+            startBtnHelperTV.setText(R.string.click_here_go_live);
         }catch (Exception e){
 
         }
@@ -247,4 +278,5 @@ public class GroupRadioFragment extends Fragment {
         Objects.requireNonNull(getActivity()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         super.onDestroyView();
     }
+
 }

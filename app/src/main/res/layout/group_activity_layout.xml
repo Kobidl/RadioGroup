@@ -65,11 +65,12 @@
         >
     </com.google.android.material.tabs.TabLayout>
 
-    <androidx.viewpager.widget.ViewPager
+    <com.komi.radiogroup.NonSwipeableViewPager
         android:id="@+id/group_view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
-    </androidx.viewpager.widget.ViewPager>
+    </com.komi.radiogroup.NonSwipeableViewPager>
 
 </LinearLayout>

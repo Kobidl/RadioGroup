@@ -90,6 +90,8 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewH
             }catch (Exception e){
                 holder.imageView.setPadding(10,10,10,10);
             }
+        }else{
+            holder.imageView.setVisibility(View.GONE);
         }
 
     }

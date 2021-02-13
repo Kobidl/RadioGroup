@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainFragment">
+    tools:context=".MainFragment"
+    android:background="@color/colorLightBackground"
+    >
 
     <include layout="@layout/toolbar_layout" />
 

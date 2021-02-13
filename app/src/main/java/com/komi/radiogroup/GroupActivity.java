@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -22,16 +23,18 @@ import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
 import com.komi.radiogroup.pages.GroupRadioFragment;
 import com.komi.radiogroup.pages.GroupTextFragment;
 import com.komi.radiogroup.pages.JoinGroupFragment;
+import com.komi.radiogroup.userlater.MusicPlayerService;
 import com.komi.structures.Group;
 
 import static com.komi.radiogroup.pages.Profile.SHARED_PREFS;
 import static com.komi.radiogroup.pages.Profile.SP_UID;
+import static com.komi.radiogroup.userlater.MusicPlayerService.GROUP_LISTENING;
 
 public class GroupActivity extends AppCompatActivity implements JoinGroupFragment.JoinGroupCallback {
 
     public static boolean listening = false;
     public static Group group;
-    private ViewPager viewPager;
+    private NonSwipeableViewPager viewPager;
     private TabLayout tabLayout;
     private GroupTabAdapter adapter;
     String userId;
@@ -49,6 +52,10 @@ public class GroupActivity extends AppCompatActivity implements JoinGroupFragmen
 
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         userId = sharedPreferences.getString(SP_UID, null);
+        String groupListeningId = sharedPreferences.getString(GROUP_LISTENING,null);
+        if(groupListeningId!=null && groupListeningId.equals(group.getGroupID())){
+            listening = true;
+        }
 
         ImageButton backBtn = findViewById(R.id.group_back_btn);
         backBtn.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +70,7 @@ public class GroupActivity extends AppCompatActivity implements JoinGroupFragmen
         groupNameTV = findViewById(R.id.group_title_text);
 
         tabLayout = (TabLayout) findViewById(R.id.group_tab_layout);
-        viewPager = (ViewPager) findViewById(R.id.group_view_pager);
+        viewPager = (NonSwipeableViewPager) findViewById(R.id.group_view_pager);
 
         adapter = new GroupTabAdapter(getSupportFragmentManager(),1);
 
@@ -85,6 +92,8 @@ public class GroupActivity extends AppCompatActivity implements JoinGroupFragmen
             viewPager.setAdapter(adapter);
             tabLayout.setupWithViewPager(viewPager);
         }
+
+        viewPager.setHorizontalScrollBarEnabled(false);
     }
 
     private void setUIGroupDetails(){

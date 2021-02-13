@@ -57,4 +57,13 @@
     <string name="radio_tab">Radio</string>
     <string name="chat_tab">Chat</string>
     <string name="copy_group_link">Copy Group Link</string>
+    <string name="explore">Explore</string>
+    <string name="profile">Profile</string>
+    <string name="join_live">Join Live Air</string>
+    <string name="click_here_go_live">* Press the button in order to start listening to the channel</string>
+    <string name="click_and_hold">Press and hold the button in order to start speaking</string>
+    <string name="click_here_leave_channel">Press the button to leave the channel and go offline</string>
+    <string name="privacy">Privacy</string>
+    <string name="private_str">Private</string>
+    <string name="public_str">Public</string>
 </resources>

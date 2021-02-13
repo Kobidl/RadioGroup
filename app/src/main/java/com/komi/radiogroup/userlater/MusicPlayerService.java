@@ -35,8 +35,11 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import static com.komi.radiogroup.pages.Profile.SHARED_PREFS;
+
 public class MusicPlayerService extends Service implements MediaPlayer.OnCompletionListener,MediaPlayer.OnPreparedListener{
     public static final String PLAYER_BROADCAST = "com.komi.radiogroup.songchanged";
+    public static final String GROUP_LISTENING = "group_listening_id";
 
     NotificationManager manager;
     NotificationCompat.Builder builder;
@@ -138,8 +141,8 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
                     openIntent.putExtra("playing",true);
                     PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, openIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                     builder.setContentIntent(pendingIntent);
-
                     messaging.subscribeToTopic(group.getGroupID());
+                    this.getSharedPreferences(SHARED_PREFS,MODE_PRIVATE).edit().putString(GROUP_LISTENING,group.getGroupID()).apply();
                 }
                 break;
             case "close":
@@ -165,6 +168,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
         }
         messaging.unsubscribeFromTopic(group.getGroupID());
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
+        this.getSharedPreferences(SHARED_PREFS,MODE_PRIVATE).edit().remove(GROUP_LISTENING).apply();
     }
 
     private void playSong(){

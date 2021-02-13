@@ -1,41 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".pages.GroupRadioFragment">
+    tools:context=".pages.GroupRadioFragment"
+    android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
-
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:padding="15dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/start_listening"
-            android:textColor="@android:color/white"
-            app:cornerRadius="6dp"
-            android:id="@+id/btn_start_listening"
-            android:enabled="true"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="15dp"
+        <ImageView
+            android:layout_width="250dp"
+            android:layout_height="200dp"
+            android:src="@drawable/offline"
+            android:layout_gravity="center"
+            android:id="@+id/radio_status_img"
+            android:layout_centerHorizontal="true"
             />
+
 
         <com.komi.radiogroup.audio_recorder.AudioRecordButton
             android:id="@+id/group_audio_record_button"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
             android:visibility="gone"
             />
-
-    </LinearLayout>
-
-</FrameLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/click_and_hold"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="12sp"
+            android:autoSizeMaxTextSize="100sp"
+            android:autoSizeStepGranularity="2sp"
+            android:textColor="@color/light_text"
+            android:lines="1"
+            android:layout_below="@+id/group_audio_record_button"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:id="@+id/record_btn_helper"
+            android:visibility="gone"
+            />
+    </RelativeLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp"
+    android:orientation="vertical"
+    >
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/click_here_go_live"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeStepGranularity="2sp"
+        android:textColor="@color/light_text"
+        android:lines="1"
+        android:id="@+id/join_group_btn_helper"
+        />
+    <com.google.android.material.button.MaterialButton
+        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/join_live"
+        android:textColor="@android:color/white"
+        app:cornerRadius="6dp"
+        android:id="@+id/btn_start_listening"
+        android:enabled="true"
+        />
+</LinearLayout>
+</LinearLayout>

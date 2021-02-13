@@ -10,14 +10,24 @@
 
 - Handle not allowing recording permissions - notif + btn in group
 
-- Coming from notif no groups shown
-
 - Update all groups after leaving a group
 
 - Test Close group
 
-- Main container -> default page //Kobi
-
 - Localization // Mishel
 
 - Loaders
+
+- Empty pages
+
+- Edit Profile page -> email + password
+
+- Handle errors messages
+
+- Handle log title
+
+- Handle long description
+
+- mark my group
+
+- show public private

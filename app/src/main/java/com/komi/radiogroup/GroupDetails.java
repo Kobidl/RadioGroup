@@ -42,6 +42,7 @@ public class GroupDetails extends AppCompatActivity {
     private ImageView imageView;
     private TextView nameTV;
     private TextView descTV;
+    private TextView privacyTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +74,7 @@ public class GroupDetails extends AppCompatActivity {
 
         nameTV = findViewById(R.id.group_details_name);
         descTV = findViewById(R.id.group_details_desc);
+        privacyTV = findViewById(R.id.group_details_privacy);
 
         setDetails();
 
@@ -149,6 +151,7 @@ public class GroupDetails extends AppCompatActivity {
     private void setDetails(){
         nameTV.setText(group.getGroupName());
         descTV.setText(group.getGroupDescription());
+        privacyTV.setText(getResources().getIdentifier(group.isPrivate() ? "private_str":"public_str", "string", this.getPackageName()));
         if(group.getProfilePicturePath() != null) {
             Glide.with(imageView).load(group.getProfilePicturePath()).into(imageView);
         }else{
