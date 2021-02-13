@@ -19,3 +19,5 @@
 - Main container -> default page //Kobi
 
 - Localization // Mishel
+
+- Loaders

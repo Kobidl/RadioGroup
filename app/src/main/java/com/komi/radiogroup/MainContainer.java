@@ -28,6 +28,7 @@ import com.komi.structures.User;
 
 public class MainContainer extends AppCompatActivity implements Welcome.OnWelcomeFragmentListener {
 
+    public static String APP_URL = "https://www.radiogroup.com/invite/";
     private FirebaseAuth firebaseAuth;
     Welcome welcomeFragment = new Welcome();
     MainFragment mainFragment = new MainFragment();
@@ -45,12 +46,14 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
         FirebaseDatabaseHelper.getInstance();
 
         Intent intent = getIntent();
-        String action = intent.getAction();
-        Uri data = intent.getData();
+        Uri initUrl = intent.getData();
 
-        Log.d("action",action);
-        if(data!=null)
-            Log.d("data",data.toString());
+        if(initUrl!=null){
+            Intent gIntent = new Intent(this,GroupActivity.class);
+            gIntent.putExtra("group_id",initUrl.toString().replace(APP_URL,"").replace("/",""));
+            startActivity(gIntent);
+        }
+
 
         // Initializing Firebase Messaging
 //        FirebaseMessagingHelper.getInstance(MainActivity.this).sendMessageToTopic("A", msg_et.getText().toString());
@@ -105,8 +108,21 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
             Toast.makeText(MainContainer.this, "Cant update display name : Not logged in", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
 
-//    private void logoutUser() {
+        Uri initUrl = intent.getData();
+        if(initUrl!=null){
+            Intent gIntent = new Intent(this,GroupActivity.class);
+            gIntent.putExtra("group_id",initUrl.toString().replace(APP_URL,"").replace("/",""));
+            startActivity(gIntent);
+        }
+
+
+    }
+
+    //    private void logoutUser() {
 //        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 //        if (firebaseUser != null)
 //            firebaseAuth.signOut();

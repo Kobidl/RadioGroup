@@ -54,4 +54,7 @@
     <string name="close_group">Close Group</string>
     <string name="edit_group">Edit Group</string>
     <string name="search_group_name">Search group name</string>
+    <string name="radio_tab">Radio</string>
+    <string name="chat_tab">Chat</string>
+    <string name="copy_group_link">Copy Group Link</string>
 </resources>

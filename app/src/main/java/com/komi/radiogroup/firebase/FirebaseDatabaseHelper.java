@@ -272,4 +272,15 @@ public class FirebaseDatabaseHelper {
             }
         });
     }
+
+    public void getGroupById(String groupId,final OnGroupDataChangedCallback callback) {
+        DatabaseReference databaseReference = firebaseDatabase.getReference().child(DB_GROUPS);
+        databaseReference.child(groupId).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                Group group = (Group) dataSnapshot.getValue(Group.class);
+                callback.onDataReceived(group);
+            }
+        });
+    }
 }

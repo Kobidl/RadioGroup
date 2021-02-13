@@ -1,6 +1,9 @@
 package com.komi.radiogroup;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -9,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +30,8 @@ import java.util.Collections;
 import java.util.List;
 
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
+
+import static com.komi.radiogroup.MainContainer.APP_URL;
 
 public class GroupDetails extends AppCompatActivity {
 
@@ -126,6 +132,18 @@ public class GroupDetails extends AppCompatActivity {
                 }
             });
         }
+
+        final MaterialButton copyLinkBtn = findViewById(R.id.group_details_link_btn);
+        copyLinkBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = APP_URL + group.getGroupID();
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText(url, url);
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(GroupDetails.this, "Linked Copied", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
     
     private void setDetails(){
