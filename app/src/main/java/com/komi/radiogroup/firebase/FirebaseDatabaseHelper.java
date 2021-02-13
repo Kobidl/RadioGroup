@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class FirebaseDatabaseHelper {
@@ -67,6 +68,10 @@ public class FirebaseDatabaseHelper {
 
     public interface GetUserCallback{
         void OnDataReceived(User user);
+    }
+
+    public interface OnUsersInGroupDataChangedCallback{
+        void OnDataReceived(List<User> users);
     }
 
     // Add methods
@@ -205,7 +210,30 @@ public class FirebaseDatabaseHelper {
         exploreListenerRef.removeEventListener(exploreListener);
     }
 
-    private void removeListenerFromRef(DatabaseReference reference, ValueEventListener listener) {
+    public void setUsersInGroupListener(final List<String> userIDs, final OnUsersInGroupDataChangedCallback callback) {
+
+        usersListenerRef = firebaseDatabase.getReference().child(DB_USERS);
+        usersListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<User> users = new ArrayList<>();
+                for (DataSnapshot snapshot1 : snapshot.getChildren()){
+                    User temp = snapshot1.getValue(User.class);
+                    if(userIDs.contains(temp.getUID())){
+                        users.add(temp);
+                    }
+                }
+                callback.OnDataReceived(users);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        };
+        usersListenerRef.addValueEventListener(usersListener);
+    }
+
+    public void removeUsersInGroupListener(){
+        usersListenerRef.removeEventListener(usersListener);
     }
 
     public void addUserToGroup(final User user, final Group group, final OnGroupDataChangedCallback callback){ // ******Must be run async

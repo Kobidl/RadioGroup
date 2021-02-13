@@ -42,8 +42,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="@string/username"
-            android:id="@+id/user_card_username"
+            android:text="Name"
+            android:id="@+id/user_card_name"
             android:layout_gravity="start"
             android:ellipsize="end"
             android:singleLine="true"
@@ -51,8 +51,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Name"
-            android:id="@+id/user_card_name"
+            android:text="Bio"
+            android:id="@+id/user_card_bio"
             android:ellipsize="middle"
             android:singleLine="true" />
         </LinearLayout>

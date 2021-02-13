@@ -31,7 +31,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -44,11 +43,9 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.komi.radiogroup.GroupMessageAdapter;
-import com.komi.radiogroup.MainContainer;
 import com.komi.radiogroup.R;
 import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
-import com.komi.radiogroup.userlater.UserGroupsIsAdminAdapter;
+import com.komi.radiogroup.UserGroupsIsAdminAdapter;
 import com.komi.structures.Group;
 import com.komi.structures.User;
 

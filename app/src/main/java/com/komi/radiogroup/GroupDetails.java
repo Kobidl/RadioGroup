@@ -21,7 +21,9 @@ import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
 import com.komi.structures.Group;
 import com.komi.structures.User;
 
+import java.lang.reflect.Array;
 import java.text.BreakIterator;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,6 +38,10 @@ public class GroupDetails extends AppCompatActivity {
     private ImageView imageView;
     private TextView nameTV;
     private TextView descTV;
+    List<User> users;
+
+    RecyclerView recyclerView;
+    UsersAdapter usersAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,13 +79,23 @@ public class GroupDetails extends AppCompatActivity {
         TextView membersTV = findViewById(R.id.group_details_members);
         membersTV.setText(getResources().getString(R.string.total) + ":" + group.getUserMap().size());
 
-        RecyclerView recyclerView = findViewById(R.id.group_details_users_recycler);
+        recyclerView = findViewById(R.id.group_details_users_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        List<User> users = Collections.list(Collections.enumeration(group.getUserMap().values()));
 
-        UsersAdapter usersAdapter = new UsersAdapter(users);
+        users = new ArrayList<>();
+
+        usersAdapter = new UsersAdapter(users);
         recyclerView.setAdapter(usersAdapter);
         recyclerView.setNestedScrollingEnabled(false);
+
+        List<String> keys = new ArrayList<String>(group.getUserMap().keySet());
+        FirebaseDatabaseHelper.getInstance().setUsersInGroupListener(keys, new FirebaseDatabaseHelper.OnUsersInGroupDataChangedCallback() {
+            @Override
+            public void OnDataReceived(List<User> users) {
+                usersAdapter.setUsers(users);
+                usersAdapter.notifyDataSetChanged();
+            }
+        });
 
         leaveBtn = findViewById(R.id.leave_group_btn);
 
