@@ -54,4 +54,20 @@
     <string name="close_group">Close Group</string>
     <string name="edit_group">Edit Group</string>
     <string name="search_group_name">Search group name</string>
+    <string name="logged_out">Logged out</string>
+    <string name="login">LogIn</string>
+    <string name="sign_up">Sign up</string>
+    <string name="logout">Logout</string>
+    <string name="recorder">Recorder</string>
+    <string name="enter_profile_name">Enter Profile Name</string>
+    <string name="enter_profile_bio">Enter Profile Bio</string>
+    <string name="edit_name_and_bio">Edit Name and Bio</string>
+    <string name="edit_profile_picture">Edit Profile Picture</string>
+    <string name="enter_message">Enter message...</string>
+    <string name="send">Send</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="groups_by_this_user">Groups by this user</string>
+    <string name="private_group">Private Group</string>
+    <string name="message_content">Message content</string>
+    <string name="bio">Bio</string>
 </resources>

@@ -57,7 +57,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Edit profile"
+        android:text="@string/edit_profile"
         android:id="@+id/btn_edit_profile"
         android:background="@color/colorPrimary"
         android:textColor="#ffffff"/>
@@ -72,7 +72,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Groups by this user"
+            android:text="@string/groups_by_this_user"
             android:textStyle="bold"
             android:textSize="16sp"
             android:layout_marginHorizontal="6dp"/>

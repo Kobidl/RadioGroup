@@ -36,7 +36,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_user_status"
-                    android:text="Logged out"
+                    android:text="@string/logged_out"
                     android:textSize="16sp"
                     android:gravity="center" />
 
@@ -50,14 +50,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/btn_login"
-                        android:text="LogIn"
+                        android:text="@string/login"
                         android:gravity="center" />
 
                     <Button
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/btn_sign_up"
-                        android:text="Sign up"
+                        android:text="@string/sign_up"
                         android:gravity="center"
                         android:layout_below="@id/btn_login"/>
 
@@ -65,7 +65,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/btn_logout"
-                        android:text="Logout"
+                        android:text="@string/logout"
                         android:gravity="center"
                         android:layout_below="@id/btn_sign_up"/>
 
@@ -73,7 +73,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/btn_recorder"
-                        android:text="Recorder"
+                        android:text="@string/recorder"
                         android:gravity="center"
                         android:layout_below="@id/btn_logout"/>
 

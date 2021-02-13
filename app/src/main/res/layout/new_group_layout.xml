@@ -85,7 +85,7 @@
             <CheckBox
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Private Group"
+                android:text="@string/private_group"
                 android:id="@+id/cb_private"
                 android:layout_margin="15dp"/>
 
