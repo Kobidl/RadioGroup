@@ -89,6 +89,7 @@ public class Groups extends Fragment {
         FirebaseDatabaseHelper.getInstance().setGroupsByUIDListener(FirebaseAuth.getInstance().getCurrentUser().getUid(), new FirebaseDatabaseHelper.OnGroupsDataChangedCallback() {
             @Override
             public void onDataReceived(List<Group> groups) {
+                groupList = groups;
                 groupsAdapter.setGroups(groups);
                 groupsAdapter.notifyDataSetChanged();
             }
