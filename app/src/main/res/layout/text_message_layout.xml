@@ -6,7 +6,8 @@
     app:cardUseCompatPadding="true"
     android:elevation="8dp"
     app:cardCornerRadius="10dp"
-    android:id="@+id/message_container">
+    android:id="@+id/message_container"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,7 +25,7 @@
                 android:text=""
                 android:textSize="18sp"
                 android:layout_marginHorizontal="10dp"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/white"
                 android:id="@+id/tv_msg_name"/>
 
             <TextView
@@ -33,7 +34,7 @@
                 android:text=""
                 android:textSize="18sp"
                 android:layout_marginHorizontal="10dp"
-                android:textColor="@color/colorOrange"
+                android:textColor="@color/white"
                 android:id="@+id/tv_msg_name_user"
                 android:layout_alignParentRight="true"/>
 
@@ -48,7 +49,8 @@
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:id="@+id/tv_msg_body" />
+            android:id="@+id/tv_msg_body"
+            android:textColor="@color/white"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -58,7 +60,8 @@
             android:layout_gravity="end"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="5dp"
-            android:id="@+id/tv_msg_time"/>
+            android:id="@+id/tv_msg_time"
+            android:textColor="@color/white"/>
 
     </LinearLayout>
 

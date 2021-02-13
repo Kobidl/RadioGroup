@@ -72,6 +72,7 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<GroupMessageAdapte
         GroupMessage groupMessage = groupMessages.get(position);
 
         if(groupMessage.getFrom_ID().matches(currentUser.getUid())){ // Case the message was send by the user
+            //todo: change text to global
             holder.tv_name_user.setText("Me");
             holder.tv_name_other.setText("");
             holder.tv_body.setGravity(Gravity.END);
@@ -79,6 +80,7 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<GroupMessageAdapte
                     (ViewGroup.MarginLayoutParams) holder.message_container.getLayoutParams();
             layoutParams.setMarginStart(metrics.widthPixels / 4);
             holder.message_container.requestLayout();
+            holder.message_container.setCardBackgroundColor(context.getColor(R.color.my_message));
         }
         else{ // Case the message is from another user
             holder.tv_name_other.setText(groupMessage.getFrom_name());
@@ -88,6 +90,7 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<GroupMessageAdapte
                     (ViewGroup.MarginLayoutParams) holder.message_container.getLayoutParams();
             layoutParams.setMarginEnd(metrics.widthPixels / 4);
             holder.message_container.requestLayout();
+            holder.message_container.setCardBackgroundColor(context.getColor(R.color.other_message));
         }
         holder.tv_body.setText(groupMessage.getBody());
         holder.tv_time.setText(getDate(groupMessage.getTimeInMillis()));

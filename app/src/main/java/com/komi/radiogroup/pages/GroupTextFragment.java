@@ -1,12 +1,15 @@
 package com.komi.radiogroup.pages;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -71,26 +74,50 @@ public class GroupTextFragment extends Fragment {
         // Initializing elements
         final EditText et_message = rootView.findViewById(R.id.et_message);
 
-        Button btn_send = rootView.findViewById(R.id.btn_send);
+        final ImageButton btn_send = rootView.findViewById(R.id.btn_send);
+
+        et_message.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String message = editable.toString().trim();
+                if(message.isEmpty()){
+                    btn_send.setVisibility(View.GONE);
+                }else{
+                    btn_send.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String message = et_message.getText().toString();
+                String message = et_message.getText().toString().trim();
+                if(!message.isEmpty()) {
+                    // Sending message to topic
+                    //FirebaseMessagingHelper.getInstance(getContext()).sendMessageToTopic(group.getGroupID(), message);
 
-                // Sending message to topic
-                //FirebaseMessagingHelper.getInstance(getContext()).sendMessageToTopic(group.getGroupID(), message);
-
-                // Sending message to database
-                GroupMessage groupMessage = new GroupMessage();
-                groupMessage.setType(GroupMessage.MESSAGE_TYPE_TEXT);
-                groupMessage.setGroup_ID(group.getGroupID());
-                groupMessage.setMsg_ID(UUID.randomUUID().toString());
-                groupMessage.setFrom_ID(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                groupMessage.setFrom_name(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-                groupMessage.setBody(message);
-                groupMessage.setTimeInMillis(System.currentTimeMillis());
-                FirebaseDatabaseHelper.getInstance().addGroupMessage(groupMessage);
-                et_message.setText("");
+                    // Sending message to database
+                    GroupMessage groupMessage = new GroupMessage();
+                    groupMessage.setType(GroupMessage.MESSAGE_TYPE_TEXT);
+                    groupMessage.setGroup_ID(group.getGroupID());
+                    groupMessage.setMsg_ID(UUID.randomUUID().toString());
+                    groupMessage.setFrom_ID(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    groupMessage.setFrom_name(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                    groupMessage.setBody(message);
+                    groupMessage.setTimeInMillis(System.currentTimeMillis());
+                    FirebaseDatabaseHelper.getInstance().addGroupMessage(groupMessage);
+                    et_message.setText("");
+                }
             }
         });
 

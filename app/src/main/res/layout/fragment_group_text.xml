@@ -6,53 +6,75 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".pages.GroupTextFragment">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="15dp"
         android:orientation="vertical"
-        android:background="#Cee9f1">
+        android:background="#fefefe">
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:layout_above="@id/rl_txt_input"
-            android:id="@+id/recyclerview_chat">
+            android:id="@+id/recyclerview_chat"
+            android:layout_margin="15dp">
 
 
         </androidx.recyclerview.widget.RecyclerView>
 
-        <RelativeLayout
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_gravity="bottom"
-            android:background="#Cee9f1"
-            android:layout_alignParentBottom="true"
-            android:id="@+id/rl_txt_input">
+            android:background="#fafafa"
+            android:id="@+id/rl_txt_input"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="15dp"
+            >
 
-            <EditText
-                android:layout_width="match_parent"
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:id="@+id/et_message"
-                android:hint="Enter message..."
-                android:layout_toStartOf="@id/btn_send"
-                android:background="#ffffff"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="5dp"
-                android:padding="5dp"/>
+                android:elevation="6dp"
+                app:cardCornerRadius="6dp"
+                android:layout_gravity="center"
+                >
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/et_message"
+                    android:hint="Enter message..."
+                    android:layout_toStartOf="@id/btn_send"
+                    android:background="#ffffff"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="5dp"
+                    android:padding="10dp"
+                />
+            </androidx.cardview.widget.CardView>
 
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Send"
-                android:layout_alignParentEnd="true"
+            <ImageButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text=""
                 android:id="@+id/btn_send"
-                android:textColor="#000000"/>
+                android:textColor="@color/white"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/ic_send"
+                android:background="@android:color/transparent"
+                android:layout_gravity="center"
+                android:scaleType="fitXY"
+                android:paddingTop="1dp"
+                android:visibility="gone"
+                />
 
-        </RelativeLayout>
+        </LinearLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </FrameLayout>
