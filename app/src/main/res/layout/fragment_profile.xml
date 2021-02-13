@@ -82,5 +82,13 @@
         </androidx.recyclerview.widget.RecyclerView>
 
     </LinearLayout>
-
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/logout"
+        android:id="@+id/btn_logout"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="@android:color/holo_red_light"
+        />
 </LinearLayout>

@@ -38,6 +38,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -58,6 +59,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
+import static com.komi.radiogroup.MainFragment.logout;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -135,7 +137,7 @@ public class Profile extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             final Bundle savedInstanceState) {
 
         //Getting storage instance
         mStorageRef = FirebaseStorage.getInstance().getReference();
@@ -148,13 +150,24 @@ public class Profile extends Fragment {
         // TODO: to allow loading this page for any user we need to pass a uid parameter and set it here
         userID = firebaseAuth.getCurrentUser().getUid();
 
+        final SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+        String latest_UID = sharedPreferences.getString(SP_UID, null);
+
+
         iv_profile_pic = rootView.findViewById(R.id.iv_profile_pic);
         tv_fullName = rootView.findViewById(R.id.tv_full_name);
         tv_bio = rootView.findViewById(R.id.tv_bio);
+        MaterialButton logoutBtn = rootView.findViewById(R.id.btn_logout);
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sharedPreferences.edit().clear().apply();
+                firebaseAuth.signOut();
+                logout();
+            }
+        });
         //btn_editProfile = rootView.findViewById(R.id.btn_edit_profile);
 
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-        String latest_UID = sharedPreferences.getString(SP_UID, null);
 
         // If the latest profile info we have saved is of the same user, then load it from shared preferences first
         if(latest_UID != null && latest_UID.matches(firebaseAuth.getCurrentUser().getUid())){

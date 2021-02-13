@@ -26,7 +26,7 @@ import com.komi.radiogroup.pages.Welcome;
 import com.komi.structures.Group;
 import com.komi.structures.User;
 
-public class MainContainer extends AppCompatActivity implements Welcome.OnWelcomeFragmentListener {
+public class MainContainer extends AppCompatActivity implements Welcome.OnWelcomeFragmentListener,MainFragment.MainFragmentListener {
 
     public static String APP_URL = "https://www.radiogroup.com/invite/";
     private FirebaseAuth firebaseAuth;
@@ -120,6 +120,11 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
         }
 
 
+    }
+
+    @Override
+    public void onLogout() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, welcomeFragment).commit();
     }
 
     //    private void logoutUser() {

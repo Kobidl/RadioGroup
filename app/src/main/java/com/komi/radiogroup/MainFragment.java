@@ -1,6 +1,7 @@
 package com.komi.radiogroup;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -36,12 +37,21 @@ public class MainFragment extends Fragment {
     Groups groupsFragment = new Groups();
     Explore exploreFragment = new Explore();
     private FragmentActivity myContext;
-    private Menu toolbarMenu;
+    static MainFragmentListener callback;
 
     public MainFragment() {
         // Required empty public constructor
     }
 
+    interface MainFragmentListener{
+        void onLogout();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        callback = (MainFragmentListener) context;
+    }
 
     // TODO: Rename and change types and number of parameters
     public static MainFragment newInstance(String param1, String param2) {
@@ -111,6 +121,11 @@ public class MainFragment extends Fragment {
         });
         bottomNavigationView.setSelectedItemId(R.id.bottom_navigation_item_group);
         return rootView;
+    }
+
+    public static void logout(){
+        if(callback!=null)
+            callback.onLogout();
     }
 
     @Override
