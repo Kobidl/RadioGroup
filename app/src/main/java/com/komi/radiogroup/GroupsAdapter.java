@@ -1,5 +1,6 @@
 package com.komi.radiogroup;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.komi.structures.Group;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewHolder> {
 
     private List<Group> groups;
     private GroupListener listener;
+    private Context context;
 
     public interface GroupListener {
         void onClick(int position,View view);
@@ -27,20 +31,29 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewH
         this.listener = listener;
     }
 
-    public GroupsAdapter(List<Group> groups){
+    public GroupsAdapter(Context context,List<Group> groups){
+        this.context = context;
         this.groups = groups;
+
     }
 
     public class GroupViewHolder extends RecyclerView.ViewHolder{
         TextView name;
         ImageView imageView;
         TextView members;
+        ImageView privacyIV;
+        TextView privacyTV;
+        TextView descTV;
 
         public GroupViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.group_name);
             members = itemView.findViewById(R.id.group_members);
             imageView = itemView.findViewById(R.id.group_card_image);
+            descTV = itemView.findViewById(R.id.group_desc);
+            privacyIV = itemView.findViewById(R.id.group_privacy_icon);
+            privacyTV = itemView.findViewById(R.id.group_privacy_desc);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -49,20 +62,6 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewH
                     }
                 }
             });
-//            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-//                @Override
-//                public boolean onLongClick(View view) {
-//                    Vibrator v = (Vibrator) view.getContext().getSystemService(Context.VIBRATOR_SERVICE);
-//                    // Vibrate for 500 milliseconds
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                        v.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE));
-//                    } else {
-//                        //deprecated in API 26
-//                        v.vibrate(100);
-//                    }
-//                    return false;
-//                }
-//            });
 
         }
     }
@@ -79,8 +78,10 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewH
         Group group = groups.get(position);
         holder.name.setText(group.getGroupName());
         Integer membersSize = group.getUserMap().size();
-        holder.members.setText(membersSize.toString());
-
+        holder.members.setText(membersSize.toString() + " " + context.getResources().getString(R.string.members));
+        holder.descTV.setText(group.getGroupDescription());
+        holder.privacyIV.setImageResource(context.getResources().getIdentifier(group.isPrivate() ? "ic_private" : "ic_public", "drawable", context.getPackageName()));
+        holder.privacyTV.setText(context.getResources().getIdentifier(group.isPrivate() ? "private_str" : "public_str", "string", context.getPackageName()));
         if(group.getProfilePicturePath() != null && !group.getProfilePicturePath().isEmpty()) {
             try {
             holder.imageView.setPadding(0,0,0,0);

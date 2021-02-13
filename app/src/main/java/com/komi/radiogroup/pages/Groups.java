@@ -66,7 +66,7 @@ public class Groups extends Fragment {
         recyclerView.setHasFixedSize(true);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
-        groupsAdapter = new GroupsAdapter(groupList);
+        groupsAdapter = new GroupsAdapter(rootView.getContext(),groupList);
         groupsAdapter.setListener(new GroupsAdapter.GroupListener() {
             @Override
             public void onClick(int position, View view) {

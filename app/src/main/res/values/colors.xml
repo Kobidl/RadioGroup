@@ -18,4 +18,5 @@
     <color name="red">@android:color/holo_red_light</color>
     <color name="green">@android:color/holo_green_light</color>
     <color name="light_text">#777</color>
+    <color name="light_black">#333</color>
 </resources>

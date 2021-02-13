@@ -13,12 +13,7 @@
 
 - Handle errors messages on login
 
-
-- Handle long description //Kobi
-
 - mark my group
-
-- show public private outside // Kobi
 
 - Change search bar on icon clicked
 

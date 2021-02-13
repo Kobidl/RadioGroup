@@ -69,7 +69,7 @@ public class Explore extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
         groupList = new ArrayList<>();
-        groupsAdapter = new GroupsAdapter(groupList);
+        groupsAdapter = new GroupsAdapter(rootView.getContext(),groupList);
         groupsAdapter.setListener(new GroupsAdapter.GroupListener() {
             @Override
             public void onClick(int position, View view) {
