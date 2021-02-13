@@ -5,8 +5,6 @@
 
 - Localization // Mishel
 
-- Loaders //Kobi
-
 - Empty pages // Kobi
 
 - Edit Profile page -> email + password
