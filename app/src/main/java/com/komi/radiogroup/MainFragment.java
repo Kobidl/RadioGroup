@@ -106,6 +106,7 @@ public class MainFragment extends Fragment {
                 return false;
             }
         });
+        bottomNavigationView.setSelectedItemId(R.id.bottom_navigation_item_group);
         return rootView;
     }
 
