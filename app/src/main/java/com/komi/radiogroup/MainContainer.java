@@ -61,6 +61,7 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
 
         firebaseAuth = FirebaseAuth.getInstance();
 
+
         // Initializing Firebase Database
         FirebaseDatabaseHelper.getInstance();
 
@@ -86,20 +87,6 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
             getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, mainFragment).commit();
         }
 
-        FirebaseDatabaseHelper.getInstance().setUserByUidListener(currentUser.getUid(), new FirebaseDatabaseHelper.OnUserDataChangedCallback() {
-            @Override
-            public void onDataReceived(User user) {
-
-                // Saving latest profile info to shared preferences
-                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(SP_UID, firebaseAuth.getCurrentUser().getUid());
-                editor.putString(SP_FULLNAME, user.getFullname());
-                editor.putString(SP_BIO, user.getBio());
-                editor.putString(SP_IMAGE, user.getProfilePicturePath());
-                editor.apply();
-            }
-        });
     }
 
 
@@ -117,12 +104,14 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
         newUser.setFullname(name);
         newUser.setBio("Bio");
         FirebaseDatabaseHelper.getInstance().addUserToUsers(newUser);
+        fetchUser();
     }
 
     @Override
     public void onLogin() {
         getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, mainFragment).commit();
         currentUser = firebaseAuth.getCurrentUser();
+        fetchUser();
     }
 
     private void updateDisplayName(String name) {
@@ -156,6 +145,23 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
     @Override
     public void onLogout() {
         getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, welcomeFragment).commit();
+    }
+
+    public void fetchUser() {
+        FirebaseDatabaseHelper.getInstance().setUserByUidListener(firebaseAuth.getCurrentUser().getUid(), new FirebaseDatabaseHelper.OnUserDataChangedCallback() {
+            @Override
+            public void onDataReceived(User user) {
+
+                // Saving latest profile info to shared preferences
+                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(SP_UID, firebaseAuth.getCurrentUser().getUid());
+                editor.putString(SP_FULLNAME, user.getFullname());
+                editor.putString(SP_BIO, user.getBio());
+                editor.putString(SP_IMAGE, user.getProfilePicturePath());
+                editor.apply();
+            }
+        });
     }
 
     //    private void logoutUser() {
