@@ -16,7 +16,7 @@
     <color name="my_message">#25D366</color>
     <color name="other_message">#34B7F1</color>
     <color name="red">@android:color/holo_red_light</color>
-    <color name="green">@android:color/holo_green_light</color>
+    <color name="green">#25D366</color>
     <color name="light_text">#777</color>
     <color name="light_black">#333</color>
 </resources>

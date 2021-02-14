@@ -34,7 +34,8 @@ import static com.komi.radiogroup.MainFragment.logout;
 
 public class MainContainer extends AppCompatActivity implements Welcome.OnWelcomeFragmentListener,MainFragment.MainFragmentListener {
 
-    public static String APP_URL = "https://www.radiogroup.com/invite/";
+    public static String playingGroup = "";
+    protected static final String APP_URL = "https://www.radiogroup.com/invite/";
     private FirebaseAuth firebaseAuth;
     Welcome welcomeFragment = new Welcome();
     MainFragment mainFragment = new MainFragment();

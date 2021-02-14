@@ -95,6 +95,7 @@
     <string name="please_fill_fields">יש למלא את כל השדות</string>
     <string name="group_desc">תיאור הקבוצה</string>
     <string name="home">בית</string>
+    <string name="current_active_users">Active Users:</string>
 
 
 </resources>

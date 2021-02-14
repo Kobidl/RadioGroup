@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
 import com.komi.radiogroup.pages.GroupRadioFragment;
 import com.komi.radiogroup.pages.GroupTextFragment;
@@ -48,12 +49,13 @@ public class GroupActivity extends AppCompatActivity implements JoinGroupFragmen
         listening = getIntent().getBooleanExtra("playing",false);
         group = (Group) getIntent().getParcelableExtra("group");
 
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-        userId = sharedPreferences.getString(SP_UID, null);
-        String groupListeningId = sharedPreferences.getString(GROUP_LISTENING,null);
-        if(groupListeningId!=null && groupListeningId.equals(group.getGroupID())){
-            listening = true;
-        }
+        userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//        String groupListeningId = sharedPreferences.getString(GROUP_LISTENING,null);
+//        if(groupListeningId!=null && groupListeningId.equals(group.getGroupID())){
+//            listening = true;
+//        }
+
+        listening = MainContainer.playingGroup.equals(group.getGroupID());
 
         ImageButton backBtn = findViewById(R.id.group_back_btn);
         backBtn.setOnClickListener(new View.OnClickListener() {

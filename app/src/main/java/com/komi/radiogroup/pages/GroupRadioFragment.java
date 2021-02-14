@@ -62,7 +62,7 @@ public class GroupRadioFragment extends Fragment {
 
 
     private static final String GROUP_PARAM = "group";
-    private static final long TIME_CHECK_ACTIVE = 1000 * 10;
+    private static final long TIME_CHECK_ACTIVE = 1000 * 5;
     private final String API_TOKEN_KEY = "AAAAMJ5RH1k:APA91bG5hD4dwWDrFFdK6QUYLmm_sLW1VvfHzwh-wwZGRar93y8ZTcyUAVU_O3pGEeKWqWe4FGgUe0Rs1VD5Vym6mQ9LnHUXhv6K5K1vlMwhCLkrpMIW0P0_6gD7ZLH5DA4u8jhNmkjz";
     private boolean listening = false;
 
@@ -77,7 +77,9 @@ public class GroupRadioFragment extends Fragment {
     protected AnimationDrawable statusAnimation;
     private TextView startBtnHelperTV;
     private TextView recordHelperTV;
+    private TextView activeUsersTV;
     Group group;
+    private int activeUsers = 0;
 
     private Handler radioHandler = new Handler();
     private Timer timer = new Timer();
@@ -127,6 +129,8 @@ public class GroupRadioFragment extends Fragment {
 
         startBtnHelperTV = rootView.findViewById(R.id.join_group_btn_helper);
         recordHelperTV  = rootView.findViewById(R.id.record_btn_helper);
+        activeUsersTV = rootView.findViewById(R.id.active_users_tv);
+        setActiveUsers(activeUsers);
 
         statusImage = rootView.findViewById(R.id.radio_status_img);
 
@@ -156,7 +160,6 @@ public class GroupRadioFragment extends Fragment {
                 listening = !listening;
                 if(listening) {
                     playMusic();
-
                 }
                 else {
                     stopMusic();
@@ -209,7 +212,8 @@ public class GroupRadioFragment extends Fragment {
     }
 
     private void setActiveUsers(int num) {
-        Toast.makeText(rootView.getContext(), "Active: " + num, Toast.LENGTH_SHORT).show();
+        activeUsers = num;
+        activeUsersTV.setText(getResources().getString(R.string.current_active_users) + "  " + num);
     }
 
     private void sendMessage(RecordingItem recordingItem) {
@@ -259,6 +263,7 @@ public class GroupRadioFragment extends Fragment {
         statusAnimation.start();
         mAudioRecordButton.setVisibility(View.VISIBLE);
         Objects.requireNonNull(getActivity()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        setActiveUsers(activeUsers+2);
         Intent intent = new Intent(rootView.getContext(), MusicPlayerService.class);
         intent.putExtra("action","start_listening");
         intent.putExtra("user_id",userId);
@@ -268,13 +273,14 @@ public class GroupRadioFragment extends Fragment {
         startStopListening.setBackgroundColor(rootView.getContext().getColor(R.color.red));
         startBtnHelperTV.setText(R.string.click_here_leave_channel);
         recordHelperTV.setVisibility(View.VISIBLE);
+
     }
 
     private void stopMusic(){
         try {
             statusImage.setImageResource(R.drawable.offline);
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) statusImage.getLayoutParams();
-            params.addRule(RelativeLayout.CENTER_IN_PARENT);
+            params.removeRule(RelativeLayout.ALIGN_PARENT_TOP);
             mAudioRecordButton.setVisibility(View.GONE);
             startStopListening.setText(R.string.start_listening);
             Intent intent = new Intent(rootView.getContext(), MusicPlayerService.class);
@@ -283,6 +289,7 @@ public class GroupRadioFragment extends Fragment {
             startStopListening.setBackgroundColor(rootView.getContext().getColor(R.color.colorPrimary));
             recordHelperTV.setVisibility(View.GONE);
             startBtnHelperTV.setText(R.string.click_here_go_live);
+            setActiveUsers(activeUsers-1);
         }catch (Exception e){
 
         }
@@ -321,6 +328,7 @@ public class GroupRadioFragment extends Fragment {
     public void onDestroyView() {
         LocalBroadcastManager.getInstance(rootView.getContext()).unregisterReceiver(broadcastReceiver);
         Objects.requireNonNull(getActivity()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        timer.cancel();
         super.onDestroyView();
     }
 

@@ -100,5 +100,6 @@
 
     <string name="group_desc">Group Description</string>
     <string name="home">Home</string>
+    <string name="current_active_users">Active Users:</string>
 
 </resources>
