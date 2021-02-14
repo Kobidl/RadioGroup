@@ -18,17 +18,17 @@ public class Group implements Parcelable {
     private String groupName = "";
     private String profilePicturePath = "";
     private String groupDescription = "";
-    private String timeStamp = "";
     private boolean isPrivate = false;
-    private Map<String,User> userMap = new HashMap<>();
+    private Map<String,Long> userMap = new HashMap<>();
+    private Long timestamp;
 
-    public Group(String groupID, String adminID, String groupName, String profilePicturePath, String groupDescription, String timeStamp, boolean isPrivate,HashMap<String,User> userMap) {
+    public Group(String groupID, String adminID, String groupName, String profilePicturePath, String groupDescription, Long timeStamp, boolean isPrivate,HashMap<String,Long> userMap) {
         this.groupID = groupID;
         this.adminID = adminID;
         this.groupName = groupName;
         this.profilePicturePath = profilePicturePath;
         this.groupDescription = groupDescription;
-        this.timeStamp = timeStamp;
+        this.timestamp = timeStamp;
         this.isPrivate = isPrivate;
         this.userMap = userMap;
 
@@ -45,7 +45,6 @@ public class Group implements Parcelable {
         groupName = in.readString();
         profilePicturePath = in.readString();
         groupDescription = in.readString();
-        timeStamp = in.readString();
         isPrivate = in.readByte() != 0;
         if(userMap == null){
             userMap = new HashMap<>();
@@ -105,12 +104,12 @@ public class Group implements Parcelable {
         this.groupDescription = groupDescription;
     }
 
-    public String getTimeStamp() {
-        return timeStamp;
+    public Long getTimeStamp() {
+        return timestamp;
     }
 
-    public void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
+    public void setTimeStamp(Long timeStamp) {
+        this.timestamp = timeStamp;
     }
 
     public boolean isPrivate() {
@@ -121,15 +120,15 @@ public class Group implements Parcelable {
         isPrivate = aPrivate;
     }
 
-    public Map<String,User> getUserMap() {
+    public Map<String,Long> getUserMap() {
         return userMap;
     }
 
     public void addUserToUserList(User user) {
-        userMap.put(user.getUID(), user);
+        userMap.put(user.getUID(), System.currentTimeMillis());
     }
 
-    public void setUserMap(Map<String, User> userMap) {
+    public void setUserMap(Map<String, Long> userMap) {
         this.userMap = userMap;
     }
 
@@ -154,7 +153,6 @@ public class Group implements Parcelable {
         parcel.writeString(groupName);
         parcel.writeString(profilePicturePath);
         parcel.writeString(groupDescription);
-        parcel.writeString(timeStamp);
         parcel.writeByte((byte) (isPrivate ? 1 : 0));
         if(userMap == null){
             userMap = new HashMap<>();
