@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -36,7 +37,7 @@ public class Groups extends Fragment {
     View rootView;
     RecyclerView recyclerView;
     GroupsAdapter groupsAdapter;
-
+    private View noResultsView;
 
     public Groups() {
         // Required empty public constructor
@@ -90,6 +91,10 @@ public class Groups extends Fragment {
         final AnimationDrawable loaderAnimation = (AnimationDrawable) loaderIV.getDrawable();
         loaderAnimation.start();
 
+        noResultsView = rootView.findViewById(R.id.no_results_container);
+        TextView noResultsTV = rootView.findViewById(R.id.no_results_label);
+        noResultsTV.setText(R.string.open_new_channel);
+        noResultsView.setVisibility(View.GONE);
 
         FirebaseDatabaseHelper.getInstance().setSortedGroupsByUIDListener(FirebaseAuth.getInstance().getCurrentUser().getUid(), new FirebaseDatabaseHelper.OnGroupsDataChangedCallback() {
             @Override
@@ -106,6 +111,9 @@ public class Groups extends Fragment {
                 groupsAdapter.notifyDataSetChanged();
                 loaderAnimation.stop();
                 loader.setVisibility(View.GONE);
+                if(groups.size() ==0 ){
+                    noResultsView.setVisibility(View.VISIBLE);
+                }
 
             }
         });

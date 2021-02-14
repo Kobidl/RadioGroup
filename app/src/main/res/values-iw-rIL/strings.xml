@@ -96,6 +96,8 @@
     <string name="group_desc">תיאור הקבוצה</string>
     <string name="home">בית</string>
     <string name="current_active_users">Active Users:</string>
+    <string name="no_results">No Results Found</string>
+    <string name="open_new_channel">No Channels. Create or join one from the explore</string>
 
 
 </resources>

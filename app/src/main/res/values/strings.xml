@@ -101,5 +101,7 @@
     <string name="group_desc">Group Description</string>
     <string name="home">Home</string>
     <string name="current_active_users">Active Users:</string>
+    <string name="no_results">No Results Found</string>
+    <string name="open_new_channel">No Channels. Create or join one from the explore</string>
 
 </resources>

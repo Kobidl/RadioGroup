@@ -28,6 +28,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <include layout="@layout/no_results"/>
         <include layout="@layout/loader_layout"/>
 
         <view class="androidx.recyclerview.widget.RecyclerView"

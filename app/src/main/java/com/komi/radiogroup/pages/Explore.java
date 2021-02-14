@@ -48,6 +48,7 @@ public class Explore extends Fragment {
     TextInputLayout searchContainer;
     private FrameLayout loader;
     EditText et_search;
+    private View noResultsView;
 
 
     public Explore() {
@@ -95,6 +96,8 @@ public class Explore extends Fragment {
         final AnimationDrawable loaderAnimation = (AnimationDrawable) loaderIV.getDrawable();
         loaderAnimation.start();
 
+        noResultsView = rootView.findViewById(R.id.no_results_container);
+
         recyclerView.setAdapter(groupsAdapter);
 
         searchContainer = rootView.findViewById(R.id.explore_search_input);
@@ -121,6 +124,7 @@ public class Explore extends Fragment {
                 String substring = s.toString().trim();
                 FirebaseDatabaseHelper.getInstance().removeExploreListener();
                 loader.setVisibility(View.VISIBLE);
+                noResultsView.setVisibility(View.GONE);
                 setListenerWithSubstring(substring);
             }
         });
@@ -154,6 +158,9 @@ public class Explore extends Fragment {
                 groupsAdapter.setGroups(groups);
                 groupsAdapter.notifyDataSetChanged();
                 loader.setVisibility(View.GONE);
+                if(groups.size()==0){
+                    noResultsView.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
