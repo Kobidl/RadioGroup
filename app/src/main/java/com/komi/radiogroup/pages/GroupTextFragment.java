@@ -164,7 +164,7 @@ public class GroupTextFragment extends Fragment {
                 Collections.sort(groupMessages, new Comparator<GroupMessage>() {
                     @Override
                     public int compare(GroupMessage o1, GroupMessage o2) {
-                        return Long.compare(o2.getTimeInMillis(), o1.getTimeInMillis());
+                        return Long.compare(o1.getTimeInMillis(), o2.getTimeInMillis());
                     }
                 });
                 groupMessageAdapter.setGroupMessages(groupMessages);
