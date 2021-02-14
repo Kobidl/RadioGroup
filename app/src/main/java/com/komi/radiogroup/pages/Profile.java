@@ -180,6 +180,8 @@ public class Profile extends Fragment {
         });
         groupsRecyclerView.setAdapter(adapter);
 
+        isMe = userID == currentUser.getUid();
+        
         FirebaseDatabaseHelper.getInstance().setGroupsByAdminIDListener(userID,isMe, new FirebaseDatabaseHelper.OnGroupsDataChangedCallback() {
             @Override
             public void onDataReceived(List<Group> groups) {
