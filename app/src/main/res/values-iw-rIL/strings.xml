@@ -83,7 +83,15 @@
     <string name="old_password">Old Password</string>
     <string name="new_password">New Password</string>
     <string name="confirm_new_password">Confirm New Password</string>
+
     <string name="loading">Loading...</string>
 
+
+    <string name="wrong_password">Wrong password</string>
+    <string name="user_doesnt_exist">User does not exist</string>
+    <string name="too_many_logins">Too many login attempts, try again later</string>
+    <string name="email_in_use">This email address is already in use</string>
+    <string name="password_weak">Invalid password (Password should be at least 6 characters</string>
+    <string name="please_fill_fields">Please fill in all fields</string>
 
 </resources>

@@ -68,7 +68,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="15dp"
                     android:hint="@string/email">
 
@@ -116,6 +116,12 @@
                         android:background="@color/colorLightBackground"
                         />
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="0dp"
+                    android:id="@+id/tv_error" />
 
                 <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
                     style="@style/Widget.AppCompat.Button.Colored"

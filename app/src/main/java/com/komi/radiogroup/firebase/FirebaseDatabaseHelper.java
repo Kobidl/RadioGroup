@@ -128,7 +128,7 @@ public class FirebaseDatabaseHelper {
     }
 
 
-    public void setGroupsByUIDListener(final String UID, final OnGroupsDataChangedCallback callback) {
+    public void setSortedGroupsByUIDListener(final String UID, final OnGroupsDataChangedCallback callback) {
 
         groupListenerRef = firebaseDatabase.getReference().child(DB_GROUPS);
         groupsListener = new ValueEventListener() {
@@ -138,21 +138,20 @@ public class FirebaseDatabaseHelper {
                 for (DataSnapshot snapshot1 : snapshot.getChildren()){
                     Group temp = snapshot1.getValue(Group.class);
                     if(temp.getUserMap().containsKey(UID)){
+                        temp.setTimeStamp(temp.getUserMap().get(UID));
                         groupList.add(temp);
                     }
                 }
                 callback.onDataReceived(groupList);
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         };
         groupListenerRef.addValueEventListener(groupsListener);
     }
 
-    public void removeGroupsByUIDListener() {
+    public void removeSortedGroupsByUIDListener() {
         groupListenerRef.removeEventListener(groupsListener);
     }
 

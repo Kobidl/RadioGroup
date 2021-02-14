@@ -40,6 +40,7 @@ public class Welcome extends Fragment
     TextView titleTV;
     TextView bottomLabelTV;
     TextView bottomLabelActionTV;
+    TextView errorTV;
     CircularProgressButton loginSignupBtn;
     View rootView;
 
@@ -85,6 +86,7 @@ public class Welcome extends Fragment
         bottomLabelTV = rootView.findViewById(R.id.change_mode_title);
         bottomLabelActionTV = rootView.findViewById(R.id.change_mode_btn);
         loginSignupBtn = (CircularProgressButton) rootView.findViewById(R.id.btn_login_signup);
+        errorTV= rootView.findViewById(R.id.tv_error);
 
         bottomLabelActionTV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,12 +114,26 @@ public class Welcome extends Fragment
             public void onClick(View view) {
                 String email = String.valueOf(emailET.getText()).trim().toLowerCase();
                 String password = String.valueOf(passwordET.getText()).trim();
-                if(email.isEmpty() || password.isEmpty()) return;
+                String name = nameET.getText().toString();
+                errorTV.setText("");
+
+                if(loginMode){
+                    if(email.isEmpty() || password.isEmpty()){
+                        errorTV.setText(R.string.please_fill_fields);
+                        return;
+                    }
+                }
+                else{
+                    if(email.isEmpty() || password.isEmpty() || name.isEmpty()){
+                        errorTV.setText(R.string.please_fill_fields);
+                        return;
+                    }
+                }
+
                 loginSignupBtn.startAnimation();
                 if(loginMode){
                     onLogin(email,password);
                 }else {
-                    String name = nameET.getText().toString();
                     onRegister(email,password,name);
                 }
             }
@@ -135,8 +151,9 @@ public class Welcome extends Fragment
                     String name = nameET.getText().toString();
                     callback.onRegister(name);
                 }
-                else
-                    Toast.makeText(rootView.getContext(), "Register Failed", Toast.LENGTH_SHORT).show();
+                else {
+                    displayError(task);
+                }
             }
         });
     }
@@ -150,9 +167,34 @@ public class Welcome extends Fragment
                     Toast.makeText(rootView.getContext(), "User login successful", Toast.LENGTH_SHORT).show();
                     callback.onLogin();
                 }
-                else
-                    Toast.makeText(rootView.getContext(), "User login failed", Toast.LENGTH_SHORT).show();
+                else {
+                    displayError(task);
+                }
             }
         });
+    }
+
+    public void displayError(Task<AuthResult> task) {
+        String err = task.getException().getMessage();
+        switch (err){
+
+            case "The password is invalid or the user does not have a password.":
+                errorTV.setText(R.string.wrong_password);
+                break;
+            case "There is no user record corresponding to this identifier. The user may have been deleted.":
+                errorTV.setText(R.string.user_doesnt_exist);
+                break;
+            case "We have blocked all requests from this device due to unusual activity. Try again later. [ Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later. ]":
+                errorTV.setText(R.string.too_many_logins);
+                break;
+            case "The email address is already in use by another account.":
+                errorTV.setText(R.string.email_in_use);
+                break;
+            case "The given password is invalid. [ Password should be at least 6 characters ]":
+                errorTV.setText(R.string.password_weak);
+                break;
+
+        }
+        Log.i("firelog", err);
     }
 }

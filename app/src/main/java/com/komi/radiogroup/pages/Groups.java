@@ -22,8 +22,11 @@ import com.komi.radiogroup.GroupsAdapter;
 import com.komi.radiogroup.R;
 import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
 import com.komi.structures.Group;
+import com.komi.structures.GroupMessage;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Groups extends Fragment {
@@ -87,10 +90,17 @@ public class Groups extends Fragment {
         final AnimationDrawable loaderAnimation = (AnimationDrawable) loaderIV.getDrawable();
         loaderAnimation.start();
 
-        FirebaseDatabaseHelper.getInstance().setGroupsByUIDListener(FirebaseAuth.getInstance().getCurrentUser().getUid(), new FirebaseDatabaseHelper.OnGroupsDataChangedCallback() {
+
+        FirebaseDatabaseHelper.getInstance().setSortedGroupsByUIDListener(FirebaseAuth.getInstance().getCurrentUser().getUid(), new FirebaseDatabaseHelper.OnGroupsDataChangedCallback() {
             @Override
             public void onDataReceived(List<Group> groups) {
                 groupList = groups;
+                Collections.sort(groups, new Comparator<Group>() {
+                    @Override
+                    public int compare(Group o1, Group o2) {
+                        return Long.compare(o1.getTimeStamp(), o2.getTimeStamp());
+                    }
+                });
                 groupsAdapter.setGroups(groups);
                 groupsAdapter.notifyDataSetChanged();
                 loaderAnimation.stop();
@@ -122,7 +132,7 @@ public class Groups extends Fragment {
         super.onDestroyView();
 
         //Unregistering listener
-        FirebaseDatabaseHelper.getInstance().removeGroupsByUIDListener();
+        FirebaseDatabaseHelper.getInstance().removeSortedGroupsByUIDListener();
     }
 
 }
