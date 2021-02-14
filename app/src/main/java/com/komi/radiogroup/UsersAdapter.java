@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -34,6 +35,16 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
         this.users = users;
     }
 
+    public interface UsersListener {
+        void onClick(int position);
+    }
+
+    UsersListener listener;
+
+    public void setListener(UsersListener listener) {
+        this.listener = listener;
+    }
+
     public class UserViewHolder extends RecyclerView.ViewHolder{
         TextView name;
         ImageView imageView;
@@ -44,6 +55,15 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             name = itemView.findViewById(R.id.user_card_name);
             bio = itemView.findViewById(R.id.user_card_bio);
             imageView = itemView.findViewById(R.id.user_card_image);
+            CardView mainView = itemView.findViewById(R.id.user_card_view);
+            mainView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (listener != null) {
+                        listener.onClick(getAdapterPosition());
+                    }
+                }
+            });
 //            itemView.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View view) {

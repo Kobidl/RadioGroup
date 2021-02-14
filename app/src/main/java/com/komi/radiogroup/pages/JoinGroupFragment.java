@@ -27,13 +27,12 @@ import com.komi.structures.User;
 
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
 
-import static com.komi.radiogroup.GroupActivity.group;
 import static com.komi.radiogroup.pages.Profile.SHARED_PREFS;
 import static com.komi.radiogroup.pages.Profile.SP_UID;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link JoinGroupFragment#newInstance} factory method to
+ * Use the {@link JoinGroupFragment#} factory method to
  * create an instance of this fragment.
  */
 public class JoinGroupFragment extends Fragment {
@@ -49,8 +48,10 @@ public class JoinGroupFragment extends Fragment {
     private View rootView;
     private JoinGroupCallback callback;
 
-    public JoinGroupFragment() {
-        // Required empty public constructor
+    Group group;
+
+    public JoinGroupFragment(Group group) {
+        this.group = group;
     }
 
     public interface  JoinGroupCallback{
@@ -63,14 +64,14 @@ public class JoinGroupFragment extends Fragment {
         callback = (JoinGroupFragment.JoinGroupCallback) context;
     }
 
-    public static JoinGroupFragment newInstance(String param1, String param2) {
-        JoinGroupFragment fragment = new JoinGroupFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+//    public static JoinGroupFragment newInstance(String param1, String param2) {
+//        JoinGroupFragment fragment = new JoinGroupFragment();
+//        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

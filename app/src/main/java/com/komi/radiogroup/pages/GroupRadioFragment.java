@@ -43,6 +43,7 @@ import com.komi.structures.Group;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -50,7 +51,6 @@ import java.util.Objects;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static com.komi.radiogroup.GroupActivity.group;
 import static com.komi.radiogroup.GroupActivity.listening;
 import static com.komi.radiogroup.userlater.MusicPlayerService.PLAYER_BROADCAST;
 
@@ -76,18 +76,29 @@ public class GroupRadioFragment extends Fragment {
     protected AnimationDrawable statusAnimation;
     private TextView startBtnHelperTV;
     private TextView recordHelperTV;
+    Group group;
 
-    public GroupRadioFragment() {
-        // Required empty public constructor
+    public GroupRadioFragment(Group group) {
+        this.group = group;
     }
 
-    public static GroupRadioFragment newInstance() {
-        GroupRadioFragment fragment = new GroupRadioFragment();
-        Bundle args = new Bundle();
+//    public static Profile newInstance(String param1, String param2) {
+//        Profile fragment = new Profile();
+//        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
-        fragment.setArguments(args);
-        return fragment;
-    }
+
+//    public static GroupRadioFragment newInstance(Group group) {
+//        GroupRadioFragment fragment = new GroupRadioFragment();
+//        Bundle args = new Bundle();
+//        args.putParcelable("group", group);
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,6 +110,7 @@ public class GroupRadioFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+//        group = (Group) this.getArguments().getParcelable("group");
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_group_radio, container, false);
 
@@ -107,8 +119,6 @@ public class GroupRadioFragment extends Fragment {
         ActivityCompat.requestPermissions(getActivity(), new String[]{WRITE_EXTERNAL_STORAGE}, 0);
 
         mAudioRecordButton = (AudioRecordButton) rootView.findViewById(R.id.group_audio_record_button);
-
-
 
         startBtnHelperTV = rootView.findViewById(R.id.join_group_btn_helper);
         recordHelperTV  = rootView.findViewById(R.id.record_btn_helper);

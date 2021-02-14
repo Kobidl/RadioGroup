@@ -32,7 +32,26 @@ public class UserGroupsIsAdminAdapter extends RecyclerView.Adapter<UserGroupsIsA
             name = itemView.findViewById(R.id.tv_group_name);
             imageView = itemView.findViewById(R.id.group_card_image);
             memberCount = itemView.findViewById(R.id.tv_group_members);
+            View smallGroupLayout = itemView.findViewById(R.id.small_group_layout);
+            smallGroupLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(listener!=null){
+                        listener.onClick(getAdapterPosition());
+                    }
+                }
+            });
         }
+    }
+
+    public interface UserGroupListener{
+        void onClick(int position);
+    }
+
+    UserGroupListener listener;
+
+    public void setListener(UserGroupListener listener) {
+        this.listener = listener;
     }
 
     public UserGroupsIsAdminAdapter(List<Group> groups) {

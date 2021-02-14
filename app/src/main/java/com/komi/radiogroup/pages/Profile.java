@@ -45,6 +45,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.komi.radiogroup.GroupActivity;
 import com.komi.radiogroup.R;
 import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
 import com.komi.radiogroup.UserGroupsIsAdminAdapter;
@@ -59,11 +60,7 @@ import java.util.UUID;
 import static android.app.Activity.RESULT_OK;
 import static com.komi.radiogroup.MainFragment.logout;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Profile#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class Profile extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -103,28 +100,34 @@ public class Profile extends Fragment {
 
     private boolean canTakeImage = false;
     private SharedPreferences sharedPreferences;
+    private boolean isMe = false;
+    public interface ProfileListener{
+        void onGroupClicked();
+    }
 
-    public Profile() {
+    ProfileListener listener;
+
+
+    public Profile(String userID,ProfileListener listener) {
         // Required empty public constructor
+        this.listener = listener;
+        this.userID = userID;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Account.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Profile newInstance(String param1, String param2) {
-        Profile fragment = new Profile();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public Profile(){
+
     }
+
+
+//    public static Profile newInstance(String param1, String param2) {
+//        Profile fragment = new Profile();
+//        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -147,42 +150,49 @@ public class Profile extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
         currentUser = firebaseAuth.getCurrentUser();
 
-        // TODO: to allow loading this page for any user we need to pass a uid parameter and set it here
-        userID = firebaseAuth.getCurrentUser().getUid();
-
-        sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-        String latest_UID = sharedPreferences.getString(SP_UID, null);
-
-
+        MaterialButton logoutBtn = rootView.findViewById(R.id.btn_logout);
         iv_profile_pic = rootView.findViewById(R.id.iv_profile_pic);
         tv_fullName = rootView.findViewById(R.id.tv_full_name);
         tv_bio = rootView.findViewById(R.id.tv_bio);
-        MaterialButton logoutBtn = rootView.findViewById(R.id.btn_logout);
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sharedPreferences.edit().clear().apply();
-                firebaseAuth.signOut();
-                logout();
+
+        // TODO: to allow loading this page for any user we need to pass a uid parameter and set it here
+        isMe = false;
+        if(userID !=null) {
+            logoutBtn.setVisibility(View.GONE);
+        }else {
+            isMe = true;
+            userID = firebaseAuth.getCurrentUser().getUid();
+
+            sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+            String latest_UID = sharedPreferences.getString(SP_UID, null);
+
+
+            logoutBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    sharedPreferences.edit().clear().apply();
+                    firebaseAuth.signOut();
+                    logout();
+                }
+            });
+            //btn_editProfile = rootView.findViewById(R.id.btn_edit_profile);
+
+
+            // If the latest profile info we have saved is of the same user, then load it from shared preferences first
+            if (latest_UID != null && latest_UID.matches(firebaseAuth.getCurrentUser().getUid())) {
+                String latest_fullname = sharedPreferences.getString(SP_FULLNAME, null);
+                String latest_bio = sharedPreferences.getString(SP_BIO, null);
+                String latest_image = sharedPreferences.getString(SP_IMAGE, null);
+                if (latest_fullname != null)
+                    tv_fullName.setText(latest_fullname);
+                if (latest_bio != null)
+                    tv_bio.setText(latest_bio);
+                if (latest_image != null) {
+                    Glide.with(this).load(latest_image).diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_profile_pic);
+                }
+
+
             }
-        });
-        //btn_editProfile = rootView.findViewById(R.id.btn_edit_profile);
-
-
-        // If the latest profile info we have saved is of the same user, then load it from shared preferences first
-        if(latest_UID != null && latest_UID.matches(firebaseAuth.getCurrentUser().getUid())){
-            String latest_fullname = sharedPreferences.getString(SP_FULLNAME, null);
-            String latest_bio = sharedPreferences.getString(SP_BIO, null);
-            String latest_image = sharedPreferences.getString(SP_IMAGE,null);
-            if (latest_fullname != null)
-                tv_fullName.setText(latest_fullname);
-            if (latest_bio != null)
-                tv_bio.setText(latest_bio);
-            if(latest_image != null ){
-                Glide.with(this).load(latest_image).diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_profile_pic);
-            }
-
-
         }
 
         // Initializing user's Groups recyclerview and setting Listeners for data
@@ -190,11 +200,24 @@ public class Profile extends Fragment {
         groupsRecyclerView.setHasFixedSize(true);
         groupsRecyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.HORIZONTAL, false));
         adapter = new UserGroupsIsAdminAdapter(groupsByUser);
+        adapter.setListener(new UserGroupsIsAdminAdapter.UserGroupListener() {
+            @Override
+            public void onClick(int position) {
+//                if(listener!=null){
+//                    listener.onGroupClicked();
+//                }
+                Group group = groupsByUser.get(position);
+                Intent intent = new Intent(getContext(), GroupActivity.class);
+                intent.putExtra("group",group);
+                startActivity(intent);
+            }
+        });
         groupsRecyclerView.setAdapter(adapter);
 
         FirebaseDatabaseHelper.getInstance().setGroupsByAdminIDListener(userID, new FirebaseDatabaseHelper.OnGroupsDataChangedCallback() {
             @Override
             public void onDataReceived(List<Group> groups) {
+                groupsByUser = groups;
                 adapter.setGroups(groups);
                 adapter.notifyDataSetChanged();
             }
@@ -219,36 +242,40 @@ public class Profile extends Fragment {
                     }
 
                     // Saving latest profile info to shared preferences
-                    sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(SP_UID, firebaseAuth.getCurrentUser().getUid());
-                    editor.putString(SP_FULLNAME, user.getFullname());
-                    editor.putString(SP_BIO, user.getBio());
-                    editor.putString(SP_IMAGE, user.getProfilePicturePath());
-                    editor.apply();
+                    if(isMe) {
+                        sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString(SP_UID, firebaseAuth.getCurrentUser().getUid());
+                        editor.putString(SP_FULLNAME, user.getFullname());
+                        editor.putString(SP_BIO, user.getBio());
+                        editor.putString(SP_IMAGE, user.getProfilePicturePath());
+                        editor.apply();
+                    }
                 }
             }
         });
 
-
-        //Request image permissions
-        if (Build.VERSION.SDK_INT >= 23) {
-            int hasWritePermission = getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            if (hasWritePermission != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_PERMISSION_REQUEST);
+        if(isMe) {
+            //Request image permissions
+            if (Build.VERSION.SDK_INT >= 23) {
+                int hasWritePermission = getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                if (hasWritePermission != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_PERMISSION_REQUEST);
+                } else {
+                    canTakeImage = true;
+                }
             } else {
                 canTakeImage = true;
             }
-        } else {
-            canTakeImage = true;
-        }
 
-        iv_profile_pic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openPickDialog();
-            }
-        });
+
+            iv_profile_pic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    openPickDialog();
+                }
+            });
+        }
 
 //        btn_editProfile.setOnClickListener(new View.OnClickListener() {
 //            @Override

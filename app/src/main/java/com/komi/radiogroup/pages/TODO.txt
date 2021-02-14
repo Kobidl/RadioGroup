@@ -18,3 +18,5 @@
 - Sort Groups
 
 - Put good groups and remove junks
+
+update group after edit

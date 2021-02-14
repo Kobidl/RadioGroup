@@ -47,7 +47,7 @@ public class GroupDetails extends AppCompatActivity {
 
     private TextView privacyTV;
 
-    List<User> users;
+    private List<User> users;
 
     RecyclerView recyclerView;
     UsersAdapter usersAdapter;
@@ -95,14 +95,24 @@ public class GroupDetails extends AppCompatActivity {
         users = new ArrayList<>();
 
         usersAdapter = new UsersAdapter(users);
+        usersAdapter.setListener(new UsersAdapter.UsersListener() {
+            @Override
+            public void onClick(int position) {
+                User user = users.get(position);
+                Intent intent = new Intent(GroupDetails.this, ProfileActivity.class);
+                intent.putExtra("user_id", user.getUID());
+                startActivity(intent);
+            }
+        });
         recyclerView.setAdapter(usersAdapter);
         recyclerView.setNestedScrollingEnabled(false);
 
         List<String> keys = new ArrayList<String>(group.getUserMap().keySet());
         FirebaseDatabaseHelper.getInstance().setUsersInGroupListener(keys, new FirebaseDatabaseHelper.OnUsersInGroupDataChangedCallback() {
             @Override
-            public void OnDataReceived(List<User> users) {
-                usersAdapter.setUsers(users);
+            public void OnDataReceived(List<User> newUsers) {
+                users = newUsers;
+                usersAdapter.setUsers(newUsers);
                 usersAdapter.notifyDataSetChanged();
             }
         });

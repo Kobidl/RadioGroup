@@ -39,8 +39,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.UUID;
 
-import static com.komi.radiogroup.GroupActivity.group;
-
 public class GroupTextFragment extends Fragment {
 
     View rootView;
@@ -52,8 +50,10 @@ public class GroupTextFragment extends Fragment {
     DatabaseReference messagesReference;
     ValueEventListener messagesListener;
 
-    public GroupTextFragment() {
+    Group group;
 
+    public GroupTextFragment(Group group) {
+        this.group = group;
     }
 
     @Override

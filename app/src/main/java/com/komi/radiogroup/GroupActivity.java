@@ -35,7 +35,7 @@ import static com.komi.radiogroup.userlater.MusicPlayerService.GROUP_LISTENING;
 public class GroupActivity extends AppCompatActivity implements JoinGroupFragment.JoinGroupCallback {
 
     public static boolean listening = false;
-    public static Group group;
+    private Group group;
     private NonSwipeableViewPager viewPager;
     private TabLayout tabLayout;
     private GroupTabAdapter adapter;
@@ -115,10 +115,10 @@ public class GroupActivity extends AppCompatActivity implements JoinGroupFragmen
         }
         groupNameTV.setText(group.getGroupName());
         if(isMember) {
-            adapter.addFragment(new GroupRadioFragment(), getResources().getString(R.string.radio_tab));
-            adapter.addFragment(new GroupTextFragment(),  getResources().getString(R.string.chat_tab));
+            adapter.addFragment(new GroupRadioFragment(group), getResources().getString(R.string.radio_tab));
+            adapter.addFragment(new GroupTextFragment(group),  getResources().getString(R.string.chat_tab));
         }else{
-            adapter.addFragment(new JoinGroupFragment(), "");
+            adapter.addFragment(new JoinGroupFragment(group), "");
             tabLayout.setVisibility(View.GONE);
         }
     }
@@ -152,10 +152,10 @@ public class GroupActivity extends AppCompatActivity implements JoinGroupFragmen
         adapter = new GroupTabAdapter(getSupportFragmentManager(),1);
         if(isMember) {
             tabLayout.setVisibility(View.VISIBLE);
-            adapter.addFragment(new GroupRadioFragment(), "Radio");
-            adapter.addFragment(new GroupTextFragment(), "Chat");
+            adapter.addFragment(new GroupRadioFragment(group), "Radio");
+            adapter.addFragment(new GroupTextFragment(group), "Chat");
         }else{
-            adapter.addFragment(new JoinGroupFragment(),"Details");
+            adapter.addFragment(new JoinGroupFragment(group),"Details");
             tabLayout.setVisibility(View.GONE);
         }
 
