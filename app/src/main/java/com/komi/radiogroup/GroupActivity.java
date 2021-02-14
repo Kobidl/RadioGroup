@@ -27,7 +27,7 @@ import static com.komi.radiogroup.services.MusicPlayerService.GROUP_LISTENING;
 
 public class GroupActivity extends AppCompatActivity implements JoinGroupFragment.JoinGroupCallback {
 
-    public static boolean listening = false;
+    private boolean listening = false;
     private Group group;
     private NonSwipeableViewPager viewPager;
     private TabLayout tabLayout;
@@ -108,7 +108,7 @@ public class GroupActivity extends AppCompatActivity implements JoinGroupFragmen
         }
         groupNameTV.setText(group.getGroupName());
         if(isMember) {
-            adapter.addFragment(new GroupRadioFragment(group), getResources().getString(R.string.radio_tab));
+            adapter.addFragment(new GroupRadioFragment(group,listening), getResources().getString(R.string.radio_tab));
             adapter.addFragment(new GroupTextFragment(group),  getResources().getString(R.string.chat_tab));
         }else{
             adapter.addFragment(new JoinGroupFragment(group), "");
@@ -145,7 +145,7 @@ public class GroupActivity extends AppCompatActivity implements JoinGroupFragmen
         adapter = new GroupTabAdapter(getSupportFragmentManager(),1);
         if(isMember) {
             tabLayout.setVisibility(View.VISIBLE);
-            adapter.addFragment(new GroupRadioFragment(group), "Radio");
+            adapter.addFragment(new GroupRadioFragment(group, listening), "Radio");
             adapter.addFragment(new GroupTextFragment(group), "Chat");
         }else{
             adapter.addFragment(new JoinGroupFragment(group),"Details");

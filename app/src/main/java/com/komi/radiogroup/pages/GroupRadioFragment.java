@@ -48,19 +48,15 @@ import java.util.Objects;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static com.komi.radiogroup.GroupActivity.listening;
 import static com.komi.radiogroup.services.MusicPlayerService.PLAYER_BROADCAST;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link GroupRadioFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class GroupRadioFragment extends Fragment {
 
 
     private static final String GROUP_PARAM = "group";
     private final String API_TOKEN_KEY = "AAAAMJ5RH1k:APA91bG5hD4dwWDrFFdK6QUYLmm_sLW1VvfHzwh-wwZGRar93y8ZTcyUAVU_O3pGEeKWqWe4FGgUe0Rs1VD5Vym6mQ9LnHUXhv6K5K1vlMwhCLkrpMIW0P0_6gD7ZLH5DA4u8jhNmkjz";
+    private boolean listening = false;
 
     private AudioRecordButton mAudioRecordButton;
     private AudioRecording audioRecording;
@@ -75,8 +71,9 @@ public class GroupRadioFragment extends Fragment {
     private TextView recordHelperTV;
     Group group;
 
-    public GroupRadioFragment(Group group) {
+    public GroupRadioFragment(Group group, boolean listening) {
         this.group = group;
+        this.listening = listening;
     }
 
 //    public static Profile newInstance(String param1, String param2) {
