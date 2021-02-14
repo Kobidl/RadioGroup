@@ -109,7 +109,7 @@ public class AudioRecordButton extends RelativeLayout {
                     mLayoutTimer.setVisibility(VISIBLE);
                     mImageButton.setVisibility(VISIBLE);
                     startRecord();
-                    vibrate();
+                    vibrate(80);
                     t = new Timer();
                     tt = new TimerTask() {
                         @Override
@@ -118,7 +118,7 @@ public class AudioRecordButton extends RelativeLayout {
                                 public void run() {
                                     MotionEvent myEvent = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_UP, 0, 0, 0);
                                     onTouchEvent(myEvent);
-                                    vibrate();
+                                    vibrate(200);
                                 }
                             });
                         };
@@ -178,14 +178,14 @@ public class AudioRecordButton extends RelativeLayout {
         return true;
     }
 
-    private void vibrate() {
+    private void vibrate(int vibration) {
         Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
         // Vibrate for 500 milliseconds
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            v.vibrate(VibrationEffect.createOneShot(80, VibrationEffect.DEFAULT_AMPLITUDE));
+            v.vibrate(VibrationEffect.createOneShot(vibration, VibrationEffect.DEFAULT_AMPLITUDE));
         } else {
             //deprecated in API 26
-            v.vibrate(80);
+            v.vibrate(vibration);
         }
 
     }
