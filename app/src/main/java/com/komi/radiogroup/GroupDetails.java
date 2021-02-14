@@ -6,6 +6,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageButton;
@@ -25,10 +26,7 @@ import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
 import com.komi.structures.Group;
 import com.komi.structures.User;
 
-import java.lang.reflect.Array;
-import java.text.BreakIterator;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
@@ -76,7 +74,7 @@ public class GroupDetails extends AppCompatActivity {
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                goBack();
             }
         });
 
@@ -197,5 +195,19 @@ public class GroupDetails extends AppCompatActivity {
                 setDetails();
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        goBack();
+    }
+
+    private void goBack(){
+        Intent data = new Intent();
+        data.putExtra("group", (Parcelable) group);
+        setResult(RESULT_OK, data);
+        finish();
     }
 }
