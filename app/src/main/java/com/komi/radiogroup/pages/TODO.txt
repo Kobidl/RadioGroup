@@ -9,8 +9,6 @@
 
 - Application Icon // Kobi
 
-- Sort Groups explore alpah //Mishel
-
 - Put good groups and remove junks
 
 - Admin localization // Kobi
