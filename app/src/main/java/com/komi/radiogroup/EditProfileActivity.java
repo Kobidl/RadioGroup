@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,11 +18,13 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,6 +36,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -42,7 +46,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
-import com.komi.structures.Group;
 import com.komi.structures.User;
 
 import java.io.File;
@@ -59,7 +62,12 @@ public class EditProfileActivity extends AppCompatActivity {
     boolean canSave;
     ImageView imageView;
     CircularProgressButton saveBtn;
+    Button changePasswordBtn;
     File file;
+
+    EditText oldPassword, newPassword, newPasswordConfirm;
+    TextInputLayout oldPLayout, newPLayout, newPCLayout;
+    CheckBox cb_changePassword;
 
     User user;
     private StorageReference mStorageRef;
@@ -97,15 +105,39 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
+        oldPLayout = findViewById(R.id.old_p_layout);
+        newPLayout = findViewById(R.id.new_p_layout);
+        newPCLayout = findViewById(R.id.new_pc_layout);
+        cb_changePassword = findViewById(R.id.cb_change_password);
+        cb_changePassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    oldPLayout.setVisibility(View.VISIBLE);
+                    newPLayout.setVisibility(View.VISIBLE);
+                    newPCLayout.setVisibility(View.VISIBLE);
+                }
+                else{
+                    oldPLayout.setVisibility(View.INVISIBLE);
+                    newPLayout.setVisibility(View.INVISIBLE);
+                    newPCLayout.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
         saveBtn = findViewById(R.id.save_group);
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (canSave) {
+                if (canSave && !cb_changePassword.isChecked()) {
                     saveBtn.startAnimation();
                     FirebaseDatabaseHelper.getInstance().addUserToUsers(user);
                     updateDisplayName(user.getFullname());
                     finish();
+                }
+                else if (canSave && checkPasswordInput()){
+                    // User info update will be called from method below
+                    changeUserPasswordAndDetails(oldPassword.getText().toString(), newPassword.getText().toString());
                 }
             }
         });
@@ -158,6 +190,55 @@ public class EditProfileActivity extends AppCompatActivity {
             imageView.setVisibility(View.VISIBLE);
         }
 
+        // Change password functionality code
+        oldPassword = findViewById(R.id.old_password_et);
+        newPassword = findViewById(R.id.new_password_et);
+        newPasswordConfirm = findViewById(R.id.new_password_confirm_et);
+
+    }
+
+
+
+    private boolean checkPasswordInput() {
+        if(oldPassword.getText().toString().isEmpty() || newPassword.getText().toString().isEmpty() || newPasswordConfirm.getText().toString().isEmpty()){
+            Toast.makeText(this, "Please fill in all password fields", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(!newPassword.getText().toString().equals(newPasswordConfirm.getText().toString())){
+            Toast.makeText(this, "New passwords do not match", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    private void changeUserPasswordAndDetails(String oldPass, final String newPass) {
+        final FirebaseUser cUser = FirebaseAuth.getInstance().getCurrentUser();
+        final String email = cUser.getEmail();
+        AuthCredential credential = EmailAuthProvider.getCredential(email,oldPass);
+
+        cUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    cUser.updatePassword(newPass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(!task.isSuccessful()){
+                                Toast.makeText(EditProfileActivity.this, "Changing password failed", Toast.LENGTH_SHORT).show();
+                            }else {
+                                saveBtn.startAnimation();
+                                Toast.makeText(EditProfileActivity.this, "Password changed successfully", Toast.LENGTH_SHORT).show();
+                                FirebaseDatabaseHelper.getInstance().addUserToUsers(user);
+                                updateDisplayName(user.getFullname());
+                                finish();
+                            }
+                        }
+                    });
+                }else {
+                    Toast.makeText(EditProfileActivity.this, "Old password is wrong", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     //Determine if save button enabled

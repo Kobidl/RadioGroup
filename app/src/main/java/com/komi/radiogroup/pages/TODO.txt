@@ -22,3 +22,5 @@
 - show public private outside // Kobi
 
 - Change search bar on icon clicked
+
+- Save user join group timestamp and sort

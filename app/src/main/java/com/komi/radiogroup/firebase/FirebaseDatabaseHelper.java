@@ -166,7 +166,7 @@ public class FirebaseDatabaseHelper {
                 List<Group> groups = new ArrayList<>();
                 for (DataSnapshot snapshot1 : snapshot.getChildren()){
                     Group temp = snapshot1.getValue(Group.class);
-                    if(temp.getAdminID().matches(UID)){
+                    if(temp.getAdminID().matches(UID) && !temp.isPrivate()){
                         groups.add(temp);
                     }
                 }
