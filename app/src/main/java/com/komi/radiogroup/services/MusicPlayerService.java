@@ -138,7 +138,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
                     group = (Group) intent.getParcelableExtra("group");
                     userId = intent.getStringExtra("user_id");
                     updateNotifView(group);
-                    Intent openIntent = new Intent(this, GroupActivity.class);
+                    Intent openIntent = new Intent(this, MainContainer.class);
                     openIntent.putExtra("group",group);
                     openIntent.putExtra("playing",true);
                     PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, openIntent, PendingIntent.FLAG_UPDATE_CURRENT);

@@ -5,12 +5,4 @@
 
 - Localization // Mishel
 
-- Empty pages // Kobi
-
-- Application Icon // Kobi
-
-- Put good groups and remove junks
-
 - Admin localization // Kobi
-
-- Notification - make prettier // Kobi

@@ -5,8 +5,8 @@
     android:layout_height="fill_parent"
     android:padding="10dp">
     <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="66dp"
+        android:layout_height="66dp"
         android:background="@drawable/notif_image_view"
         android:id="@+id/notif_group_image"
         android:scaleType="centerCrop"
@@ -29,33 +29,35 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Song Name"
+                android:text="Channel Name"
                 android:textSize="18sp"
                 android:singleLine="true"
                 android:ellipsize="end"
                 android:layout_gravity="center"
                 android:id="@+id/notif_group_name"
                 />
-            <ImageButton
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_baseline_close_24"
-                android:background="@drawable/notif_btn_round_view"
-                android:scaleType="fitXY"
-                android:id="@+id/close_btn"
-                android:layout_gravity="center"/>
+<!--            <ImageButton-->
+<!--                android:layout_width="30dp"-->
+<!--                android:layout_height="30dp"-->
+<!--                android:src="@drawable/ic_baseline_close_24"-->
+<!--                android:background="@drawable/notif_btn_round_view"-->
+<!--                android:scaleType="fitXY"-->
+<!--                android:id="@+id/close_btn"-->
+<!--                android:layout_gravity="center"/>-->
         </LinearLayout>
 
-<!--        <com.google.android.material.button.MaterialButton-->
-<!--            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="@string/save"-->
-<!--            android:textColor="@android:color/white"-->
-<!--            app:cornerRadius="6dp"-->
-<!--            android:id="@+id/save_group"-->
-<!--            android:enabled="true"-->
-<!--            />-->
+        <Button
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:text="@string/leave_channel"
+            android:textColor="@android:color/white"
+            app:cornerRadius="6dp"
+            android:id="@+id/close_btn"
+            android:enabled="true"
+            android:layout_marginLeft="10dp"
+            android:backgroundTint="@android:color/holo_red_light"
+            />
 
     </LinearLayout>
 

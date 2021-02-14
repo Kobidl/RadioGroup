@@ -65,14 +65,23 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
         // Initializing Firebase Database
         FirebaseDatabaseHelper.getInstance();
 
-        Intent intent = getIntent();
-        Uri initUrl = intent.getData();
-
-        if (initUrl != null) {
+        Group group = getIntent().getParcelableExtra("group");
+        if (group!=null) {
+            playingGroup = group.getGroupID();
             Intent gIntent = new Intent(this, GroupActivity.class);
-            gIntent.putExtra("group_id", initUrl.toString().replace(APP_URL, "").replace("/", ""));
+            gIntent.putExtra("group", group);
             startActivity(gIntent);
         }
+        else{
+                Intent intent = getIntent();
+                Uri initUrl = intent.getData();
+
+                if (initUrl != null) {
+                    Intent gIntent = new Intent(this, GroupActivity.class);
+                    gIntent.putExtra("group_id", initUrl.toString().replace(APP_URL, "").replace("/", ""));
+                    startActivity(gIntent);
+                }
+            }
 
 
         // Initializing Firebase Messaging
