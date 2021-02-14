@@ -95,6 +95,7 @@ public class Groups extends Fragment {
                 groupsAdapter.notifyDataSetChanged();
                 loaderAnimation.stop();
                 loader.setVisibility(View.GONE);
+
             }
         });
 

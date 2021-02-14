@@ -17,6 +17,4 @@
 
 - Sort Groups
 
-- Tiles fonts
-
 - Put good groups and remove junks
