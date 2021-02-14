@@ -119,7 +119,7 @@ public class JoinGroupFragment extends Fragment {
             public void onClick(View view) {
                 joinBtn.startAnimation();
 
-                firebaseDB.getUserById(userId, new FirebaseDatabaseHelper.GetUserCallback() {
+                firebaseDB.getUserById(FirebaseAuth.getInstance().getCurrentUser().getUid(), new FirebaseDatabaseHelper.GetUserCallback() {
                     @Override
                     public void OnDataReceived(User user) {
 

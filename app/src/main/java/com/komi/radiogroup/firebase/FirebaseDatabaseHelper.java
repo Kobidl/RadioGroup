@@ -205,7 +205,7 @@ public class FirebaseDatabaseHelper {
                 List<Group> groups = new ArrayList<>();
                 for (DataSnapshot snapshot1 : snapshot.getChildren()){
                     Group temp = snapshot1.getValue(Group.class);
-                    if(!temp.getUserMap().containsKey(userID) && !temp.isPrivate() && temp.getGroupName().contains(subString) ){ //if user not in group and group is public and group name contains substring
+                    if(!temp.getUserMap().containsKey(userID) && !temp.isPrivate() && temp.getGroupName().toLowerCase().contains(subString.toLowerCase()) ){ //if user not in group and group is public and group name contains substring
                         groups.add(temp);
                     }
                 }
