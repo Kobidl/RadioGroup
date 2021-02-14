@@ -40,7 +40,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 public class MusicPlayerService extends Service implements MediaPlayer.OnCompletionListener,MediaPlayer.OnPreparedListener{
     public static final String PLAYER_BROADCAST = "com.komi.radiogroup.songchanged";
     public static final String GROUP_LISTENING = "group_listening_id";
-    private static final long TIME_SEND_ACTIVE = 1000 * 60;
+    private static final long TIME_SEND_ACTIVE = 1000 * 40;
 
     NotificationManager manager;
     NotificationCompat.Builder builder;
