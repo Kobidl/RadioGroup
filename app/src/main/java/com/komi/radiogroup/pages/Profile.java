@@ -234,27 +234,6 @@ public class Profile extends Fragment {
             }
         });
 
-//        if(isMe) {
-//            //Request image permissions
-//            if (Build.VERSION.SDK_INT >= 23) {
-//                int hasWritePermission = getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-//                if (hasWritePermission != PackageManager.PERMISSION_GRANTED) {
-//                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_PERMISSION_REQUEST);
-//                } else {
-//                    canTakeImage = true;
-//                }
-//            } else {
-//                canTakeImage = true;
-//            }
-//
-//
-//            iv_profile_pic.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    openPickDialog();
-//                }
-//            });
-//        }
         return rootView;
     }
 

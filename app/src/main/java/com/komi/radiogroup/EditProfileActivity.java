@@ -62,12 +62,13 @@ public class EditProfileActivity extends AppCompatActivity {
     boolean canSave;
     ImageView imageView;
     CircularProgressButton saveBtn;
-    Button changePasswordBtn;
     File file;
 
     EditText oldPassword, newPassword, newPasswordConfirm;
     TextInputLayout oldPLayout, newPLayout, newPCLayout;
-    CheckBox cb_changePassword;
+    TextView uploadImageTv;
+    TextView showPasswordTV;
+    boolean showPassword = false;
 
     User user;
     private StorageReference mStorageRef;
@@ -93,9 +94,14 @@ public class EditProfileActivity extends AppCompatActivity {
         mStorageRef = FirebaseStorage.getInstance().getReference();
         canSave = false;
 
+        uploadImageTv = findViewById(R.id.upload_image_text);
+
         newProfileName.setText(user.getFullname());
         newProfileBio.setText(user.getBio());
-        Glide.with(this).load(user.getProfilePicturePath()).into(imageView);
+        if(user.getProfilePicturePath()!=null) {
+            Glide.with(this).load(user.getProfilePicturePath()).into(imageView);
+            uploadImageTv.setVisibility(View.GONE);
+        }
         checkCanSave();
 
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -108,19 +114,23 @@ public class EditProfileActivity extends AppCompatActivity {
         oldPLayout = findViewById(R.id.old_p_layout);
         newPLayout = findViewById(R.id.new_p_layout);
         newPCLayout = findViewById(R.id.new_pc_layout);
-        cb_changePassword = findViewById(R.id.cb_change_password);
-        cb_changePassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        showPasswordTV = findViewById(R.id.show_pass_btn);
+        showPasswordTV.setText( " + " + getResources().getString(R.string.change_password));
+        showPasswordTV.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
+            public void onClick(View view) {
+                showPassword = !showPassword;
+                if(showPassword){
                     oldPLayout.setVisibility(View.VISIBLE);
                     newPLayout.setVisibility(View.VISIBLE);
                     newPCLayout.setVisibility(View.VISIBLE);
+                    showPasswordTV.setText( " - " + getResources().getString(R.string.change_password));
                 }
                 else{
                     oldPLayout.setVisibility(View.INVISIBLE);
                     newPLayout.setVisibility(View.INVISIBLE);
                     newPCLayout.setVisibility(View.INVISIBLE);
+                    showPasswordTV.setText( " + " + getResources().getString(R.string.change_password));
                 }
             }
         });
@@ -129,7 +139,7 @@ public class EditProfileActivity extends AppCompatActivity {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (canSave && !cb_changePassword.isChecked()) {
+                if (canSave && !showPassword) {
                     saveBtn.startAnimation();
                     FirebaseDatabaseHelper.getInstance().addUserToUsers(user);
                     updateDisplayName(user.getFullname());
@@ -354,6 +364,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
 
             /* Showing image */
+            uploadImageTv.setVisibility(View.GONE);
             Glide.with(this)
                     .load(file.getAbsoluteFile())
                     .into(imageView);

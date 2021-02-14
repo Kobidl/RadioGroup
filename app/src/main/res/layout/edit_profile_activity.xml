@@ -28,6 +28,42 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="20dp"
+                app:cardCornerRadius="75dp"
+                android:elevation="2dp">
+                <RelativeLayout
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center"
+                    >
+
+                    <ImageView
+                        android:id="@+id/new_profile_view"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/upload_image_view"
+                        android:visibility="invisible"
+                        android:scaleType="centerCrop"
+                        />
+
+                    <TextView
+                        android:id="@+id/upload_image_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:alpha="1"
+                        android:background="@android:color/transparent"
+                        android:text="@string/upload_image"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp" />
+
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -63,47 +99,22 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <RelativeLayout
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:layout_gravity="center"
-                android:layout_margin="20dp"
-                >
-
-                <ImageView
-                    android:id="@+id/new_profile_view"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/upload_image_view"
-                    android:visibility="invisible"
-                    android:scaleType="centerCrop"
-                    />
-
-                <TextView
-                    android:id="@+id/upload_image_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:alpha="1"
-                    android:background="@android:color/transparent"
-                    android:text="@string/upload_image"
-                    android:textColor="@android:color/white"
-                    android:textSize="18sp" />
-
-            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <CheckBox
+
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
                     android:text="@string/change_password"
-                    android:layout_marginHorizontal="15dp"
-                    android:id="@+id/cb_change_password"/>
+                    android:textColor="@color/colorPrimary"
+                    android:id="@+id/show_pass_btn"
+                    android:textStyle="bold"
+                    />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
@@ -168,7 +179,7 @@
     </ScrollView>
 
     <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
-        style="@style/Widget.AppCompat.Button"
+        style="@style/Widget.MaterialComponents.Button"
         android:id="@+id/save_group"
         android:layout_width="match_parent"
         android:layout_height="50dp"
