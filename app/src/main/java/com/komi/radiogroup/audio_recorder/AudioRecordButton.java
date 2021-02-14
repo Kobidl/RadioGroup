@@ -10,6 +10,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -102,6 +104,14 @@ public class AudioRecordButton extends RelativeLayout {
                     mLayoutTimer.setVisibility(VISIBLE);
                     mImageButton.setVisibility(VISIBLE);
                     startRecord();
+                    Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+                    // Vibrate for 500 milliseconds
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        v.vibrate(VibrationEffect.createOneShot(80, VibrationEffect.DEFAULT_AMPLITUDE));
+                    } else {
+                        //deprecated in API 26
+                        v.vibrate(80);
+                    }
                     return true;
                 }
                 break;
