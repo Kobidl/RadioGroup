@@ -18,6 +18,3 @@
 - Admin localization // Kobi
 
 - Notification - make prettier // Kobi
-
-- Show active users // Kobi
-- Reduce timers // Kobi
