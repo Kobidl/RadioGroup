@@ -4,5 +4,3 @@
 - Handle not allowing recording permissions - notif + btn in group
 
 - Localization // Mishel
-
-- Admin localization // Kobi
