@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.komi.radiogroup.pages.Profile;
+import com.komi.radiogroup.fragments.ProfileFragment;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -29,7 +29,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         String user_id = getIntent().getStringExtra("user_id");
 
-        Profile profile = new Profile(user_id);
+        ProfileFragment profile = new ProfileFragment(user_id);
         getSupportFragmentManager().beginTransaction().replace(R.id.profile_frame_layout, profile).commit();
     }
 }

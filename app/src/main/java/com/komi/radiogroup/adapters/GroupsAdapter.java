@@ -1,4 +1,4 @@
-package com.komi.radiogroup;
+package com.komi.radiogroup.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -13,10 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
+import com.komi.radiogroup.R;
 import com.komi.structures.Group;
 import com.skydoves.androidribbon.RibbonView;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -24,8 +23,8 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewH
 
     private List<Group> groups;
     private GroupListener listener;
-    private Context context;
-    private String userId;
+    private final Context context;
+    private final String userId;
 
     public interface GroupListener {
         void onClick(int position,View view);

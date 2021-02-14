@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
+import com.komi.radiogroup.adapters.UsersAdapter;
 import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
 import com.komi.structures.Group;
 import com.komi.structures.User;
@@ -33,7 +34,7 @@ import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
 
 import static com.komi.radiogroup.MainContainer.APP_URL;
 
-public class GroupDetails extends AppCompatActivity {
+public class GroupDetailsActivity extends AppCompatActivity {
 
     private static final int EDIT_DETAILS_RESULT_CODE = 1;
     Group group;
@@ -97,7 +98,7 @@ public class GroupDetails extends AppCompatActivity {
             @Override
             public void onClick(int position) {
                 User user = users.get(position);
-                Intent intent = new Intent(GroupDetails.this, ProfileActivity.class);
+                Intent intent = new Intent(GroupDetailsActivity.this, ProfileActivity.class);
                 intent.putExtra("user_id", user.getUID());
                 startActivity(intent);
             }
@@ -126,7 +127,7 @@ public class GroupDetails extends AppCompatActivity {
                     FirebaseDatabaseHelper.getInstance().deleteGroup(group, new FirebaseDatabaseHelper.OnGroupDataChangedCallback() {
                         @Override
                         public void onDataReceived(Group group) {
-                            final Intent intent = new Intent(GroupDetails.this, MainContainer.class);
+                            final Intent intent = new Intent(GroupDetailsActivity.this, MainContainer.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
                         }
@@ -138,7 +139,7 @@ public class GroupDetails extends AppCompatActivity {
             editBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(GroupDetails.this, EditGroupActivity.class);
+                    Intent intent = new Intent(GroupDetailsActivity.this, EditGroupActivity.class);
                     intent.putExtra("group", group);
                     startActivityForResult(intent, EDIT_DETAILS_RESULT_CODE);
                 }
@@ -152,7 +153,7 @@ public class GroupDetails extends AppCompatActivity {
                     FirebaseDatabaseHelper.getInstance().removeUserFromGroup(userId, group, new FirebaseDatabaseHelper.OnGroupDataChangedCallback() {
                         @Override
                         public void onDataReceived(Group group) {
-                            final Intent intent = new Intent(GroupDetails.this, MainContainer.class);
+                            final Intent intent = new Intent(GroupDetailsActivity.this, MainContainer.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
                         }
@@ -169,7 +170,7 @@ public class GroupDetails extends AppCompatActivity {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText(url, url);
                 clipboard.setPrimaryClip(clip);
-                Toast.makeText(GroupDetails.this, "Linked Copied", Toast.LENGTH_SHORT).show();
+                Toast.makeText(GroupDetailsActivity.this, "Linked Copied", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -1,4 +1,4 @@
-package com.komi.radiogroup.pages;
+package com.komi.radiogroup.fragments;
 
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
@@ -19,18 +19,17 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.komi.radiogroup.EditGroupActivity;
 import com.komi.radiogroup.GroupActivity;
-import com.komi.radiogroup.GroupsAdapter;
+import com.komi.radiogroup.adapters.GroupsAdapter;
 import com.komi.radiogroup.R;
 import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
 import com.komi.structures.Group;
-import com.komi.structures.GroupMessage;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class Groups extends Fragment {
+public class GroupsFragment extends Fragment {
 
     List<Group> groupList;
     Group group;
@@ -39,13 +38,13 @@ public class Groups extends Fragment {
     GroupsAdapter groupsAdapter;
     private View noResultsView;
 
-    public Groups() {
+    public GroupsFragment() {
         // Required empty public constructor
     }
 
 
-    public static Groups newInstance() {
-        Groups fragment = new Groups();
+    public static GroupsFragment newInstance() {
+        GroupsFragment fragment = new GroupsFragment();
         Bundle args = new Bundle();
 
         fragment.setArguments(args);

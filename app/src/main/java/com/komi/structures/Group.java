@@ -5,13 +5,12 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+import com.komi.radiogroup.interfaces.GroupInterface;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class Group implements Parcelable {
+public class Group implements GroupInterface,Parcelable {
 
     private String groupID = "";
     private String adminID = "";

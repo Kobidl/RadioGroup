@@ -1,6 +1,8 @@
 package com.komi.structures;
 
-public class ListeningUser {
+import com.komi.radiogroup.interfaces.ListeningUserInterface;
+
+public class ListeningUser implements ListeningUserInterface {
 
     private String userID;
     private Long timeInMillis;

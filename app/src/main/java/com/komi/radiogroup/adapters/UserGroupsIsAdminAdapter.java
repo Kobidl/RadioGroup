@@ -1,4 +1,4 @@
-package com.komi.radiogroup;
+package com.komi.radiogroup.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.komi.radiogroup.R;
 import com.komi.structures.Group;
 import com.komi.structures.User;
 

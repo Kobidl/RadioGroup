@@ -1,4 +1,4 @@
-package com.komi.radiogroup;
+package com.komi.radiogroup.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,25 +11,15 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.komi.structures.Group;
+import com.komi.radiogroup.R;
 import com.komi.structures.User;
 
-import java.net.CookieHandler;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHolder> {
 
-//    private UserListener listener;
     private List<User> users = new ArrayList<>();
-
-//    public interface UserListener {
-//        void onClick(int position, View view);
-//    }
-//
-//    public void setListener(UserListener listener){
-//        this.listener = listener;
-//    }
 
     public UsersAdapter(List<User> users){
         this.users = users;

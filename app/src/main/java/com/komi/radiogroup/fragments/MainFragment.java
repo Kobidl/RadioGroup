@@ -1,46 +1,36 @@
-package com.komi.radiogroup;
+package com.komi.radiogroup.fragments;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
+import com.komi.radiogroup.R;
 import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
-import com.komi.radiogroup.pages.Explore;
-import com.komi.radiogroup.pages.Groups;
-import com.komi.radiogroup.pages.Profile;
 
-import static com.komi.radiogroup.pages.Profile.SHARED_PREFS;
+import static com.komi.radiogroup.fragments.ProfileFragment.SHARED_PREFS;
 
 
 public class MainFragment extends Fragment {
 
     BottomNavigationView bottomNavigationView;
-    Profile profileFragment = new Profile();
-    Groups groupsFragment = new Groups();
-    Explore exploreFragment = new Explore();
+    ProfileFragment profileFragment = new ProfileFragment();
+    GroupsFragment groupsFragment = new GroupsFragment();
+    ExploreFragment exploreFragment = new ExploreFragment();
     private FragmentActivity myContext;
     static MainFragmentListener callback;
     ImageView rightToolbarBtn;
@@ -49,7 +39,7 @@ public class MainFragment extends Fragment {
         // Required empty public constructor
     }
 
-    interface MainFragmentListener{
+    public interface MainFragmentListener{
         void onLogout();
     }
 

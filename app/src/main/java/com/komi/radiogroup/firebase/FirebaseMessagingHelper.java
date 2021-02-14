@@ -1,6 +1,7 @@
 package com.komi.radiogroup.firebase;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -36,51 +37,43 @@ public class FirebaseMessagingHelper {
         firebaseMessaging = FirebaseMessaging.getInstance();
     }
 
-    public void sendMessageToTopic(String topic, String message) {
-
-        String URL = "https://fcm.googleapis.com/fcm/send";
+    public void sendMessageToTopic(String fileUrl,String userId,String topic) {
 
         final JSONObject rootObject = new JSONObject();
-
         try {
             rootObject.put("to", "/topics/" + topic);
-        }catch (JSONException exception){
-            exception.printStackTrace();
+            rootObject.put("data", new JSONObject().put("message", fileUrl).put("sender_id", userId));
+            String url = "https://fcm.googleapis.com/fcm/send";
+            RequestQueue queue = Volley.newRequestQueue(context);
+            StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.i("testrecording","error when sending recording "+error.toString());
+                }
+            }) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> headers = new HashMap<>();
+                    headers.put("Content-Type", "application/json");
+                    headers.put("Authorization", "key=" + API_TOKEN_KEY);
+                    return headers;
+                }
+
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    return rootObject.toString().getBytes();
+                }
+            };
+            queue.add(request);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-
-        try {
-            rootObject.put("data", new JSONObject().put("message", message));
-        } catch (JSONException exception) {
-            exception.printStackTrace();
-        }
-
-        RequestQueue queue = Volley.newRequestQueue(context);
-        StringRequest request = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> headers = new HashMap<>();
-                headers.put("Content-Type","application/json");
-                headers.put("Authorization","key=" + API_TOKEN_KEY);
-                return headers;
-            }
-
-            @Override
-            public byte[] getBody() throws AuthFailureError {
-                return rootObject.toString().getBytes();
-            }
-        };
-        queue.add(request);
-        queue.start();
     }
 
     public void subscribeToTopic(String topicName) {

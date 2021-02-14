@@ -1,9 +1,7 @@
 package com.komi.radiogroup;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.View;
@@ -18,15 +16,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.komi.radiogroup.adapters.GroupTabAdapter;
 import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
-import com.komi.radiogroup.pages.GroupRadioFragment;
-import com.komi.radiogroup.pages.GroupTextFragment;
-import com.komi.radiogroup.pages.JoinGroupFragment;
+import com.komi.radiogroup.fragments.GroupRadioFragment;
+import com.komi.radiogroup.fragments.GroupTextFragment;
+import com.komi.radiogroup.fragments.JoinGroupFragment;
 import com.komi.structures.Group;
-
-import static com.komi.radiogroup.pages.Profile.SHARED_PREFS;
-import static com.komi.radiogroup.pages.Profile.SP_UID;
-import static com.komi.radiogroup.services.MusicPlayerService.GROUP_LISTENING;
 
 public class GroupActivity extends AppCompatActivity implements JoinGroupFragment.JoinGroupCallback {
 
@@ -135,7 +130,7 @@ public class GroupActivity extends AppCompatActivity implements JoinGroupFragmen
 
     public void showGroupDetails(View view) {
         if(isMember) {
-            Intent intent = new Intent(this, GroupDetails.class);
+            Intent intent = new Intent(this, GroupDetailsActivity.class);
             intent.putExtra("group", group);
             intent.putExtra("user_id", userId);
             startActivityForResult(intent,GROUP_DETAILS_RESULT_CODE);

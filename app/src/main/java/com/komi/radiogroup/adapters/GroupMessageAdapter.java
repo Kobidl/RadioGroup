@@ -1,4 +1,4 @@
-package com.komi.radiogroup;
+package com.komi.radiogroup.adapters;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
@@ -9,25 +9,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.komi.radiogroup.R;
 import com.komi.structures.GroupMessage;
 
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 public class GroupMessageAdapter extends RecyclerView.Adapter<GroupMessageAdapter.GroupMessageViewHolder>{
 
@@ -72,8 +66,7 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<GroupMessageAdapte
         GroupMessage groupMessage = groupMessages.get(position);
 
         if(groupMessage.getFrom_ID().matches(currentUser.getUid())){ // Case the message was send by the user
-            //todo: change text to global
-            holder.tv_name_user.setText("Me");
+            holder.tv_name_user.setText(context.getResources().getString(R.string.me));
             holder.tv_name_other.setText("");
             holder.tv_body.setGravity(Gravity.END);
             ViewGroup.MarginLayoutParams layoutParams =

@@ -5,9 +5,11 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import com.komi.radiogroup.interfaces.UserInterface;
+
 import java.io.Serializable;
 
-public class User implements Parcelable {
+public class User implements UserInterface,Parcelable {
 
     private String UID = "";
     private String username = "";

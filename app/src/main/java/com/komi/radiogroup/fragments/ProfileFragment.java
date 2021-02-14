@@ -1,10 +1,9 @@
-package com.komi.radiogroup.pages;
+package com.komi.radiogroup.fragments;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,7 +24,7 @@ import com.google.firebase.storage.StorageReference;
 import com.komi.radiogroup.EditProfileActivity;
 import com.komi.radiogroup.GroupActivity;
 import com.komi.radiogroup.R;
-import com.komi.radiogroup.UserGroupsIsAdminAdapter;
+import com.komi.radiogroup.adapters.UserGroupsIsAdminAdapter;
 import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
 import com.komi.structures.Group;
 import com.komi.structures.User;
@@ -35,7 +33,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Profile extends Fragment {
+public class ProfileFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -76,13 +74,13 @@ public class Profile extends Fragment {
     private SharedPreferences sharedPreferences;
     private boolean isMe = true;
 
-    public Profile(String userID) {
+    public ProfileFragment(String userID) {
         // Required empty public constructor
         this.userID = userID;
         this.isMe = false;
     }
 
-    public Profile(){
+    public ProfileFragment(){
     }
 
 

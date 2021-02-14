@@ -2,7 +2,9 @@ package com.komi.structures;
 
 import androidx.annotation.NonNull;
 
-public class GroupMessage {
+import com.komi.radiogroup.interfaces.GroupMessageInterface;
+
+public class GroupMessage implements GroupMessageInterface {
 
     public static final int MESSAGE_TYPE_TEXT = 1;
     public static final int MESSAGE_TYPE_RECORDING = 2;

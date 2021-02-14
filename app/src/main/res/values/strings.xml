@@ -105,5 +105,6 @@
     <string name="open_new_channel">No Channels. Create or join one from the explore</string>
     <string name="leave_channel">Leave Channel</string>
     <string name="admin">Admin</string>
+    <string name="me">Me</string>
 
 </resources>

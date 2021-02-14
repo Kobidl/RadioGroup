@@ -18,13 +18,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.komi.radiogroup.GroupActivity;
 import com.komi.radiogroup.MainContainer;
 import com.komi.radiogroup.R;
 import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
+import com.komi.radiogroup.firebase.FirebaseMessagingHelper;
 import com.komi.radiogroup.firebase.MyFirebaseMessagingService;
 import com.komi.structures.Group;
-import com.komi.structures.VoiceRecord;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-public class MusicPlayerService extends Service implements MediaPlayer.OnCompletionListener,MediaPlayer.OnPreparedListener{
+public class ChannelPlayerService extends Service implements MediaPlayer.OnCompletionListener,MediaPlayer.OnPreparedListener{
     public static final String PLAYER_BROADCAST = "com.komi.radiogroup.songchanged";
     public static final String GROUP_LISTENING = "group_listening_id";
     private static final long TIME_SEND_ACTIVE = 1000 * 40;
@@ -49,7 +48,6 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
 
     private MediaPlayer player = new MediaPlayer();
     private static Group group;
-    ArrayList<VoiceRecord> voiceRecords;
     boolean playing = false;
     RemoteViews remoteViews;
     FirebaseMessaging messaging = FirebaseMessaging.getInstance();
@@ -69,8 +67,6 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
     @Override
     public void onCreate() {
         super.onCreate();
-        voiceRecords = new ArrayList<>();
-
         player.setOnCompletionListener(this);
         player.setOnPreparedListener(this);
         player.reset();
@@ -87,11 +83,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
 
         remoteViews = new RemoteViews(getPackageName(), R.layout.music_notif);
 
-        //Intent playIntent = new Intent(this, MusicPlayerService.class);
-
-
-
-        Intent closeIntent = new Intent(this, MusicPlayerService.class);
+        Intent closeIntent = new Intent(this, ChannelPlayerService.class);
         closeIntent.putExtra("action", "close");
         PendingIntent closePendingIntent = PendingIntent.getService(this, 4, closeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.close_btn, closePendingIntent);
@@ -143,14 +135,14 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
                     openIntent.putExtra("playing",true);
                     PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, openIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                     builder.setContentIntent(pendingIntent);
-                    messaging.subscribeToTopic(group.getGroupID());
+                    FirebaseMessagingHelper.getInstance(this).subscribeToTopic(group.getGroupID());
                     setActiveUpdater(true);
                     MainContainer.playingGroup = group.getGroupID();
                 }
                 break;
             case "close":
                 notify("closed");
-                messaging.unsubscribeFromTopic(group.getGroupID());
+                FirebaseMessagingHelper.getInstance(this).unsubscribeFromTopic(group.getGroupID());
                 MainContainer.playingGroup = "";
                 stopSelf();
                 break;
@@ -187,7 +179,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
         }
         if(timer !=null)
             timer.cancel();
-        messaging.unsubscribeFromTopic(group.getGroupID());
+        FirebaseMessagingHelper.getInstance(this).unsubscribeFromTopic(group.getGroupID());
         setActiveUpdater(false);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
         MainContainer.playingGroup = "";

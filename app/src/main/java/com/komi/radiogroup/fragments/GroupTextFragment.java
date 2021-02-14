@@ -1,13 +1,11 @@
-package com.komi.radiogroup.pages;
+package com.komi.radiogroup.fragments;
 
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -23,20 +21,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.komi.radiogroup.GroupMessageAdapter;
+import com.komi.radiogroup.adapters.GroupMessageAdapter;
 import com.komi.radiogroup.R;
 import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
-import com.komi.radiogroup.firebase.FirebaseMessagingHelper;
 import com.komi.structures.Group;
 import com.komi.structures.GroupMessage;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.UUID;
 
 public class GroupTextFragment extends Fragment {

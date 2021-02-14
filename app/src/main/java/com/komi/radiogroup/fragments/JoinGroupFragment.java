@@ -1,4 +1,4 @@
-package com.komi.radiogroup.pages;
+package com.komi.radiogroup.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,15 +11,11 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.komi.radiogroup.GroupActivity;
 import com.komi.radiogroup.R;
 import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
 import com.komi.structures.Group;
@@ -27,8 +23,8 @@ import com.komi.structures.User;
 
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
 
-import static com.komi.radiogroup.pages.Profile.SHARED_PREFS;
-import static com.komi.radiogroup.pages.Profile.SP_UID;
+import static com.komi.radiogroup.fragments.ProfileFragment.SHARED_PREFS;
+import static com.komi.radiogroup.fragments.ProfileFragment.SP_UID;
 
 /**
  * A simple {@link Fragment} subclass.

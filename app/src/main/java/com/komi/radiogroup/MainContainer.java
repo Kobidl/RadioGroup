@@ -1,42 +1,26 @@
 package com.komi.radiogroup;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.button.MaterialButton;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.FirebaseDatabase;
 import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
-import com.komi.radiogroup.firebase.FirebaseMessagingHelper;
-import com.komi.radiogroup.pages.Welcome;
+import com.komi.radiogroup.fragments.MainFragment;
+import com.komi.radiogroup.fragments.WelcomeFragment;
 import com.komi.structures.Group;
 import com.komi.structures.User;
 
-import static com.komi.radiogroup.MainFragment.logout;
-
-public class MainContainer extends AppCompatActivity implements Welcome.OnWelcomeFragmentListener,MainFragment.MainFragmentListener {
+public class MainContainer extends AppCompatActivity implements WelcomeFragment.OnWelcomeFragmentListener, MainFragment.MainFragmentListener {
 
 
     public static String APP_URL = "https://www.radiogroup.com/invite/";
@@ -49,7 +33,7 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
     private static final String SP_IMAGE = "latest_image";
 
     private FirebaseAuth firebaseAuth;
-    Welcome welcomeFragment = new Welcome();
+    WelcomeFragment welcomeFragment = new WelcomeFragment();
     MainFragment mainFragment = new MainFragment();
 
     FirebaseUser currentUser;

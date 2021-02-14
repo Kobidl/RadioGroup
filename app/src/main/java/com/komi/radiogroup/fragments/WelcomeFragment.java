@@ -1,4 +1,4 @@
-package com.komi.radiogroup.pages;
+package com.komi.radiogroup.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,24 +10,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.komi.radiogroup.MainContainer;
 import com.komi.radiogroup.R;
 
 import br.com.simplepass.loadingbutton.customViews.CircularProgressButton;
 
-public class Welcome extends Fragment
+public class WelcomeFragment extends Fragment
 {
     private FirebaseAuth firebaseAuth;
 
@@ -51,7 +46,7 @@ public class Welcome extends Fragment
 
     OnWelcomeFragmentListener callback;
 
-    public Welcome() {
+    public WelcomeFragment() {
         // Required empty public constructor
     }
 
@@ -61,8 +56,8 @@ public class Welcome extends Fragment
         callback = (OnWelcomeFragmentListener) context;
     }
 
-    public static Welcome newInstance(String param1, String param2) {
-        Welcome fragment = new Welcome();
+    public static WelcomeFragment newInstance(String param1, String param2) {
+        WelcomeFragment fragment = new WelcomeFragment();
         return fragment;
     }
 

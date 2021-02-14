@@ -1,4 +1,4 @@
-package com.komi.radiogroup.pages;
+package com.komi.radiogroup.fragments;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -21,33 +21,18 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.firebase.auth.FirebaseAuth;
 import com.komi.radiogroup.R;
 import com.komi.radiogroup.audio_recorder.AudioListener;
 import com.komi.radiogroup.audio_recorder.AudioRecordButton;
-import com.komi.radiogroup.audio_recorder.AudioRecording;
 import com.komi.radiogroup.audio_recorder.RecordingItem;
 import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
-import com.komi.radiogroup.services.MusicPlayerService;
+import com.komi.radiogroup.firebase.FirebaseMessagingHelper;
+import com.komi.radiogroup.services.ChannelPlayerService;
 import com.komi.structures.Group;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -55,22 +40,20 @@ import java.util.TimerTask;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static com.komi.radiogroup.services.MusicPlayerService.PLAYER_BROADCAST;
+import static com.komi.radiogroup.services.ChannelPlayerService.PLAYER_BROADCAST;
 
 
 public class GroupRadioFragment extends Fragment {
 
 
-    private static final String GROUP_PARAM = "group";
     private static final long TIME_CHECK_ACTIVE = 1000 * 5;
-    private final String API_TOKEN_KEY = "AAAAMJ5RH1k:APA91bG5hD4dwWDrFFdK6QUYLmm_sLW1VvfHzwh-wwZGRar93y8ZTcyUAVU_O3pGEeKWqWe4FGgUe0Rs1VD5Vym6mQ9LnHUXhv6K5K1vlMwhCLkrpMIW0P0_6gD7ZLH5DA4u8jhNmkjz";
     private boolean listening = false;
 
     private AudioRecordButton mAudioRecordButton;
-    private AudioRecording audioRecording;
+
     private Button startStopListening;
     View rootView;
-    FirebaseAuth firebaseAuth;
+
     private String userId;
     private BroadcastReceiver broadcastReceiver;
     private ImageView statusImage;
@@ -88,24 +71,6 @@ public class GroupRadioFragment extends Fragment {
         this.group = group;
         this.listening = listening;
     }
-
-//    public static Profile newInstance(String param1, String param2) {
-//        Profile fragment = new Profile();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
-
-
-//    public static GroupRadioFragment newInstance(Group group) {
-//        GroupRadioFragment fragment = new GroupRadioFragment();
-//        Bundle args = new Bundle();
-//        args.putParcelable("group", group);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -217,41 +182,7 @@ public class GroupRadioFragment extends Fragment {
     }
 
     private void sendMessage(RecordingItem recordingItem) {
-        final JSONObject rootObject = new JSONObject();
-        try {
-            rootObject.put("to", "/topics/" + group.getGroupID());
-            rootObject.put("data", new JSONObject().put("message", recordingItem.getFileUrl()).put("sender_id", userId));
-            String url = "https://fcm.googleapis.com/fcm/send";
-            RequestQueue queue = Volley.newRequestQueue(rootView.getContext());
-            StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.i("testrecording","error when sending recording "+error.toString());
-                }
-            }) {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> headers = new HashMap<>();
-                    headers.put("Content-Type", "application/json");
-                    headers.put("Authorization", "key=" + API_TOKEN_KEY);
-                    return headers;
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    return rootObject.toString().getBytes();
-                }
-            };
-            queue.add(request);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        FirebaseMessagingHelper.getInstance(rootView.getContext()).sendMessageToTopic(recordingItem.getFileUrl(),userId,group.getGroupID());
     }
 
     private void playMusic(){
@@ -264,7 +195,7 @@ public class GroupRadioFragment extends Fragment {
         mAudioRecordButton.setVisibility(View.VISIBLE);
         Objects.requireNonNull(getActivity()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setActiveUsers(activeUsers+2);
-        Intent intent = new Intent(rootView.getContext(), MusicPlayerService.class);
+        Intent intent = new Intent(rootView.getContext(), ChannelPlayerService.class);
         intent.putExtra("action","start_listening");
         intent.putExtra("user_id",userId);
         intent.putExtra("group",group);
@@ -283,7 +214,7 @@ public class GroupRadioFragment extends Fragment {
             params.removeRule(RelativeLayout.ALIGN_PARENT_TOP);
             mAudioRecordButton.setVisibility(View.GONE);
             startStopListening.setText(R.string.start_listening);
-            Intent intent = new Intent(rootView.getContext(), MusicPlayerService.class);
+            Intent intent = new Intent(rootView.getContext(), ChannelPlayerService.class);
             rootView.getContext().stopService(intent);
             Objects.requireNonNull(getActivity()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             startStopListening.setBackgroundColor(rootView.getContext().getColor(R.color.colorPrimary));
