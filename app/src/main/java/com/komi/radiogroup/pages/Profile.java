@@ -76,11 +76,12 @@ public class Profile extends Fragment {
 
     private boolean canTakeImage = false;
     private SharedPreferences sharedPreferences;
-    private boolean isMe = false;
+    private boolean isMe = true;
 
     public Profile(String userID) {
         // Required empty public constructor
         this.userID = userID;
+        this.isMe = false;
     }
 
     public Profile(){
@@ -133,11 +134,10 @@ public class Profile extends Fragment {
         });
         editProfileBtn.setVisibility(View.GONE);
         // TODO: to allow loading this page for any user we need to pass a uid parameter and set it here
-        isMe = false;
-        if(userID !=null) {
+
+        if(!isMe) {
             logoutBtn.setVisibility(View.GONE);
         }else {
-            isMe = true;
             userID = firebaseAuth.getCurrentUser().getUid();
 
             sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
@@ -158,6 +158,7 @@ public class Profile extends Fragment {
 
             // If the latest profile info we have saved is of the same user, then load it from shared preferences first
             if (latest_UID != null && latest_UID.matches(firebaseAuth.getCurrentUser().getUid())) {
+                editProfileBtn.setVisibility(View.VISIBLE);
                 String latest_fullname = sharedPreferences.getString(SP_FULLNAME, null);
                 String latest_bio = sharedPreferences.getString(SP_BIO, null);
                 String latest_image = sharedPreferences.getString(SP_IMAGE, null);

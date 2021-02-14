@@ -26,3 +26,5 @@ update group after edit
 
 - Save user join group timestamp and sort
 
+- save user details in main container
+
