@@ -26,10 +26,13 @@ import androidx.core.content.ContextCompat;
 
 import com.komi.radiogroup.R;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 public class AudioRecordButton extends RelativeLayout {
 
+    private static final int TIME_OUT = 60 * 1000;
     private final int DEFAULT_ICON_SIZE = Math.round(getResources().getDimension(R.dimen.default_icon_size));
     private final int DEFAULT_REMOVE_ICON_SIZE =  Math.round(getResources().getDimension(R.dimen.default_icon_remove_size));
 
@@ -57,7 +60,9 @@ public class AudioRecordButton extends RelativeLayout {
     private boolean isPausing = false;
 
     private boolean enabled = true;
-
+    Timer t;
+    TimerTask tt;
+    Handler handler = new Handler();
 
     private WindowManager.LayoutParams params;
 
@@ -104,14 +109,22 @@ public class AudioRecordButton extends RelativeLayout {
                     mLayoutTimer.setVisibility(VISIBLE);
                     mImageButton.setVisibility(VISIBLE);
                     startRecord();
-                    Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
-                    // Vibrate for 500 milliseconds
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        v.vibrate(VibrationEffect.createOneShot(80, VibrationEffect.DEFAULT_AMPLITUDE));
-                    } else {
-                        //deprecated in API 26
-                        v.vibrate(80);
-                    }
+                    vibrate();
+                    t = new Timer();
+                    tt = new TimerTask() {
+                        @Override
+                        public void run() {
+                            handler.post(new Runnable() {
+                                public void run() {
+                                    MotionEvent myEvent = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_UP, 0, 0, 0);
+                                    onTouchEvent(myEvent);
+                                    vibrate();
+                                }
+                            });
+                        };
+                    };
+                    t.schedule(tt,TIME_OUT+1000);
+
                     return true;
                 }
                 break;
@@ -139,6 +152,12 @@ public class AudioRecordButton extends RelativeLayout {
 
                 break;
             case MotionEvent.ACTION_UP:
+                if(tt!=null){
+                    tt.cancel();
+                }
+                if(t!=null){
+                    t.cancel();
+                }
                 if (isPlaying && !isPausing) {
                     isPausing = true;
                     moveImageToBack();
@@ -157,6 +176,18 @@ public class AudioRecordButton extends RelativeLayout {
                 return false;
         }
         return true;
+    }
+
+    private void vibrate() {
+        Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+        // Vibrate for 500 milliseconds
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            v.vibrate(VibrationEffect.createOneShot(80, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            //deprecated in API 26
+            v.vibrate(80);
+        }
+
     }
 
     private void moveImageToBack() {
