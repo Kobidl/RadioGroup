@@ -324,14 +324,18 @@ public class FirebaseDatabaseHelper {
         });
     }
 
-    public void updateUserListening(String groupID, String userID) {
+    public void updateUserListening(String groupID, String userID,boolean active) {
         userListeningRef = firebaseDatabase.getReference().child(DB_GROUP_LISTENER).child(groupID).child(userID);
-        ListeningUser listeningUser = new ListeningUser();
-        listeningUser.setUserID(userID);
-        listeningUser.setTimeInMillis(System.currentTimeMillis());
-
-        userListeningRef.setValue(listeningUser);
+        if(active) {
+            ListeningUser listeningUser = new ListeningUser();
+            listeningUser.setUserID(userID);
+            listeningUser.setTimeInMillis(System.currentTimeMillis());
+            userListeningRef.setValue(listeningUser);
+        }else{
+            userListeningRef.removeValue();
+        }
     }
+
 
     public void getActiveUsers(String groupID, final OnUsersListeningDataChangedCallback callback) {
         firebaseDatabase.getReference().child(DB_GROUP_LISTENER).child(groupID).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
@@ -343,7 +347,7 @@ public class FirebaseDatabaseHelper {
                     Long now = System.currentTimeMillis();
                     Long then = temp.getTimeInMillis();
                     Long passed = now - then;
-                    if((passed / 1000) < 120){
+                    if((passed / 1000) < 60){
                         num++;
                     }
                 }

@@ -38,7 +38,9 @@ import static com.komi.radiogroup.MainFragment.logout;
 
 public class MainContainer extends AppCompatActivity implements Welcome.OnWelcomeFragmentListener,MainFragment.MainFragmentListener {
 
+
     public static String APP_URL = "https://www.radiogroup.com/invite/";
+    public static String playingGroup = "";
 
     public static final String SHARED_PREFS = "radioGroup_sp";
     public static final String SP_UID = "latest_uid";
