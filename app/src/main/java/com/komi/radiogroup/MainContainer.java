@@ -1,7 +1,9 @@
 package com.komi.radiogroup;
 
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -35,6 +39,13 @@ import static com.komi.radiogroup.MainFragment.logout;
 public class MainContainer extends AppCompatActivity implements Welcome.OnWelcomeFragmentListener,MainFragment.MainFragmentListener {
 
     public static String APP_URL = "https://www.radiogroup.com/invite/";
+
+    public static final String SHARED_PREFS = "radioGroup_sp";
+    public static final String SP_UID = "latest_uid";
+    private static final String SP_FULLNAME = "latest_fullname";
+    private static final String SP_BIO = "latest_bio";
+    private static final String SP_IMAGE = "latest_image";
+
     private FirebaseAuth firebaseAuth;
     Welcome welcomeFragment = new Welcome();
     MainFragment mainFragment = new MainFragment();
@@ -54,7 +65,7 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
         Intent intent = getIntent();
         Uri initUrl = intent.getData();
 
-        if(initUrl!=null) {
+        if (initUrl != null) {
             Intent gIntent = new Intent(this, GroupActivity.class);
             gIntent.putExtra("group_id", initUrl.toString().replace(APP_URL, "").replace("/", ""));
             startActivity(gIntent);
@@ -67,13 +78,29 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
         //todo: check if registered by
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
-        if(currentUser == null){
+        if (currentUser == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, welcomeFragment).commit();
-        }else {
+        } else {
             getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, mainFragment).commit();
         }
 
+        FirebaseDatabaseHelper.getInstance().setUserByUidListener(currentUser.getUid(), new FirebaseDatabaseHelper.OnUserDataChangedCallback() {
+            @Override
+            public void onDataReceived(User user) {
+
+                // Saving latest profile info to shared preferences
+                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(SP_UID, firebaseAuth.getCurrentUser().getUid());
+                editor.putString(SP_FULLNAME, user.getFullname());
+                editor.putString(SP_BIO, user.getBio());
+                editor.putString(SP_IMAGE, user.getProfilePicturePath());
+                editor.apply();
+            }
+        });
     }
+
+
 
     @Override
     public void onRegister(String name) {

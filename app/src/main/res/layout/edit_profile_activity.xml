@@ -48,8 +48,7 @@
                         android:layout_gravity="center"
                         android:background="@drawable/upload_image_view"
                         android:visibility="invisible"
-                        android:scaleType="centerCrop"
-                        />
+                        android:scaleType="centerCrop" />
 
                     <TextView
                         android:id="@+id/upload_image_text"

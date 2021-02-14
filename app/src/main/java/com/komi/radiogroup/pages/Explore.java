@@ -45,6 +45,7 @@ public class Explore extends Fragment {
     GroupsAdapter groupsAdapter;
     TextInputLayout searchContainer;
     private FrameLayout loader;
+    EditText et_search;
 
 
     public Explore() {
@@ -100,7 +101,7 @@ public class Explore extends Fragment {
         setListenerWithSubstring(""); //Empty substring for init so we get all groups
 
         // TODO: set a listener that will search on user input and get rid of the button
-        final EditText et_search = rootView.findViewById(R.id.et_search);
+        et_search = rootView.findViewById(R.id.et_search);
         et_search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -129,6 +130,12 @@ public class Explore extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         FirebaseDatabaseHelper.getInstance().removeExploreListener();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        et_search.setText("");
     }
 
     public void setListenerWithSubstring(String substring) {

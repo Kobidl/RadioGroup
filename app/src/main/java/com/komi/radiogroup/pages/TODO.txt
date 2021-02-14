@@ -13,8 +13,6 @@
 
 - Put good groups and remove junks
 
-- save user details in main container // Mishel
-
 - Admin localization // Kobi
 
 - Notification - make prettier // Kobi
