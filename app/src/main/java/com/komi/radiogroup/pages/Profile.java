@@ -203,7 +203,8 @@ public class Profile extends Fragment {
             @Override
             public void onDataReceived(User nUser) {
                 user = nUser;
-                editProfileBtn.setVisibility(View.VISIBLE);
+                if(isMe)
+                    editProfileBtn.setVisibility(View.VISIBLE);
                 tv_fullName.setText(user.getFullname());
                 tv_bio.setText(user.getBio());
 
