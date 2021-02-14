@@ -15,7 +15,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -30,20 +29,18 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.komi.radiogroup.R;
 import com.komi.radiogroup.audio_recorder.AudioListener;
 import com.komi.radiogroup.audio_recorder.AudioRecordButton;
 import com.komi.radiogroup.audio_recorder.AudioRecording;
 import com.komi.radiogroup.audio_recorder.RecordingItem;
-import com.komi.radiogroup.userlater.MusicPlayerService;
+import com.komi.radiogroup.services.MusicPlayerService;
 import com.komi.structures.Group;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -52,7 +49,7 @@ import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static com.komi.radiogroup.GroupActivity.listening;
-import static com.komi.radiogroup.userlater.MusicPlayerService.PLAYER_BROADCAST;
+import static com.komi.radiogroup.services.MusicPlayerService.PLAYER_BROADCAST;
 
 /**
  * A simple {@link Fragment} subclass.

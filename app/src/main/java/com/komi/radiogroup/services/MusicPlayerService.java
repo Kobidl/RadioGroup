@@ -1,4 +1,4 @@
-package com.komi.radiogroup.userlater;
+package com.komi.radiogroup.services;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -13,14 +13,12 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.IBinder;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.komi.radiogroup.GroupActivity;
-import com.komi.radiogroup.MainContainer;
 import com.komi.radiogroup.R;
 import com.komi.radiogroup.firebase.MyFirebaseMessagingService;
 import com.komi.structures.Group;

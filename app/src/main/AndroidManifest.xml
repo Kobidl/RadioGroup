@@ -51,6 +51,11 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".EditProfileActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.komi.radiogroup.provider"
@@ -61,7 +66,7 @@
                 android:resource="@xml/files_dir" />
         </provider>
 
-        <service android:name=".userlater.MusicPlayerService" />
+        <service android:name=".services.MusicPlayerService" />
 
         <service android:name=".firebase.MyFirebaseMessagingService">
             <intent-filter>

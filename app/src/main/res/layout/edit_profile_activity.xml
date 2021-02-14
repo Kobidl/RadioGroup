@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:backgroundTint="@color/colorDarkBackground"
+    android:orientation="vertical"
+    >
+
+    <include layout="@layout/toolbar_layout" />
+
+    <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
+    <LinearLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="0px"
+        android:layout_height="0px"/>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:hint="@string/profile_name"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/new_profile_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:background="@color/colorLightBackground"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:hint="@string/bio">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/new_profile_bio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:background="@color/colorLightBackground"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <RelativeLayout
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:layout_margin="20dp"
+                >
+
+                <ImageView
+                    android:id="@+id/new_profile_view"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/upload_image_view"
+                    android:visibility="invisible"
+                    android:scaleType="centerCrop"
+                    />
+
+                <TextView
+                    android:id="@+id/upload_image_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:alpha="1"
+                    android:background="@android:color/transparent"
+                    android:text="@string/upload_image"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/change_password"
+                    android:layout_marginHorizontal="15dp"
+                    android:id="@+id/cb_change_password"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15dp"
+                    android:hint="@string/old_password"
+                    android:id="@+id/old_p_layout"
+                    android:visibility="invisible">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/old_password_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:background="@color/colorLightBackground"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginTop="5dp"
+                    android:hint="@string/new_password"
+                    android:id="@+id/new_p_layout"
+                    android:visibility="invisible">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/new_password_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:background="@color/colorLightBackground"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginTop="5dp"
+                    android:hint="@string/confirm_new_password"
+                    android:id="@+id/new_pc_layout"
+                    android:visibility="invisible">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/new_password_confirm_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:background="@color/colorLightBackground"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+        style="@style/Widget.AppCompat.Button"
+        android:id="@+id/save_group"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        app:finalCornerAngle="50dp"
+        app:initialCornerAngle="6dp"
+        app:spinning_bar_color="#FFFFFF"
+        app:spinning_bar_padding="0dp"
+        app:spinning_bar_width="3dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:text="@string/save"
+        app:cornerRadius="6dp"
+        android:layout_margin="15dp"
+        android:enabled="false"
+        />
+
+
+</LinearLayout>

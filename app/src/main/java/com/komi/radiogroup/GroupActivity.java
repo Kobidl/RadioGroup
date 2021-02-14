@@ -5,19 +5,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.tabs.TabLayout;
@@ -25,12 +19,11 @@ import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
 import com.komi.radiogroup.pages.GroupRadioFragment;
 import com.komi.radiogroup.pages.GroupTextFragment;
 import com.komi.radiogroup.pages.JoinGroupFragment;
-import com.komi.radiogroup.userlater.MusicPlayerService;
 import com.komi.structures.Group;
 
 import static com.komi.radiogroup.pages.Profile.SHARED_PREFS;
 import static com.komi.radiogroup.pages.Profile.SP_UID;
-import static com.komi.radiogroup.userlater.MusicPlayerService.GROUP_LISTENING;
+import static com.komi.radiogroup.services.MusicPlayerService.GROUP_LISTENING;
 
 public class GroupActivity extends AppCompatActivity implements JoinGroupFragment.JoinGroupCallback {
 

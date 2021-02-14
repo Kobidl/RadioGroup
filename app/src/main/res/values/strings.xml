@@ -85,4 +85,9 @@
     <string name="message_content">Message content</string>
     <string name="bio">Bio</string>
     <string name="loading">Loading...</string>
+    <string name="profile_name">Profile Name</string>
+    <string name="change_password">Change password</string>
+    <string name="old_password">Old Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
 </resources>
