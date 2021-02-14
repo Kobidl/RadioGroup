@@ -77,7 +77,7 @@ public class FirebaseDatabaseHelper {
     }
 
     public interface OnUsersListeningDataChangedCallback{
-        void OnDataReceived(Integer integer);
+        void OnDataReceived(int integer);
     }
 
     // Add methods
@@ -326,14 +326,12 @@ public class FirebaseDatabaseHelper {
         userListeningRef.setValue(listeningUser);
     }
 
-    public void setUsersListeningInGroupListener(String groupID, final OnUsersListeningDataChangedCallback callback) {
-
-        userListeningRef = firebaseDatabase.getReference().child(DB_GROUP_LISTENER).child(groupID);
-        userListeningListener = new ValueEventListener() {
+    public void getActiveUsers(String groupID, final OnUsersListeningDataChangedCallback callback) {
+        firebaseDatabase.getReference().child(DB_GROUP_LISTENER).child(groupID).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+            public void onSuccess(DataSnapshot dataSnapshot) {
                 Integer num = 0;
-                for (DataSnapshot snapshot1 : snapshot.getChildren()){
+                for (DataSnapshot snapshot1 : dataSnapshot.getChildren()){
                     ListeningUser temp = snapshot1.getValue(ListeningUser.class);
                     Long now = System.currentTimeMillis();
                     Long then = temp.getTimeInMillis();
@@ -344,15 +342,7 @@ public class FirebaseDatabaseHelper {
                 }
                 callback.OnDataReceived(num);
             }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        };
-        userListeningRef.addValueEventListener(userListeningListener);
-    }
-
-    public void removeUsersListeningInGroupListener() {
-        userListeningRef.removeEventListener(userListeningListener);
+        });
     }
 
 }

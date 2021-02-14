@@ -20,6 +20,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.komi.radiogroup.GroupActivity;
 import com.komi.radiogroup.R;
+import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
 import com.komi.radiogroup.firebase.MyFirebaseMessagingService;
 import com.komi.structures.Group;
 import com.komi.structures.VoiceRecord;
@@ -27,6 +28,8 @@ import com.komi.structures.VoiceRecord;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,6 +41,7 @@ import static com.komi.radiogroup.pages.Profile.SHARED_PREFS;
 public class MusicPlayerService extends Service implements MediaPlayer.OnCompletionListener,MediaPlayer.OnPreparedListener{
     public static final String PLAYER_BROADCAST = "com.komi.radiogroup.songchanged";
     public static final String GROUP_LISTENING = "group_listening_id";
+    private static final long TIME_SEND_ACTIVE = 1000 * 60;
 
     NotificationManager manager;
     NotificationCompat.Builder builder;
@@ -55,6 +59,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
 
     private BroadcastReceiver broadcastReceiver;
     private String userId;
+    private Timer timer = new Timer();
 
     @Nullable
     @Override
@@ -141,6 +146,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
                     builder.setContentIntent(pendingIntent);
                     messaging.subscribeToTopic(group.getGroupID());
                     this.getSharedPreferences(SHARED_PREFS,MODE_PRIVATE).edit().putString(GROUP_LISTENING,group.getGroupID()).apply();
+                    setActiveUpdater();
                 }
                 break;
             case "close":
@@ -156,6 +162,18 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
         return super.onStartCommand(intent,flags,startId);
     }
 
+    private void setActiveUpdater() {
+        try {
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    FirebaseDatabaseHelper.getInstance().updateUserListening(group.getGroupID(),userId);
+                }
+            }, 0,TIME_SEND_ACTIVE);
+                    
+        }catch (Exception e){}
+    }
+
     @Override
     public void onDestroy(){
         super.onDestroy();
@@ -164,9 +182,12 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnComplet
                 player.stop();
             player.release();
         }
+        if(timer !=null)
+            timer.cancel();
         messaging.unsubscribeFromTopic(group.getGroupID());
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
         this.getSharedPreferences(SHARED_PREFS,MODE_PRIVATE).edit().remove(GROUP_LISTENING).apply();
+
     }
 
     private void playSong(){

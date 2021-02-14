@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -42,6 +43,7 @@ public class Explore extends Fragment {
     List<Group> groupList;
     RecyclerView recyclerView;
     GroupsAdapter groupsAdapter;
+    TextInputLayout searchContainer;
     private FrameLayout loader;
 
 
@@ -92,6 +94,8 @@ public class Explore extends Fragment {
 
         recyclerView.setAdapter(groupsAdapter);
 
+        searchContainer = rootView.findViewById(R.id.explore_search_input);
+
         // Setting the group listener
         setListenerWithSubstring(""); //Empty substring for init so we get all groups
 
@@ -139,4 +143,14 @@ public class Explore extends Fragment {
         });
     }
 
+    public void showSearch() {
+        if(searchContainer!=null){
+            if(searchContainer.getVisibility() == View.GONE) {
+                searchContainer.setVisibility(View.VISIBLE);
+            }else{
+                searchContainer.setVisibility(View.GONE);
+            }
+
+        }
+    }
 }

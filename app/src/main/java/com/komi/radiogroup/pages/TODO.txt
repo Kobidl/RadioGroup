@@ -7,20 +7,14 @@
 
 - Empty pages // Kobi
 
-- Edit Profile page -> email + password
-
-- Handle errors messages on login
-
-- Change search bar on icon clicked
-
 - Application Icon
 
-- Sort Groups
+- Sort Groups explore alpah
 
 - Put good groups and remove junks
 
-- Change search bar on icon clicked
-
-
 - save user details in main container
 
+- Admin localization
+
+- Notification - make prettier

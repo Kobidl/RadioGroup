@@ -126,12 +126,15 @@ public class MainFragment extends Fragment {
                         assert getFragmentManager() != null;
                         getFragmentManager().beginTransaction().replace(R.id.main_frame_layout, exploreFragment).commit();
                         titleTV.setText(R.string.explore);
-//                        toolbarMenu.findItem(R.id.add_group_btn).setVisible(false);
-                        if(rightToolbarBtn!=null) {
-                            rightToolbarBtn.setOnClickListener(null);
-                            rightToolbarBtn.setVisibility(View.GONE);
-                            rightToolbarBtn = null;
-                        }
+                        rightToolbarBtn = rootView.findViewById(R.id.toolbar_right_icon);
+                        rightToolbarBtn.setVisibility(View.VISIBLE);
+                        rightToolbarBtn.setImageResource(R.drawable.ic_search);
+                        rightToolbarBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                exploreFragment.showSearch();
+                            }
+                        });
                         return true;
                     case R.id.bottom_navigation_item_group:
                         assert getFragmentManager() != null;

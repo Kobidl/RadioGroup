@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,7 +21,10 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -35,6 +39,7 @@ import com.komi.radiogroup.audio_recorder.AudioListener;
 import com.komi.radiogroup.audio_recorder.AudioRecordButton;
 import com.komi.radiogroup.audio_recorder.AudioRecording;
 import com.komi.radiogroup.audio_recorder.RecordingItem;
+import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
 import com.komi.radiogroup.services.MusicPlayerService;
 import com.komi.structures.Group;
 
@@ -44,6 +49,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.RECORD_AUDIO;
@@ -55,6 +62,7 @@ public class GroupRadioFragment extends Fragment {
 
 
     private static final String GROUP_PARAM = "group";
+    private static final long TIME_CHECK_ACTIVE = 1000 * 30;
     private final String API_TOKEN_KEY = "AAAAMJ5RH1k:APA91bG5hD4dwWDrFFdK6QUYLmm_sLW1VvfHzwh-wwZGRar93y8ZTcyUAVU_O3pGEeKWqWe4FGgUe0Rs1VD5Vym6mQ9LnHUXhv6K5K1vlMwhCLkrpMIW0P0_6gD7ZLH5DA4u8jhNmkjz";
     private boolean listening = false;
 
@@ -71,6 +79,9 @@ public class GroupRadioFragment extends Fragment {
     private TextView recordHelperTV;
     Group group;
 
+    private Handler radioHandler = new Handler();
+    private Timer timer = new Timer();
+    
     public GroupRadioFragment(Group group, boolean listening) {
         this.group = group;
         this.listening = listening;
@@ -165,14 +176,40 @@ public class GroupRadioFragment extends Fragment {
             statusImage.setImageResource(R.drawable.online_animation);
             statusAnimation = (AnimationDrawable) statusImage.getDrawable();
             statusAnimation.start();
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) statusImage.getLayoutParams();
+            params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+
         }
 
         registerReceiver();
 
-
-
+        getActiveUsers();
 
         return rootView;
+    }
+
+    private void getActiveUsers() {
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                FirebaseDatabaseHelper.getInstance().getActiveUsers(group.getGroupID(), new FirebaseDatabaseHelper.OnUsersListeningDataChangedCallback() {
+                    @Override
+                    public void OnDataReceived(final int number) {
+                        radioHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                setActiveUsers(number);
+                            }
+                        });
+                    }
+                });
+            }
+        }, 0,TIME_CHECK_ACTIVE);
+
+    }
+
+    private void setActiveUsers(int num) {
+        Toast.makeText(rootView.getContext(), "Active: " + num, Toast.LENGTH_SHORT).show();
     }
 
     private void sendMessage(RecordingItem recordingItem) {
@@ -216,6 +253,8 @@ public class GroupRadioFragment extends Fragment {
     private void playMusic(){
         stopMusic();
         statusImage.setImageResource(R.drawable.online_animation);
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) statusImage.getLayoutParams();
+        params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         statusAnimation = (AnimationDrawable) statusImage.getDrawable();
         statusAnimation.start();
         mAudioRecordButton.setVisibility(View.VISIBLE);
@@ -234,6 +273,8 @@ public class GroupRadioFragment extends Fragment {
     private void stopMusic(){
         try {
             statusImage.setImageResource(R.drawable.offline);
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) statusImage.getLayoutParams();
+            params.addRule(RelativeLayout.CENTER_IN_PARENT);
             mAudioRecordButton.setVisibility(View.GONE);
             startStopListening.setText(R.string.start_listening);
             Intent intent = new Intent(rootView.getContext(), MusicPlayerService.class);
