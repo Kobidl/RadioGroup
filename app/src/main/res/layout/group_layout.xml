@@ -123,7 +123,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Group Desc"
+                android:text="@string/group_desc"
                 android:id="@+id/group_desc"
                 android:ellipsize="end"
                 android:layout_marginTop="10sp"

@@ -147,7 +147,6 @@ public class Welcome extends Fragment
             public void onComplete(@NonNull Task<AuthResult> task) {
                 loginSignupBtn.revertAnimation();
                 if (task.isSuccessful()) {
-                    Toast.makeText(rootView.getContext(), "Register Successful", Toast.LENGTH_SHORT).show();
                     String name = nameET.getText().toString();
                     callback.onRegister(name);
                 }
@@ -164,7 +163,6 @@ public class Welcome extends Fragment
             public void onComplete(@NonNull Task<AuthResult> task) {
                 loginSignupBtn.revertAnimation();
                 if(task.isSuccessful()) {
-                    Toast.makeText(rootView.getContext(), "User login successful", Toast.LENGTH_SHORT).show();
                     callback.onLogin();
                 }
                 else {

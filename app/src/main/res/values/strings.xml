@@ -97,4 +97,8 @@
     <string name="email_in_use">This email address is already in use</string>
     <string name="password_weak">Invalid password (Password should be at least 6 characters</string>
     <string name="please_fill_fields">Please fill in all fields</string>
+
+    <string name="group_desc">Group Description</string>
+    <string name="home">Home</string>
+
 </resources>

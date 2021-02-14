@@ -19,10 +19,6 @@
 
 - Put good groups and remove junks
 
-
-update group after edit
-
 - Change search bar on icon clicked
 
-- Save user join group timestamp and sort
 

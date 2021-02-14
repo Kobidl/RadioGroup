@@ -98,15 +98,12 @@ public class MainContainer extends AppCompatActivity implements Welcome.OnWelcom
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()){
-                        Toast.makeText(MainContainer.this, "User display name update successful", Toast.LENGTH_SHORT).show();
+
                     }
-                    else
-                        Toast.makeText(MainContainer.this, "User display name update failed", Toast.LENGTH_SHORT).show();
                 }
             });
         }
-        else
-            Toast.makeText(MainContainer.this, "Cant update display name : Not logged in", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
