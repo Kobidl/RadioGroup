@@ -34,9 +34,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.komi.radiogroup.MainFragment.logout;
-
-
 public class Profile extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -119,7 +116,7 @@ public class Profile extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
         currentUser = firebaseAuth.getCurrentUser();
 
-        MaterialButton logoutBtn = rootView.findViewById(R.id.btn_logout);
+
         iv_profile_pic = rootView.findViewById(R.id.iv_profile_pic);
         tv_fullName = rootView.findViewById(R.id.tv_full_name);
         tv_bio = rootView.findViewById(R.id.tv_bio);
@@ -135,9 +132,7 @@ public class Profile extends Fragment {
         editProfileBtn.setVisibility(View.GONE);
         // TODO: to allow loading this page for any user we need to pass a uid parameter and set it here
 
-        if(!isMe) {
-            logoutBtn.setVisibility(View.GONE);
-        }else {
+        if(isMe){
             userID = firebaseAuth.getCurrentUser().getUid();
 
             sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
@@ -145,14 +140,7 @@ public class Profile extends Fragment {
 
 
 
-            logoutBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    sharedPreferences.edit().clear().apply();
-                    firebaseAuth.signOut();
-                    logout();
-                }
-            });
+
             //btn_editProfile = rootView.findViewById(R.id.btn_edit_profile);
 
 

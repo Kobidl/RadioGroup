@@ -40,5 +40,17 @@
        android:fontFamily="@font/lobster"
        />
 
+   <ImageButton
+       android:layout_width="26dp"
+       android:layout_height="26dp"
+       android:id="@+id/toolbar_right_icon"
+       android:layout_centerVertical="true"
+       android:layout_alignParentEnd="true"
+       android:scaleType="fitXY"
+       android:background="@android:color/transparent"
+       android:backgroundTint="@android:color/transparent"
+       android:visibility="gone"
+       />
+
 </RelativeLayout>
 </androidx.cardview.widget.CardView>

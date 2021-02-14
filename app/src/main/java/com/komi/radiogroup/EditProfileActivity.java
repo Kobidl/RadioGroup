@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -80,6 +81,17 @@ public class EditProfileActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_profile_activity);
+
+        //Set toolbar
+        TextView titleTV = findViewById(R.id.toolbar_title);
+        titleTV.setText(R.string.edit_profile);
+        ImageButton backBtn = findViewById(R.id.toolbar_back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         user = (User) getIntent().getParcelableExtra("user");
 

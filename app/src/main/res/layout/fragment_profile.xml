@@ -90,16 +90,6 @@
 
         </LinearLayout>
     </LinearLayout>
-    <com.google.android.material.button.MaterialButton
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/logout"
-        android:id="@+id/btn_logout"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="10dp"
-        android:backgroundTint="@android:color/holo_red_light"
-        android:layout_alignParentBottom="true"
-        />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
