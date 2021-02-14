@@ -101,6 +101,7 @@ public class Groups extends Fragment {
                         return Long.compare(o1.getTimeStamp(), o2.getTimeStamp());
                     }
                 });
+                Collections.reverse(groups);
                 groupsAdapter.setGroups(groups);
                 groupsAdapter.notifyDataSetChanged();
                 loaderAnimation.stop();
