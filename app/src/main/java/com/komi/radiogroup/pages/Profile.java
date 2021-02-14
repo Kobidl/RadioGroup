@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -222,6 +223,7 @@ public class Profile extends Fragment {
             }
         });
 
+
         return rootView;
     }
 
@@ -231,6 +233,7 @@ public class Profile extends Fragment {
         super.onDestroyView();
         FirebaseDatabaseHelper.getInstance().removeGroupsByAdminIDListener();
         FirebaseDatabaseHelper.getInstance().removeUserByUIDListener();
+
     }
 }
 

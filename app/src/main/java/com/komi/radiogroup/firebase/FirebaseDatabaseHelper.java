@@ -13,6 +13,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.komi.structures.Group;
 import com.komi.structures.GroupMessage;
+import com.komi.structures.ListeningUser;
 import com.komi.structures.User;
 
 import java.util.ArrayList;
@@ -27,14 +28,15 @@ public class FirebaseDatabaseHelper {
     public static final String DB_USERS = "users_DB";
     public static final String DB_GROUPS = "groups_DB";
     public static final String DB_GROUP_MESSAGES = "group_messages_DB";
+    public static final String DB_GROUP_LISTENER = "group_listeners_DB";
 
     private static FirebaseDatabaseHelper instance;
     FirebaseDatabase firebaseDatabase;
 
 
-    DatabaseReference usersListenerRef, userByUidListenerRef, groupListenerRef, groupMessageListenerRef, exploreListenerRef, adminGroupsListenerRef;
+    DatabaseReference usersListenerRef, userByUidListenerRef, groupListenerRef, groupMessageListenerRef, exploreListenerRef, adminGroupsListenerRef, userListeningRef;
 
-    ValueEventListener usersListener, userByUidListener, groupsListener, groupMessagesListener, exploreListener, adminGroupsListener;
+    ValueEventListener usersListener, userByUidListener, groupsListener, groupMessagesListener, exploreListener, adminGroupsListener, userListeningListener;
 
 
     public static FirebaseDatabaseHelper getInstance() {
@@ -72,6 +74,10 @@ public class FirebaseDatabaseHelper {
 
     public interface OnUsersInGroupDataChangedCallback{
         void OnDataReceived(List<User> users);
+    }
+
+    public interface OnUsersListeningDataChangedCallback{
+        void OnDataReceived(Integer integer);
     }
 
     // Add methods
@@ -310,4 +316,43 @@ public class FirebaseDatabaseHelper {
             }
         });
     }
+
+    public void updateUserListening(String groupID, String userID) {
+        userListeningRef = firebaseDatabase.getReference().child(DB_GROUP_LISTENER).child(groupID).child(userID);
+        ListeningUser listeningUser = new ListeningUser();
+        listeningUser.setUserID(userID);
+        listeningUser.setTimeInMillis(System.currentTimeMillis());
+
+        userListeningRef.setValue(listeningUser);
+    }
+
+    public void setUsersListeningInGroupListener(String groupID, final OnUsersListeningDataChangedCallback callback) {
+
+        userListeningRef = firebaseDatabase.getReference().child(DB_GROUP_LISTENER).child(groupID);
+        userListeningListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Integer num = 0;
+                for (DataSnapshot snapshot1 : snapshot.getChildren()){
+                    ListeningUser temp = snapshot1.getValue(ListeningUser.class);
+                    Long now = System.currentTimeMillis();
+                    Long then = temp.getTimeInMillis();
+                    Long passed = now - then;
+                    if((passed / 1000) < 120){
+                        num++;
+                    }
+                }
+                callback.OnDataReceived(num);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        };
+        userListeningRef.addValueEventListener(userListeningListener);
+    }
+
+    public void removeUsersListeningInGroupListener() {
+        userListeningRef.removeEventListener(userListeningListener);
+    }
+
 }
