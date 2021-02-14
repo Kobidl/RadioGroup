@@ -1,5 +1,6 @@
 package com.komi.radiogroup;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -27,6 +29,7 @@ import static com.komi.radiogroup.services.MusicPlayerService.GROUP_LISTENING;
 
 public class GroupActivity extends AppCompatActivity implements JoinGroupFragment.JoinGroupCallback {
 
+    private static final int GROUP_DETAILS_RESULT_CODE = 1;
     private boolean listening = false;
     private Group group;
     private NonSwipeableViewPager viewPager;
@@ -133,7 +136,7 @@ public class GroupActivity extends AppCompatActivity implements JoinGroupFragmen
             Intent intent = new Intent(this, GroupDetails.class);
             intent.putExtra("group", group);
             intent.putExtra("user_id", userId);
-            startActivity(intent);
+            startActivityForResult(intent,GROUP_DETAILS_RESULT_CODE);
         }
     }
 
@@ -154,5 +157,17 @@ public class GroupActivity extends AppCompatActivity implements JoinGroupFragmen
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == GROUP_DETAILS_RESULT_CODE){
+            if(resultCode == Activity.RESULT_OK){
+                group = (Group) data.getParcelableExtra("group");
+                groupNameTV.setText(group.getGroupName());
+            }
+        }
     }
 }

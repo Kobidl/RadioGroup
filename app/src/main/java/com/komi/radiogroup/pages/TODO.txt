@@ -22,3 +22,5 @@
 - Change search bar on icon clicked
 
 
+- save user details in main container
+

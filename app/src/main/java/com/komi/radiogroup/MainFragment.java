@@ -3,6 +3,7 @@ package com.komi.radiogroup;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 
@@ -24,13 +25,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.komi.radiogroup.firebase.FirebaseDatabaseHelper;
 import com.komi.radiogroup.pages.Explore;
 import com.komi.radiogroup.pages.Groups;
 import com.komi.radiogroup.pages.Profile;
 
-import java.util.Objects;
+import static com.komi.radiogroup.pages.Profile.SHARED_PREFS;
+
 
 public class MainFragment extends Fragment {
 
@@ -40,6 +43,7 @@ public class MainFragment extends Fragment {
     Explore exploreFragment = new Explore();
     private FragmentActivity myContext;
     static MainFragmentListener callback;
+    ImageView rightToolbarBtn;
 
     public MainFragment() {
         // Required empty public constructor
@@ -103,6 +107,19 @@ public class MainFragment extends Fragment {
                         assert getFragmentManager() != null;
                         getFragmentManager().beginTransaction().replace(R.id.main_frame_layout, profileFragment).commit();
                         titleTV.setText(R.string.profile);
+
+                        rightToolbarBtn = rootView.findViewById(R.id.toolbar_right_icon);
+                        rightToolbarBtn.setVisibility(View.VISIBLE);
+                        rightToolbarBtn.setImageResource(R.drawable.logout);
+                        rightToolbarBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+                                sharedPreferences.edit().clear().apply();
+                                FirebaseAuth.getInstance().signOut();
+                                logout();
+                            }
+                        });
 //                        toolbarMenu.findItem(R.id.add_group_btn).setVisible(false);
                         return true;
                     case R.id.bottom_navigation_item_explore:
@@ -110,12 +127,22 @@ public class MainFragment extends Fragment {
                         getFragmentManager().beginTransaction().replace(R.id.main_frame_layout, exploreFragment).commit();
                         titleTV.setText(R.string.explore);
 //                        toolbarMenu.findItem(R.id.add_group_btn).setVisible(false);
+                        if(rightToolbarBtn!=null) {
+                            rightToolbarBtn.setOnClickListener(null);
+                            rightToolbarBtn.setVisibility(View.GONE);
+                            rightToolbarBtn = null;
+                        }
                         return true;
                     case R.id.bottom_navigation_item_group:
                         assert getFragmentManager() != null;
 //                        toolbarMenu.findItem(R.id.add_group_btn).setVisible(true).setEnabled(true);
                         getFragmentManager().beginTransaction().replace(R.id.main_frame_layout, groupsFragment).commit();
                         titleTV.setText(R.string.app_name);
+                        if(rightToolbarBtn!=null) {
+                            rightToolbarBtn.setOnClickListener(null);
+                            rightToolbarBtn.setVisibility(View.GONE);
+                            rightToolbarBtn = null;
+                        }
                         return true;
                 }
                 return false;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,85 +13,83 @@
         android:orientation="vertical"
         >
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="50dp"
-            android:id="@+id/profile_pic_cv"
-            android:layout_marginTop="25dp"
-            android:layout_gravity="center">
-            <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/default_profile_pic"
-                android:id="@+id/iv_profile_pic"/>
-        </androidx.cardview.widget.CardView>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_margin="15dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="25sp"
-                android:id="@+id/tv_full_name"
-                android:textAlignment="center"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"/>
+            >
 
-            <TextView
+            <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="15sp"
-                android:id="@+id/tv_bio"
-                android:textAlignment="center"
-                android:layout_gravity="center"
-                android:layout_marginTop="5dp"/>
+                app:cardCornerRadius="50dp"
+                android:id="@+id/profile_pic_cv"
+                android:layout_marginTop="25dp"
+                android:layout_gravity="center">
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/default_profile_pic"
+                    android:id="@+id/iv_profile_pic"/>
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="15dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="25sp"
+                    android:id="@+id/tv_full_name"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="15sp"
+                    android:id="@+id/tv_bio"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"/>
+            </LinearLayout>
+
         </LinearLayout>
 
-    </LinearLayout>
 
+        <include layout="@layout/divider"/>
 
-    <include layout="@layout/divider"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="6dp"
-        android:orientation="vertical"
-        android:layout_marginTop="8dp">
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/groups_by_this_user"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:layout_marginHorizontal="6dp"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:id="@+id/recyclerview_groups_by_user"
             android:layout_marginHorizontal="6dp"
-            android:layout_marginTop="5dp">
+            android:orientation="vertical"
+            android:layout_marginTop="8dp">
 
-        </androidx.recyclerview.widget.RecyclerView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/groups_by_this_user"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginHorizontal="6dp"/>
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:id="@+id/recyclerview_groups_by_user"
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginTop="5dp">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </LinearLayout>
     </LinearLayout>
-    <com.google.android.material.button.MaterialButton
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/logout"
-        android:id="@+id/btn_logout"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="10dp"
-        android:backgroundTint="@android:color/holo_red_light"
-        />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
@@ -103,7 +101,9 @@
         android:background="@color/colorPrimary"
         android:backgroundTint="@color/colorPrimary"
         app:tint="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         />
 
 
-</LinearLayout>
+</RelativeLayout>

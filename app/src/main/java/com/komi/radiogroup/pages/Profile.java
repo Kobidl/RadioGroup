@@ -34,9 +34,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.komi.radiogroup.MainFragment.logout;
-
-
 public class Profile extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -76,11 +73,12 @@ public class Profile extends Fragment {
 
     private boolean canTakeImage = false;
     private SharedPreferences sharedPreferences;
-    private boolean isMe = false;
+    private boolean isMe = true;
 
     public Profile(String userID) {
         // Required empty public constructor
         this.userID = userID;
+        this.isMe = false;
     }
 
     public Profile(){
@@ -118,7 +116,7 @@ public class Profile extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
         currentUser = firebaseAuth.getCurrentUser();
 
-        MaterialButton logoutBtn = rootView.findViewById(R.id.btn_logout);
+
         iv_profile_pic = rootView.findViewById(R.id.iv_profile_pic);
         tv_fullName = rootView.findViewById(R.id.tv_full_name);
         tv_bio = rootView.findViewById(R.id.tv_bio);
@@ -133,11 +131,8 @@ public class Profile extends Fragment {
         });
         editProfileBtn.setVisibility(View.GONE);
         // TODO: to allow loading this page for any user we need to pass a uid parameter and set it here
-        isMe = false;
-        if(userID !=null) {
-            logoutBtn.setVisibility(View.GONE);
-        }else {
-            isMe = true;
+
+        if(isMe){
             userID = firebaseAuth.getCurrentUser().getUid();
 
             sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
@@ -145,19 +140,13 @@ public class Profile extends Fragment {
 
 
 
-            logoutBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    sharedPreferences.edit().clear().apply();
-                    firebaseAuth.signOut();
-                    logout();
-                }
-            });
+
             //btn_editProfile = rootView.findViewById(R.id.btn_edit_profile);
 
 
             // If the latest profile info we have saved is of the same user, then load it from shared preferences first
             if (latest_UID != null && latest_UID.matches(firebaseAuth.getCurrentUser().getUid())) {
+                editProfileBtn.setVisibility(View.VISIBLE);
                 String latest_fullname = sharedPreferences.getString(SP_FULLNAME, null);
                 String latest_bio = sharedPreferences.getString(SP_BIO, null);
                 String latest_image = sharedPreferences.getString(SP_IMAGE, null);
@@ -233,27 +222,6 @@ public class Profile extends Fragment {
             }
         });
 
-//        if(isMe) {
-//            //Request image permissions
-//            if (Build.VERSION.SDK_INT >= 23) {
-//                int hasWritePermission = getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-//                if (hasWritePermission != PackageManager.PERMISSION_GRANTED) {
-//                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_PERMISSION_REQUEST);
-//                } else {
-//                    canTakeImage = true;
-//                }
-//            } else {
-//                canTakeImage = true;
-//            }
-//
-//
-//            iv_profile_pic.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    openPickDialog();
-//                }
-//            });
-//        }
         return rootView;
     }
 
