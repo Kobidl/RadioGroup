@@ -17,12 +17,12 @@
         android:orientation="vertical"
         >
 
-        <androidx.cardview.widget.CardView
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:background="@android:color/white"
             android:backgroundTint="@android:color/white"
+            android:orientation="vertical"
             >
             <ImageView
                 android:layout_width="match_parent"
@@ -48,7 +48,7 @@
                 android:textStyle="bold"
                 android:id="@+id/group_ribbon"
                 />
-        </androidx.cardview.widget.CardView>
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
