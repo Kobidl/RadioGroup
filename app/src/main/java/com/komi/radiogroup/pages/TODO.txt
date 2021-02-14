@@ -9,7 +9,7 @@
 
 - Application Icon // Kobi
 
-- Sort Groups explore alpah //Mishel
+- Sort Groups explore alpha //Mishel
 
 - Put good groups and remove junks
 
