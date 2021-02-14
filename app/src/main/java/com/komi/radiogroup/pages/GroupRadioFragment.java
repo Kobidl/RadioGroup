@@ -62,7 +62,7 @@ public class GroupRadioFragment extends Fragment {
 
 
     private static final String GROUP_PARAM = "group";
-    private static final long TIME_CHECK_ACTIVE = 1000 * 30;
+    private static final long TIME_CHECK_ACTIVE = 1000 * 10;
     private final String API_TOKEN_KEY = "AAAAMJ5RH1k:APA91bG5hD4dwWDrFFdK6QUYLmm_sLW1VvfHzwh-wwZGRar93y8ZTcyUAVU_O3pGEeKWqWe4FGgUe0Rs1VD5Vym6mQ9LnHUXhv6K5K1vlMwhCLkrpMIW0P0_6gD7ZLH5DA4u8jhNmkjz";
     private boolean listening = false;
 

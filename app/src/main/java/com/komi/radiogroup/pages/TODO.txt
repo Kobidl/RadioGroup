@@ -7,14 +7,17 @@
 
 - Empty pages // Kobi
 
-- Application Icon
+- Application Icon // Kobi
 
-- Sort Groups explore alpah
+- Sort Groups explore alpah //Mishel
 
 - Put good groups and remove junks
 
-- save user details in main container
+- save user details in main container // Mishel
 
-- Admin localization
+- Admin localization // Kobi
 
-- Notification - make prettier
+- Notification - make prettier // Kobi
+
+- Show active users // Kobi
+- Reduce timers // Kobi
