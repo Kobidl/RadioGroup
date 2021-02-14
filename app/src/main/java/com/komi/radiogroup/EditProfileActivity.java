@@ -110,7 +110,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         newProfileName.setText(user.getFullname());
         newProfileBio.setText(user.getBio());
-        if(user.getProfilePicturePath()!=null) {
+        if(user.getProfilePicturePath()!=null && !user.getProfilePicturePath().isEmpty()) {
             Glide.with(this).load(user.getProfilePicturePath()).into(imageView);
             uploadImageTv.setVisibility(View.GONE);
         }
