@@ -162,7 +162,7 @@ public class FirebaseDatabaseHelper {
     }
 
 
-    public void setGroupsByAdminIDListener(final String UID, final OnGroupsDataChangedCallback callback) {
+    public void setGroupsByAdminIDListener(final String UID, final boolean withPrivate , final OnGroupsDataChangedCallback callback) {
 
         adminGroupsListenerRef = firebaseDatabase.getReference().child(DB_GROUPS);
         adminGroupsListener = new ValueEventListener() {
@@ -171,8 +171,15 @@ public class FirebaseDatabaseHelper {
                 List<Group> groups = new ArrayList<>();
                 for (DataSnapshot snapshot1 : snapshot.getChildren()){
                     Group temp = snapshot1.getValue(Group.class);
-                    if(temp.getAdminID().matches(UID) && !temp.isPrivate()){
-                        groups.add(temp);
+                    if(withPrivate){
+                        if(temp.getAdminID().matches(UID)){
+                            groups.add(temp);
+                        }
+                    }
+                    else {
+                        if (temp.getAdminID().matches(UID) && !temp.isPrivate()) {
+                            groups.add(temp);
+                        }
                     }
                 }
                 callback.onDataReceived(groups);
