@@ -37,10 +37,7 @@
     <string name="stop_listening">Stop Listening</string>
     <string name="you">You</string>
     <string name="title_activity_group_details">GroupDetails</string>
-    <!--
-    This string is used for square devices and overridden by hello_world in
-    values-round/strings.xml for round devices.
-    -->
+
     <string name="hello_world">Hello Square World!</string>
     <string name="name">Name</string>
     <string name="Members">Members</string>
@@ -61,7 +58,7 @@
     <string name="join_live">Join Live Air</string>
     <string name="click_here_go_live">* Press the button in order to start listening to the channel</string>
     <string name="click_and_hold">Press and hold the button in order to start speaking</string>
-    <string name="click_here_leave_channel">Press the button to leave the channel and go offline</string>
+    <string name="click_here_leave_channel">Press the button to go offline</string>
     <string name="privacy">Privacy</string>
     <string name="private_str">Private</string>
     <string name="public_str">Public</string>
@@ -100,8 +97,8 @@
     <string name="home">Home</string>
     <string name="current_active_users">Active Users:</string>
     <string name="no_results">No Results Found</string>
-    <string name="open_new_channel">No Channels. Create or join one from the explore</string>
-    <string name="leave_channel">Leave Channel</string>
+    <string name="open_new_channel">No Groups. Create or join one from the explore</string>
+    <string name="leave_channel">Leave Group</string>
     <string name="admin">Admin</string>
     <string name="me">Me</string>
     <string name="are_you_sure_logout">Are you sure you want to logout?</string>

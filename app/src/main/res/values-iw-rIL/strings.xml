@@ -17,7 +17,6 @@
     <string name="cancel">ביטול</string>
     <string name="play">נגן</string>
     <string name="stop">עצור</string>
-    <string name="hello_blank_fragment">שלום</string>
     <string name="welcome">ברוך הבא</string>
     <string name="signin">התחברות</string>
     <string name="email">אימייל</string>
@@ -95,12 +94,13 @@
     <string name="please_fill_fields">יש למלא את כל השדות</string>
     <string name="group_desc">תיאור הקבוצה</string>
     <string name="home">בית</string>
-    <string name="current_active_users">Active Users:</string>
-    <string name="no_results">No Results Found</string>
-    <string name="open_new_channel">No Channels. Create or join one from the explore</string>
-    <string name="leave_channel">Leave Channel</string>
-    <string name="admin">Admin</string>
-    <string name="are_you_sure_logout">Logout</string>
-
+    <string name="current_active_users">יוזרים פעילים:</string>
+    <string name="no_results">אין תוצאות</string>
+    <string name="open_new_channel">אין קבוצות. צורה חדשה או הצטרף לאחת מהאקספלור</string>
+    <string name="leave_channel">עזוב את הקבוצה</string>
+    <string name="admin">מנהל</string>
+    <string name="are_you_sure_logout">התנתק</string>
+    <string name="me">אני</string>
+    <string name="no_permissions">עליך לאפשר הרשאות על מנת להתחיל להקליט</string>
 
 </resources>
