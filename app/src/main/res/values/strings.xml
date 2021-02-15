@@ -75,7 +75,7 @@
     <string name="enter_message">Enter message...</string>
     <string name="send">Send</string>
     <string name="edit_profile">Edit profile</string>
-    <string name="groups_by_this_user">Groups by this user</string>
+    <string name="groups_by_this_user">User Groups Created</string>
     <string name="private_group">Private Group</string>
     <string name="message_content">Message content</string>
     <string name="bio">Bio</string>
