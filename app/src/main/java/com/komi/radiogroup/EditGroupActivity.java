@@ -54,6 +54,7 @@ public class EditGroupActivity extends AppCompatActivity {
     final int CAMERA_REQUEST = 1;
     final int PICK_IMAGE = 2;
     boolean canSave;
+    private boolean uploadImage = false;
     ImageView imageView;
     CircularProgressButton saveBtn;
     File file;
@@ -201,10 +202,10 @@ public class EditGroupActivity extends AppCompatActivity {
 
     //Determine if save button enabled
     private void checkCanSave() {
-        if(!canSave && group.getGroupName().length() >0){
+        if(!canSave && group.getGroupName().length() >0&& !uploadImage){
             saveBtn.setEnabled(true);
             canSave = true;
-        }else if(canSave &&  group.getGroupName().length() == 0){
+        }else if(canSave &&  (group.getGroupName().length() == 0 || uploadImage)){
             canSave = false;
             saveBtn.setEnabled(false);
         }
@@ -215,7 +216,6 @@ public class EditGroupActivity extends AppCompatActivity {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.choose_image_dialog);
-        saveBtn.setEnabled(false);
 
         dialog.setOnKeyListener(new Dialog.OnKeyListener() {
 
@@ -224,7 +224,6 @@ public class EditGroupActivity extends AppCompatActivity {
                                  KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
                     dialog.dismiss();
-                    saveBtn.setEnabled(true);
                 }
                 return true;
             }
@@ -235,7 +234,7 @@ public class EditGroupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                saveBtn.setEnabled(true);
+
             }
         });
 
@@ -302,6 +301,8 @@ public class EditGroupActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK) {
+            uploadImage = true;
+            checkCanSave();
             if (requestCode == CAMERA_REQUEST) {
 //                imageView.setImageDrawable(Drawable.createFromPath(file.getAbsolutePath()));
             }
@@ -329,7 +330,8 @@ public class EditGroupActivity extends AppCompatActivity {
                                 public void onSuccess(Uri uri) {
                                     String url = uri.toString();
                                     group.setProfilePicturePath(url);
-                                    saveBtn.setEnabled(true);
+                                    uploadImage = false;
+                                    checkCanSave();
                                 }
                             });
                         }
