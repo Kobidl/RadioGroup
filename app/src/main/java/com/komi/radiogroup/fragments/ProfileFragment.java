@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -163,7 +164,7 @@ public class ProfileFragment extends Fragment {
         // Initializing user's Groups recyclerview and setting Listeners for data
         groupsRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview_groups_by_user);
         groupsRecyclerView.setHasFixedSize(true);
-        groupsRecyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.HORIZONTAL, false));
+        groupsRecyclerView.setLayoutManager(new GridLayoutManager(rootView.getContext(), 2));
         adapter = new UserGroupsIsAdminAdapter(groupsByUser);
         adapter.setListener(new UserGroupsIsAdminAdapter.UserGroupListener() {
             @Override
