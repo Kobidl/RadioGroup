@@ -45,7 +45,6 @@ public class ExploreFragment extends Fragment {
 
 
     public ExploreFragment() {
-        // Required empty public constructor
     }
 
     public static ExploreFragment newInstance(String param1, String param2) {
@@ -98,7 +97,6 @@ public class ExploreFragment extends Fragment {
         // Setting the group listener
         setListenerWithSubstring(""); //Empty substring for init so we get all groups
 
-        // TODO: set a listener that will search on user input and get rid of the button
         et_search = rootView.findViewById(R.id.et_search);
         et_search.addTextChangedListener(new TextWatcher() {
             @Override

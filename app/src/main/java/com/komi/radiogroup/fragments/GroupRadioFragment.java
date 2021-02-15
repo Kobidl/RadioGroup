@@ -136,7 +136,7 @@ public class GroupRadioFragment extends Fragment {
 
 
 
-        if(listening){
+        if(listening){//Init the page if listening
             mAudioRecordButton.setVisibility(View.VISIBLE);
             startStopListening.setText(R.string.stop_listening);
             Objects.requireNonNull(getActivity()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -148,7 +148,6 @@ public class GroupRadioFragment extends Fragment {
             statusAnimation.start();
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) statusImage.getLayoutParams();
             params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-
         }
 
         registerReceiver();
@@ -201,24 +200,31 @@ public class GroupRadioFragment extends Fragment {
     }
 
     private void playMusic(){
+        //tops old ones
         stopMusic();
+
+        //Starting new channel service
+        Intent intent = new Intent(rootView.getContext(), ChannelPlayerService.class);
+        intent.putExtra("action","start_listening");
+        intent.putExtra("user_id",userId);
+        intent.putExtra("group",group);
+        rootView.getContext().startService(intent);
+
+        //Change layout view
         statusImage.setImageResource(R.drawable.online_animation);
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) statusImage.getLayoutParams();
         params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         statusAnimation = (AnimationDrawable) statusImage.getDrawable();
         statusAnimation.start();
         mAudioRecordButton.setVisibility(View.VISIBLE);
-        Objects.requireNonNull(getActivity()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        Intent intent = new Intent(rootView.getContext(), ChannelPlayerService.class);
-        intent.putExtra("action","start_listening");
-        intent.putExtra("user_id",userId);
-        intent.putExtra("group",group);
-        rootView.getContext().startService(intent);
+
         startStopListening.setText(R.string.stop_listening);
         startStopListening.setBackgroundColor(rootView.getContext().getColor(R.color.red));
         startBtnHelperTV.setText(R.string.click_here_leave_channel);
         recordHelperTV.setVisibility(View.VISIBLE);
 
+        //Prevent screen turn off
+        Objects.requireNonNull(getActivity()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     private void stopMusic(){
@@ -230,11 +236,13 @@ public class GroupRadioFragment extends Fragment {
             startStopListening.setText(R.string.start_listening);
             Intent intent = new Intent(rootView.getContext(), ChannelPlayerService.class);
             rootView.getContext().stopService(intent);
-            Objects.requireNonNull(getActivity()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             startStopListening.setBackgroundColor(rootView.getContext().getColor(R.color.colorPrimary));
             recordHelperTV.setVisibility(View.GONE);
             startBtnHelperTV.setText(R.string.click_here_go_live);
             startCheckingActiveUsers();
+
+            //Remove preventing screen off
+            Objects.requireNonNull(getActivity()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }catch (Exception e){
 
         }
@@ -245,7 +253,7 @@ public class GroupRadioFragment extends Fragment {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    private void registerReceiver() {
+    private void registerReceiver() {//Getting commands from notif
         IntentFilter filter = new IntentFilter(PLAYER_BROADCAST);
         broadcastReceiver = new BroadcastReceiver() {
             @Override

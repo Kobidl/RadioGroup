@@ -78,8 +78,6 @@ public class FirebaseDatabaseHelper implements FirebaseDatabaseHelperInterface {
         reference.child(groupMessage.getGroup_ID()).child(groupMessage.getMsg_ID()).setValue(groupMessage);
     }
 
-
-
     // Get methods
     public void setUserByUidListener(final String UID, final OnUserDataChangedCallback callback) {
 

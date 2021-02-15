@@ -89,8 +89,6 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<GroupMessageAdapte
         }
         holder.tv_body.setText(groupMessage.getBody());
         holder.tv_time.setText(getDate(groupMessage.getTimeInMillis()));
-
-
     }
 
     @Override

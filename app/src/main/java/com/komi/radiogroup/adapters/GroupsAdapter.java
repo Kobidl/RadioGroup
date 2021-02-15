@@ -82,8 +82,8 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewH
     public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
         Group group = groups.get(position);
         holder.name.setText(group.getGroupName());
-        Integer membersSize = group.getUserMap().size();
-        holder.members.setText(membersSize.toString() + " " + context.getResources().getString(R.string.members));
+        int membersSize = group.getUserMap().size();
+        holder.members.setText(membersSize + " " + context.getResources().getString(R.string.members));
         holder.descTV.setText(group.getGroupDescription());
         holder.privacyIV.setImageResource(context.getResources().getIdentifier(group.isPrivate() ? "ic_private" : "ic_public", "drawable", context.getPackageName()));
         holder.privacyTV.setText(context.getResources().getIdentifier(group.isPrivate() ? "private_str" : "public_str", "string", context.getPackageName()));

@@ -92,9 +92,8 @@ public class JoinGroupFragment extends Fragment {
         if(group.getProfilePicturePath() != null) {
             Glide.with(imageView).load(group.getProfilePicturePath()).into(imageView);
         }else{
-            //todo: show empty image
+            imageView.setImageResource(R.drawable.ic_empty_image);
         }
-
 
         TextView nameTV = rootView.findViewById(R.id.join_group_name);
         nameTV.setText(group.getGroupName());
@@ -104,10 +103,6 @@ public class JoinGroupFragment extends Fragment {
         membersTV.setText(getResources().getString(R.string.total) + ":" + group.getUserMap().size());
 
         final FirebaseDatabaseHelper firebaseDB = FirebaseDatabaseHelper.getInstance();
-
-        SharedPreferences sharedPreferences = rootView.getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-        final String userId = sharedPreferences.getString(SP_UID, null);
-        final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
         final CircularProgressButton joinBtn = (CircularProgressButton) rootView.findViewById(R.id.join_group_btn);
         joinBtn.setOnClickListener(new View.OnClickListener() {

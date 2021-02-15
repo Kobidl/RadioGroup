@@ -95,6 +95,7 @@ public class GroupsFragment extends Fragment {
         noResultsTV.setText(R.string.open_new_channel);
         noResultsView.setVisibility(View.GONE);
 
+        //Getting groups from Firebase
         FirebaseDatabaseHelper.getInstance().setSortedGroupsByUIDListener(FirebaseAuth.getInstance().getCurrentUser().getUid(), new FirebaseDatabaseHelper.OnGroupsDataChangedCallback() {
             @Override
             public void onDataReceived(List<Group> groups) {

@@ -1,7 +1,0 @@
-
-- UI //God save us
-
-- Handle not allowing recording permissions - notif + btn in group
-
-- Localization // Mishel
-י

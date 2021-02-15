@@ -90,12 +90,11 @@ public class MainFragment extends Fragment {
         backBtn.setVisibility(View.GONE);
 
         bottomNavigationView = rootView.findViewById(R.id.bottom_navigation_view);
-        //bottomNavigationView.setSelectedItemId(R.id.bottom_navigation_item_explore);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
-                    case R.id.bottom_navigation_item_profile:
+                    case R.id.bottom_navigation_item_profile: //Case profile
                         assert getFragmentManager() != null;
                         getFragmentManager().beginTransaction().replace(R.id.main_frame_layout, profileFragment).commit();
                         titleTV.setText(R.string.profile);
@@ -109,9 +108,8 @@ public class MainFragment extends Fragment {
                                logout();
                             }
                         });
-//                        toolbarMenu.findItem(R.id.add_group_btn).setVisible(false);
                         return true;
-                    case R.id.bottom_navigation_item_explore:
+                    case R.id.bottom_navigation_item_explore: //Case Explore
                         assert getFragmentManager() != null;
                         getFragmentManager().beginTransaction().replace(R.id.main_frame_layout, exploreFragment).commit();
                         titleTV.setText(R.string.explore);
@@ -125,9 +123,8 @@ public class MainFragment extends Fragment {
                             }
                         });
                         return true;
-                    case R.id.bottom_navigation_item_group:
+                    case R.id.bottom_navigation_item_group: //Case My Groups
                         assert getFragmentManager() != null;
-//                        toolbarMenu.findItem(R.id.add_group_btn).setVisible(true).setEnabled(true);
                         getFragmentManager().beginTransaction().replace(R.id.main_frame_layout, groupsFragment).commit();
                         titleTV.setText(R.string.app_name);
                         if(rightToolbarBtn!=null) {
@@ -168,7 +165,6 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
                 // Do nothing
                 dialog.dismiss();
             }

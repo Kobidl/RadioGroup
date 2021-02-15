@@ -47,21 +47,12 @@ public class ProfileFragment extends Fragment {
     private static final String SP_BIO = "latest_bio";
     private static final String SP_IMAGE = "latest_image";
 
-    final int WRITE_PERMISSION_REQUEST = 1;
-    final int CAMERA_REQUEST = 1;
-    final int PICK_IMAGE = 2;
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     String userID;
     FirebaseAuth firebaseAuth;
     FirebaseUser currentUser;
     User user;
     List<Group> groupsByUser = new ArrayList<>();
     File file;
-    private StorageReference mStorageRef;
 
     View rootView;
     ImageView iv_profile_pic;
@@ -71,7 +62,6 @@ public class ProfileFragment extends Fragment {
     RecyclerView groupsRecyclerView;
     UserGroupsIsAdminAdapter adapter;
 
-    private boolean canTakeImage = false;
     private SharedPreferences sharedPreferences;
     private boolean isMe = true;
 
@@ -82,7 +72,6 @@ public class ProfileFragment extends Fragment {
     ProfileFragmentListener listener;
 
     public ProfileFragment(String userID,ProfileFragmentListener listener) {
-        // Required empty public constructor
         this.userID = userID;
         this.isMe = false;
         this.listener = listener;
@@ -92,22 +81,11 @@ public class ProfileFragment extends Fragment {
     }
 
 
-//    public static Profile newInstance(String param1, String param2) {
-//        Profile fragment = new Profile();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
 
@@ -116,7 +94,7 @@ public class ProfileFragment extends Fragment {
                              final Bundle savedInstanceState) {
 
         //Getting storage instance
-        mStorageRef = FirebaseStorage.getInstance().getReference();
+        StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
 
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_profile, container, false);
@@ -183,7 +161,7 @@ public class ProfileFragment extends Fragment {
         });
         groupsRecyclerView.setAdapter(adapter);
 
-        isMe = userID == currentUser.getUid();
+        isMe = userID.equals(currentUser.getUid());
 
         FirebaseDatabaseHelper.getInstance().setGroupsByAdminIDListener(userID,isMe, new FirebaseDatabaseHelper.OnGroupsDataChangedCallback() {
             @Override

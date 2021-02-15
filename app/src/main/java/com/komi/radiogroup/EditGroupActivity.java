@@ -210,16 +210,6 @@ public class EditGroupActivity extends AppCompatActivity {
         }
     }
 
-
-//    /* If back button pressed on toolbar */
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        if(item.getItemId() == android.R.id.home){
-//            finish();
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
-
     private void openPickDialog() {
         final Dialog dialog = new Dialog(this, R.style.WideDialog);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
