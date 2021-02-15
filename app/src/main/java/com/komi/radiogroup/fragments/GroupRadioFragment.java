@@ -125,9 +125,11 @@ public class GroupRadioFragment extends Fragment {
                 listening = !listening;
                 if(listening) {
                     playMusic();
+                    getActiveUsers();
                 }
                 else {
                     stopMusic();
+                    getActiveUsers();
                 }
             }
         });
@@ -151,12 +153,12 @@ public class GroupRadioFragment extends Fragment {
 
         registerReceiver();
 
-        getActiveUsers();
+        startCheckingActiveUsers();
 
         return rootView;
     }
 
-    private void getActiveUsers() {
+    private void startCheckingActiveUsers(){
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -166,14 +168,27 @@ public class GroupRadioFragment extends Fragment {
                         radioHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                setActiveUsers(number);
+                                getActiveUsers();
                             }
                         });
                     }
                 });
             }
         }, 0,TIME_CHECK_ACTIVE);
+    }
 
+    private void getActiveUsers() {
+        FirebaseDatabaseHelper.getInstance().getActiveUsers(group.getGroupID(), new FirebaseDatabaseHelper.OnUsersListeningDataChangedCallback() {
+            @Override
+            public void OnDataReceived(final int number) {
+                radioHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        setActiveUsers(number);
+                    }
+                });
+            }
+        });
     }
 
     private void setActiveUsers(int num) {
@@ -194,7 +209,6 @@ public class GroupRadioFragment extends Fragment {
         statusAnimation.start();
         mAudioRecordButton.setVisibility(View.VISIBLE);
         Objects.requireNonNull(getActivity()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        setActiveUsers(activeUsers+2);
         Intent intent = new Intent(rootView.getContext(), ChannelPlayerService.class);
         intent.putExtra("action","start_listening");
         intent.putExtra("user_id",userId);
@@ -220,7 +234,7 @@ public class GroupRadioFragment extends Fragment {
             startStopListening.setBackgroundColor(rootView.getContext().getColor(R.color.colorPrimary));
             recordHelperTV.setVisibility(View.GONE);
             startBtnHelperTV.setText(R.string.click_here_go_live);
-            setActiveUsers(activeUsers-1);
+            startCheckingActiveUsers();
         }catch (Exception e){
 
         }
@@ -240,6 +254,7 @@ public class GroupRadioFragment extends Fragment {
                 switch (command){
                     case "closed":
                         stopMusic();
+                        getActiveUsers();
                         break;
                     case "start_playing":
                         mAudioRecordButton.setEnabled(false);
