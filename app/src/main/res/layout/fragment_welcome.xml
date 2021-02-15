@@ -25,12 +25,13 @@
         android:layout_margin="15dp"
         android:textColor="@color/white"
         android:textStyle="bold"
+        android:fontFamily="@font/lobster"
         />
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:src="@drawable/ic_baseline_radio_24"
+        android:layout_height="130dp"
+        android:src="@drawable/app_icon_white"
         android:scaleType="fitCenter"
         android:layout_margin="10dp"
         />

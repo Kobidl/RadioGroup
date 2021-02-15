@@ -90,7 +90,7 @@ public class ChannelPlayerService extends Service implements MediaPlayer.OnCompl
 
         builder.setCustomContentView(remoteViews);
 
-        builder.setSmallIcon(android.R.drawable.ic_media_play);
+        builder.setSmallIcon(R.drawable.app_icon_white);
 
         startForeground(NOTIF_ID, builder.build());
 

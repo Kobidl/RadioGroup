@@ -11,6 +11,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.komi.radiogroup.interfaces.FirebaseDatabaseHelperInterface;
 import com.komi.structures.Group;
 import com.komi.structures.GroupMessage;
 import com.komi.structures.ListeningUser;
@@ -23,7 +24,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-public class FirebaseDatabaseHelper {
+public class FirebaseDatabaseHelper implements FirebaseDatabaseHelperInterface {
 
     public static final String DB_USERS = "users_DB";
     public static final String DB_GROUPS = "groups_DB";
@@ -49,35 +50,6 @@ public class FirebaseDatabaseHelper {
     public FirebaseDatabaseHelper() {
         firebaseDatabase = FirebaseDatabase.getInstance();
 
-    }
-
-    // Interfaces used for callbacks
-    public interface OnExploreDataChangedCallback{
-        void onDataReceived(List<Group> groups);
-    }
-
-    public interface OnGroupsDataChangedCallback{
-        void onDataReceived(List<Group> groups);
-    }
-
-    public interface OnUserDataChangedCallback{
-        void onDataReceived(User user);
-    }
-
-    public interface OnGroupDataChangedCallback{
-        void onDataReceived(Group group);
-    }
-
-    public interface GetUserCallback{
-        void OnDataReceived(User user);
-    }
-
-    public interface OnUsersInGroupDataChangedCallback{
-        void OnDataReceived(List<User> users);
-    }
-
-    public interface OnUsersListeningDataChangedCallback{
-        void OnDataReceived(int integer);
     }
 
     // Add methods
