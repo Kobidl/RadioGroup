@@ -21,9 +21,11 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
 
     private List<User> users = new ArrayList<>();
 
-    public UsersAdapter(List<User> users){
+    public UsersAdapter(List<User> users,String groupAdmin){
         this.users = users;
+        this.groupAdmin = groupAdmin;
     }
+    public String groupAdmin;
 
     public interface UsersListener {
         void onClick(int position);
@@ -39,6 +41,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
         TextView name;
         ImageView imageView;
         TextView bio;
+        TextView adminTV;
 
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -54,6 +57,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
                     }
                 }
             });
+            adminTV = itemView.findViewById(R.id.user_card_admin);
         }
     }
 
@@ -82,6 +86,11 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UserViewHold
             }
         }
 
+        if(user.getUID().equals(groupAdmin)){
+            holder.adminTV.setVisibility(View.VISIBLE);
+        }else{
+            holder.adminTV.setVisibility(View.GONE);
+        }
     }
 
     @Override

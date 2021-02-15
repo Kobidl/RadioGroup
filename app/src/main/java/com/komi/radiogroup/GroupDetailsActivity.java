@@ -93,7 +93,7 @@ public class GroupDetailsActivity extends AppCompatActivity {
 
         users = new ArrayList<>();
 
-        usersAdapter = new UsersAdapter(users);
+        usersAdapter = new UsersAdapter(users,group.getAdminID());
         usersAdapter.setListener(new UsersAdapter.UsersListener() {
             @Override
             public void onClick(int position) {
