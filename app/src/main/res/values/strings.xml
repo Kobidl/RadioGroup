@@ -105,5 +105,6 @@
     <string name="admin">Admin</string>
     <string name="me">Me</string>
     <string name="are_you_sure_logout">Are you sure you want to logout?</string>
+    <string name="no_permissions">You need to grant permissions in order to start recording</string>
 
 </resources>

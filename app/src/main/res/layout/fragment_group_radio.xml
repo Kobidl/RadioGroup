@@ -61,6 +61,7 @@
             android:layout_marginTop="10dp"
             android:id="@+id/record_btn_helper"
             android:visibility="gone"
+            android:gravity="center"
             />
     </RelativeLayout>
 <LinearLayout
@@ -80,6 +81,7 @@
         android:textColor="@color/light_text"
         android:lines="1"
         android:id="@+id/join_group_btn_helper"
+        android:gravity="center"
         />
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.MaterialComponents.Button.UnelevatedButton"

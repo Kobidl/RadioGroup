@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 
@@ -23,6 +24,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.komi.radiogroup.R;
 import com.komi.radiogroup.audio_recorder.AudioListener;
@@ -47,6 +49,7 @@ public class GroupRadioFragment extends Fragment {
 
 
     private static final long TIME_CHECK_ACTIVE = 1000 * 5;
+    private static final int WRITE_PERMISSION_REQUEST = 1;
     private boolean listening = false;
 
     private AudioRecordButton mAudioRecordButton;
@@ -86,9 +89,7 @@ public class GroupRadioFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_group_radio, container, false);
 
-        ActivityCompat.requestPermissions(getActivity(), new String[]{WRITE_EXTERNAL_STORAGE, RECORD_AUDIO, READ_EXTERNAL_STORAGE},0);
-
-        ActivityCompat.requestPermissions(getActivity(), new String[]{WRITE_EXTERNAL_STORAGE}, 0);
+        requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE, RECORD_AUDIO, READ_EXTERNAL_STORAGE}, WRITE_PERMISSION_REQUEST);
 
         mAudioRecordButton = (AudioRecordButton) rootView.findViewById(R.id.group_audio_record_button);
 
@@ -251,6 +252,15 @@ public class GroupRadioFragment extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == WRITE_PERMISSION_REQUEST){
+            for(int result : grantResults){
+                if(result != PackageManager.PERMISSION_GRANTED ){
+                    mAudioRecordButton.setEnabled(false);
+                    if(recordHelperTV!=null)
+                        recordHelperTV.setText(R.string.no_permissions);
+                }
+            }
+        }
     }
 
     private void registerReceiver() {//Getting commands from notif
