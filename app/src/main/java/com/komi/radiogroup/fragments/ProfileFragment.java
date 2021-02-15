@@ -194,7 +194,8 @@ public class ProfileFragment extends Fragment {
 
                     // Saving latest profile info to shared preferences
                     if(isMe) {
-                        sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+
+                        sharedPreferences = rootView.getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString(SP_UID, firebaseAuth.getCurrentUser().getUid());
                         editor.putString(SP_FULLNAME, user.getFullname());
