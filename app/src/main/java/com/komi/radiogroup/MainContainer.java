@@ -33,8 +33,6 @@ public class MainContainer extends AppCompatActivity implements WelcomeFragment.
     private static final String SP_IMAGE = "latest_image";
 
     private FirebaseAuth firebaseAuth;
-    WelcomeFragment welcomeFragment = new WelcomeFragment();
-    MainFragment mainFragment = new MainFragment();
 
     FirebaseUser currentUser;
 
@@ -75,8 +73,10 @@ public class MainContainer extends AppCompatActivity implements WelcomeFragment.
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
         if (currentUser == null) {
+            WelcomeFragment welcomeFragment = new WelcomeFragment();
             getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, welcomeFragment).commit();
         } else {
+            MainFragment mainFragment = new MainFragment();
             getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, mainFragment).commit();
         }
 
@@ -88,6 +88,7 @@ public class MainContainer extends AppCompatActivity implements WelcomeFragment.
     public void onRegister(String name) {
         currentUser = firebaseAuth.getCurrentUser();
         updateDisplayName(name);
+        MainFragment mainFragment = new MainFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, mainFragment).commit();
 
         // Adding new user to database
@@ -102,6 +103,7 @@ public class MainContainer extends AppCompatActivity implements WelcomeFragment.
 
     @Override
     public void onLogin() {
+        MainFragment mainFragment = new MainFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, mainFragment).commit();
         currentUser = firebaseAuth.getCurrentUser();
         fetchUser();
@@ -137,6 +139,7 @@ public class MainContainer extends AppCompatActivity implements WelcomeFragment.
 
     @Override
     public void onLogout() {
+        WelcomeFragment welcomeFragment = new WelcomeFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, welcomeFragment).commit();
     }
 
@@ -156,12 +159,5 @@ public class MainContainer extends AppCompatActivity implements WelcomeFragment.
             }
         });
     }
-
-    //    private void logoutUser() {
-//        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-//        if (firebaseUser != null)
-//            firebaseAuth.signOut();
-//        onLogout();
-//    }
 
 }

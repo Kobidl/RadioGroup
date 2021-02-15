@@ -1,7 +1,9 @@
 package com.komi.radiogroup.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -88,7 +90,7 @@ public class MainFragment extends Fragment {
         backBtn.setVisibility(View.GONE);
 
         bottomNavigationView = rootView.findViewById(R.id.bottom_navigation_view);
-        bottomNavigationView.setSelectedItemId(R.id.bottom_navigation_item_profile);
+        //bottomNavigationView.setSelectedItemId(R.id.bottom_navigation_item_explore);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -104,10 +106,7 @@ public class MainFragment extends Fragment {
                         rightToolbarBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
-                                sharedPreferences.edit().clear().apply();
-                                FirebaseAuth.getInstance().signOut();
-                                logout();
+                               logout();
                             }
                         });
 //                        toolbarMenu.findItem(R.id.add_group_btn).setVisible(false);
@@ -145,9 +144,38 @@ public class MainFragment extends Fragment {
         return rootView;
     }
 
-    public static void logout(){
-        if(callback!=null)
-            callback.onLogout();
+    public void logout(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        builder.setTitle(getResources().getString(R.string.logout));
+        builder.setMessage(getResources().getString(R.string.are_you_sure_logout));
+
+        builder.setNegativeButton("YES", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                // Do nothing but close the dialog
+                SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+                sharedPreferences.edit().clear().apply();
+                FirebaseAuth.getInstance().signOut();
+                if(callback!=null)
+                    callback.onLogout();
+                dialog.dismiss();
+            }
+        });
+
+        builder.setPositiveButton("NO", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                // Do nothing
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     @Override

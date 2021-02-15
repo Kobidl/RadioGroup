@@ -106,5 +106,6 @@
     <string name="leave_channel">Leave Channel</string>
     <string name="admin">Admin</string>
     <string name="me">Me</string>
+    <string name="are_you_sure_logout">Are you sure you want to logout?</string>
 
 </resources>
