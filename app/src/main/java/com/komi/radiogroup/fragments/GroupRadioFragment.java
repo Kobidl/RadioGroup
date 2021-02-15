@@ -193,7 +193,11 @@ public class GroupRadioFragment extends Fragment {
 
     private void setActiveUsers(int num) {
         activeUsers = num;
-        activeUsersTV.setText(getResources().getString(R.string.current_active_users) + "  " + num);
+        try {
+            if (getActivity() != null) {
+                activeUsersTV.setText(getResources().getString(R.string.current_active_users) + "  " + num);
+            }
+        }catch (Exception e){}
     }
 
     private void sendMessage(RecordingItem recordingItem) {

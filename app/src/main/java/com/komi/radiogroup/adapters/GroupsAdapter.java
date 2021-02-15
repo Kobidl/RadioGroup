@@ -18,6 +18,7 @@ import com.komi.structures.Group;
 import com.skydoves.androidribbon.RibbonView;
 
 import java.util.List;
+import java.util.Locale;
 
 public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewHolder> {
 
@@ -25,6 +26,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewH
     private GroupListener listener;
     private final Context context;
     private final String userId;
+    private boolean isRTL;
 
     public interface GroupListener {
         void onClick(int position,View view);
@@ -38,6 +40,13 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewH
         this.context = context;
         this.groups = groups;
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        this.isRTL = isRTL(Locale.getDefault());
+    }
+
+    private static boolean isRTL(Locale locale) {
+        final int directionality = Character.getDirectionality(locale.getDisplayName().charAt(0));
+        return directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT ||
+                directionality == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC;
     }
 
     public class GroupViewHolder extends RecyclerView.ViewHolder{
@@ -67,6 +76,8 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewH
                     }
                 }
             });
+
+
 
         }
     }
@@ -101,7 +112,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewH
             holder.imageView.setImageResource(R.drawable.ic_baseline_image_24);
             holder.imageView.setBackgroundColor(Color.parseColor("#dddddd"));
         }
-        if(userId.equals(group.getAdminID())){
+        if(!isRTL && userId.equals(group.getAdminID())){
             holder.ribbonView.setVisibility(View.VISIBLE);
         }else{
             holder.ribbonView.setVisibility(View.GONE);
