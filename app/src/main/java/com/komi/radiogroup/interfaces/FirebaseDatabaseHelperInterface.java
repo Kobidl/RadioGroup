@@ -63,7 +63,7 @@ public interface FirebaseDatabaseHelperInterface {
 
     void removeExploreListener();
 
-    void setUsersInGroupListener(final List<String> userIDs, final OnUsersInGroupDataChangedCallback callback);
+    void setUsersInGroupListener(final List<String> userIDs, String adminID ,final OnUsersInGroupDataChangedCallback callback);
 
     void removeUsersInGroupListener();
 

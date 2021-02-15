@@ -107,7 +107,7 @@ public class GroupDetailsActivity extends AppCompatActivity {
         recyclerView.setNestedScrollingEnabled(false);
 
         List<String> keys = new ArrayList<String>(group.getUserMap().keySet());
-        FirebaseDatabaseHelper.getInstance().setUsersInGroupListener(keys, new FirebaseDatabaseHelper.OnUsersInGroupDataChangedCallback() {
+        FirebaseDatabaseHelper.getInstance().setUsersInGroupListener(keys, group.getAdminID() ,new FirebaseDatabaseHelper.OnUsersInGroupDataChangedCallback() {
             @Override
             public void OnDataReceived(List<User> newUsers) {
                 users = newUsers;
