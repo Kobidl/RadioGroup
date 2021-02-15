@@ -74,10 +74,17 @@ public class ProfileFragment extends Fragment {
     private SharedPreferences sharedPreferences;
     private boolean isMe = true;
 
-    public ProfileFragment(String userID) {
+    public interface ProfileFragmentListener{
+        void onEnterGroup();
+    }
+
+    ProfileFragmentListener listener;
+
+    public ProfileFragment(String userID,ProfileFragmentListener listener) {
         // Required empty public constructor
         this.userID = userID;
         this.isMe = false;
+        this.listener = listener;
     }
 
     public ProfileFragment(){
@@ -129,18 +136,12 @@ public class ProfileFragment extends Fragment {
             }
         });
         editProfileBtn.setVisibility(View.GONE);
-        // TODO: to allow loading this page for any user we need to pass a uid parameter and set it here
 
         if(isMe){
             userID = firebaseAuth.getCurrentUser().getUid();
 
             sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
             String latest_UID = sharedPreferences.getString(SP_UID, null);
-
-
-
-
-            //btn_editProfile = rootView.findViewById(R.id.btn_edit_profile);
 
 
             // If the latest profile info we have saved is of the same user, then load it from shared preferences first
@@ -174,6 +175,9 @@ public class ProfileFragment extends Fragment {
                 Intent intent = new Intent(getContext(), GroupActivity.class);
                 intent.putExtra("group",group);
                 startActivity(intent);
+                if(listener!=null){
+                    listener.onEnterGroup();
+                }
             }
         });
         groupsRecyclerView.setAdapter(adapter);

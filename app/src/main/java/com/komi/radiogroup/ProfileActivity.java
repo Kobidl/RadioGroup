@@ -29,7 +29,12 @@ public class ProfileActivity extends AppCompatActivity {
 
         String user_id = getIntent().getStringExtra("user_id");
 
-        ProfileFragment profile = new ProfileFragment(user_id);
+        ProfileFragment profile = new ProfileFragment(user_id, new ProfileFragment.ProfileFragmentListener() {
+            @Override
+            public void onEnterGroup() {
+                finish();
+            }
+        });
         getSupportFragmentManager().beginTransaction().replace(R.id.profile_frame_layout, profile).commit();
     }
 }

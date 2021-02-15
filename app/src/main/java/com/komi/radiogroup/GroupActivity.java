@@ -45,10 +45,6 @@ public class GroupActivity extends AppCompatActivity implements JoinGroupFragmen
         group = (Group) getIntent().getParcelableExtra("group");
 
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-//        String groupListeningId = sharedPreferences.getString(GROUP_LISTENING,null);
-//        if(groupListeningId!=null && groupListeningId.equals(group.getGroupID())){
-//            listening = true;
-//        }
 
         listening = MainContainer.playingGroup.equals(group.getGroupID());
 
@@ -117,9 +113,6 @@ public class GroupActivity extends AppCompatActivity implements JoinGroupFragmen
     }
     
     private void goBack() {
-        Intent intent = new Intent(this,MainContainer.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
-        startActivity(intent);
         finish();
     }
 
