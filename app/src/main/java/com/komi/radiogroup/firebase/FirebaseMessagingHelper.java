@@ -21,7 +21,7 @@ import java.util.Map;
 
 public class FirebaseMessagingHelper implements FirebaseMessagingHelperInterface {
 
-    final String API_TOKEN_KEY = "AAAAMJ5RH1k:APA91bG5hD4dwWDrFFdK6QUYLmm_sLW1VvfHzwh-wwZGRar93y8ZTcyUAVU_O3pGEeKWqWe4FGgUe0Rs1VD5Vym6mQ9LnHUXhv6K5K1vlMwhCLkrpMIW0P0_6gD7ZLH5DA4u8jhNmkjz";
+    final String API_TOKEN_KEY = API_KEY;
 
     private static FirebaseMessagingHelper instance;
     private static FirebaseMessaging firebaseMessaging;
