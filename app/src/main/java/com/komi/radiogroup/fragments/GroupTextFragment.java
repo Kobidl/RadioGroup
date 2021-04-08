@@ -62,9 +62,6 @@ public class GroupTextFragment extends Fragment {
         // Inflating layout
         rootView = inflater.inflate(R.layout.fragment_group_text, container, false);
 
-        // Subscribing to group messaging topic
-        //FirebaseMessagingHelper.getInstance(getContext()).subscribeToTopic(group.getGroupID());
-
         // Initializing elements
         final EditText et_message = rootView.findViewById(R.id.et_message);
 

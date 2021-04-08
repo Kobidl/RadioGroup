@@ -60,15 +60,6 @@ public class JoinGroupFragment extends Fragment {
         callback = (JoinGroupFragment.JoinGroupCallback) context;
     }
 
-//    public static JoinGroupFragment newInstance(String param1, String param2) {
-//        JoinGroupFragment fragment = new JoinGroupFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

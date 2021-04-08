@@ -29,10 +29,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        // ...
-
-        // TODO(developer): Handle FCM messages here.
-        // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.i(TAG, "From: " + remoteMessage.getFrom());
 
         // Check if message contains a data payload.
@@ -45,8 +41,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             intent.putExtra("sender_id",remoteMessage.getData().get("sender_id"));
             LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 
-            // If application is not in foreground then post notification
-
         }
 
         // Check if message contains a notification payload.
@@ -54,8 +48,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
 
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification
     }
 
     public static String getToken(Context context) {
